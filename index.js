@@ -84,7 +84,11 @@ client.on('message', msg => {
             if (i == 1) { ann = ann + arg[i] } else { ann = ann + " " + arg[i] }
         }
         let efficomsalon = client.channels.cache.get("762698661892849714");
+<<<<<<< HEAD
         efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann); 
+=======
+        efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann);
+>>>>>>> main
     }
 
     // jeux
