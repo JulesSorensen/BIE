@@ -17,8 +17,9 @@
   "homepage": "https://github.com/JulesSorensen/BIE#readme",
   "dependencies": {
     "discord.js": "^12.3.1",
-    "myges": "^1.9.0"
+    "fs": "^0.0.1-security",
+    "myges": "^1.9.0",
+    "snekfetch": "^4.0.4"
   },
-  "devDependencies": {},
   "description": ""
 }
