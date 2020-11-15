@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.2.1";
+let version = "1.2.2";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -84,11 +84,7 @@ client.on('message', msg => {
             if (i == 1) { ann = ann + arg[i] } else { ann = ann + " " + arg[i] }
         }
         let efficomsalon = client.channels.cache.get("762698661892849714");
-<<<<<<< HEAD
-        efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann); 
-=======
         efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann);
->>>>>>> main
     }
 
     // jeux
