@@ -42,27 +42,6 @@ client.on('message', msg => {
     // }
     // || msg.author.id === "336458121180610560"
     if (msg.author.id === client.user.id) return;
-    // bonjour
-    BJ = ["bonjour", "salut", "hei ", "guttentag", "hallo ", "hola ", "buenos días", "hey", "yo ", "yop ", "coucou"];
-    for (let i = 0; i < BJ.length; i++) {
-        if (msg.content.toLowerCase().includes(BJ[i])) {
-            msg.react("👋")
-        };
-    };
-    // mdr lol ...
-    LOL = ["mdr", "lol", "xd", "x)", "😂", "🤣", "😆"]
-    for (let i2 = 0; i2 < LOL.length; i2++) {
-        if (msg.content.toLowerCase().includes(LOL[i2])) {
-            hasard = Math.floor(Math.random() * 3) + 1;
-            if (hasard === 1) {
-                msg.react("😂");
-            } else if (hasard === 2) {
-                msg.react("🤣");
-            } else {
-                msg.react("😆");
-            };
-        };
-    };
 
     // annonce jules
     if (msg.content.toLowerCase().startsWith("$a")) {
