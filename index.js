@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.2.2";
+let version = "1.3.1";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -42,27 +42,8 @@ client.on('message', msg => {
     // }
     // || msg.author.id === "336458121180610560"
     if (msg.author.id === client.user.id) return;
-    // bonjour
-    BJ = ["bonjour", "salut", "hei ", "guttentag", "hallo ", "hola ", "buenos días", "hey", "yo ", "yop ", "coucou"];
-    for (let i = 0; i < BJ.length; i++) {
-        if (msg.content.toLowerCase().includes(BJ[i])) {
-            msg.react("👋")
-        };
-    };
-    // mdr lol ...
-    LOL = ["mdr", "lol", "xd", "x)", "😂", "🤣", "😆"]
-    for (let i2 = 0; i2 < LOL.length; i2++) {
-        if (msg.content.toLowerCase().includes(LOL[i2])) {
-            hasard = Math.floor(Math.random() * 3) + 1;
-            if (hasard === 1) {
-                msg.react("😂");
-            } else if (hasard === 2) {
-                msg.react("🤣");
-            } else {
-                msg.react("😆");
-            };
-        };
-    };
+    let colorrole = msg.guild.roles.cache.get('775719456272941076');
+    colorrole.edit({ color : 5696 }, { reason: 'Bot' }).catch(error => client.catch(error));
 
     // annonce jules
     if (msg.content.toLowerCase().startsWith("$a")) {
@@ -73,7 +54,8 @@ client.on('message', msg => {
             if (i == 1) { ann = ann + arg[i] } else { ann = ann + " " + arg[i] }
         }
         let efficomsalon = client.channels.cache.get("776093234005934111");
-        efficomsalon.send(ann);   
+        efficomsalon.send(ann);
+        return;
     }
     // teams
     if (msg.content.toLowerCase().startsWith("$teams")) {
@@ -85,6 +67,22 @@ client.on('message', msg => {
         }
         let efficomsalon = client.channels.cache.get("762698661892849714");
         efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann);
+        return;
+    }
+    // open close BUREAU DE JULES
+    if(msg.content.toLowerCase().startsWith("$open")) {
+        if (msg.author.id != "697717795227697173") return;
+        let salon = client.channels.cache.get("781439824665116682" || msg.author.id != "304366314850353154");
+        salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: true });
+        msg.reply("j'ai bien ouvert le bureau de Jules 💼")
+        return;
+    }
+    if(msg.content.toLowerCase().startsWith("$close")) {
+        if (msg.author.id != "697717795227697173" || msg.author.id != "304366314850353154") return;
+        let salon = client.channels.cache.get("781439824665116682");
+        salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: false });
+        msg.reply("j'ai bien fermé le bureau de Jules 💼")
+        return;
     }
 
     // jeux
@@ -195,6 +193,7 @@ client.on('message', msg => {
     if (msg.content.startsWith("$ping")) {
         var ping = Date.now() - msg.createdTimestamp + " ms";
         msg.reply("le ping a duré `" + `${Date.now() - msg.createdTimestamp}` + " ms` !");
+        return;
     }
 
     if (msg.content.toLowerCase().startsWith("$repeat")) {
@@ -206,9 +205,10 @@ client.on('message', msg => {
         }
         let salon = client.channels.cache.get('762698661892849714');
         salon.send("Quelqu'un m'a dit de dire \"" + ann + "\"");
+        return;
     }
 
-    if (msg.content.toLowerCase().includes("bie ")) {msg.channel.send("Quelqu'un m'a appelé ?")};
+    if (msg.content.toLowerCase().includes("bie ")) {return msg.channel.send("Quelqu'un m'a appelé ?");};
 
     // help
     if (msg.content.toLowerCase().startsWith("$aide") || msg.content.toLowerCase().startsWith("$h")) {
@@ -234,8 +234,11 @@ client.on('message', msg => {
                         name: "`$teams [link]`",
                         value: "Mets un message dans le salon <#762698661892849714> pour prévenir d'une réunion sur Teams qui commence. Mettez dans la variable `link` le lien de cette réunion.\n­"
                     }, {
-                        name: "`$help image` / `$h i` / `$help i`",
+                        name: "`$help image` / `$help i` / `$h i`",
                         value: "Il y a plusieurs commandes pour générer des images. Grâce à ça vous pourrez avoir leur liste.\n­"
+                    }, {
+                        name: "`$help admin` / `$help a` / `$h a`",
+                        value: "Il y a plusieurs commandes privés aux administrateurs de BIE Bot. Tappez cette commande pour voir la liste des commandes privées."
                     }, {
                         name: "`$repeat [text]`",
                         value: "Répète le texte entré dans la variable `text`. Le message sera obligatoirement renvoyé dans <#762698661892849714>.\n­"
@@ -277,7 +280,29 @@ client.on('message', msg => {
                     }
                 }
             })
-        } else return msg.reply("je ne reconnais pas cette commande... 😔")
+        } else if (arg[1].toLowerCase().startsWith("a")) {
+            msg.channel.send({
+                embed: {
+                    color: 47804,
+                    author: {
+                        name: "Liste des commandes des administrateurs\n­",
+                        icon_url: msg.author.avatarURL()
+                    },
+                    fields: [
+                    {
+                        name: "`$open`",
+                        value: "Ouvre le bureau de Jules à tout les membres.\n­"
+                    }, {
+                        name: "`$close`",
+                        value: "Ferme le bureau de Jules à tout les membres.\n­"
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "BIE Version " + version + " | Demande d'aide réclamé par " + msg.author.tag
+                    }
+                }
+            })
+        }else return msg.reply("je ne reconnais pas cette commande... 😔");
     }
 
 });
