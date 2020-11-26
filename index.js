@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.3.4";
+let version = "1.3.5";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -12,7 +12,7 @@ let childimages = childimagefichier.split("\n");
 var lancement = false;
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.username}! Version: ` + version + " ✅");
+    console.log(`Logged in as ${client.user.username} ! Version: ` + version + " ✅");
     client.user.setPresence({
         activity: {
             name: '$help',
@@ -28,19 +28,6 @@ function emoji(id) {
 }
 
 client.on('message', msg => {
-    // function couleuraleatoire() {
-    //     if (msg.guild.id == "762698485011054602");
-    //     setInterval(function(){
-    //         var coleurrandom = '#' + ("000000" + Math.random().toString(16).slice(2, 8).toUpperCase()).slice(-6);
-    //         let colorrole = msg.guild.roles.cache.get('775777327669444619');
-    //         colorrole.edit({ color : coleurrandom }, { reason: 'Bot' }).catch(error => client.catch(error));
-    //     }, 1000)
-    // }
-    // if (lancement == false) {
-    //     lancement = true;
-    //     couleuraleatoire();
-    // }
-    // || msg.author.id === "336458121180610560"
     if (msg.author.id === client.user.id) return;
 
     // annonce jules
@@ -69,18 +56,18 @@ client.on('message', msg => {
     }
     // open close BUREAU DE JULES
     if(msg.content.toLowerCase().startsWith("$open")) {
-        if (msg.author.id != "697717795227697173") return;
-        let salon = client.channels.cache.get("781439824665116682" || msg.author.id != "304366314850353154");
+        if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")};
+        let salon = client.channels.cache.get("781439824665116682");
         salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: true });
+        salon.setName("🔓 Bureau de Jules L")
         msg.reply("j'ai bien ouvert le bureau de Jules 💼")
-        return;
     }
     if(msg.content.toLowerCase().startsWith("$close")) {
-        if (msg.author.id != "697717795227697173" || msg.author.id != "304366314850353154") return;
+        if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")};
         let salon = client.channels.cache.get("781439824665116682");
         salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: false });
+        salon.setName("🔒 Bureau de Jules L")
         msg.reply("j'ai bien fermé le bureau de Jules 💼")
-        return;
     }
 
     // jeux
@@ -305,4 +292,5 @@ client.on('message', msg => {
 
 });
 
-client.login(process.env.TOKEN);
+// client.login(process.env.TOKEN);
+client.login('NzY1NjQ4NDcxMDU4NTQ2Njk4.X4X3tA.tyDymdTCo7j7mk1E8cmSpU4UpsU');
