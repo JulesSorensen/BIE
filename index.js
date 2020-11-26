@@ -42,8 +42,11 @@ client.on('message', msg => {
     // }
     // || msg.author.id === "336458121180610560"
     if (msg.author.id === client.user.id) return;
+<<<<<<< HEAD
     let colorrole = msg.guild.roles.cache.get('775719456272941076');
     colorrole.edit({ color : 5696 }, { reason: 'Bot' }).catch(error => client.catch(error));
+=======
+>>>>>>> main
 
     // annonce jules
     if (msg.content.toLowerCase().startsWith("$a")) {
