@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.3.7";
+let version = "1.4.0";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -26,6 +26,12 @@ client.on('ready', () => {
 function emoji(id) {
     return client.emojis.get(id).toString();
 }
+// reactions
+client.on('messageReactionAdd', (reaction, user) => {
+    let msg = reaction.message
+    let emoji = reaction.emoji;
+    msg.react(emoji)
+});
 
 client.on('message', msg => {
     if (msg.author.id === client.user.id) return;
@@ -46,15 +52,146 @@ client.on('message', msg => {
     if (msg.content.toLowerCase().startsWith("$teams")) {
         msg.delete({timeout:10});
         const arg = msg.content.slice(prefix.length).split(' ');
-        ann = "";
-        for (let i = 1; i < arg.length; i++) {
-            if (i == 1) { ann = ann + arg[i] } else { ann = ann + " " + arg[i] }
-        }
         let efficomsalon = client.channels.cache.get("762698661892849714");
-        efficomsalon.send("**__Une réunion sur Teams va / vient de commencer <@&775833208012800050>__** : " + ann);
+        if (arg.length == 1) return msg.channel.send("Merci de mettre un lien !")
+        if (arg.length == 2) {
+            var teamsurl = arg[1]
+            efficomsalon.send("<@&775833208012800050>")
+            efficomsalon.send({
+                embed: {
+                    color: 4673464,
+                    thumbnail: {
+                        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png"
+                    },
+                    author: {
+                        name: "Une réunion va ou vient de commencer !\n­",
+                    },
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    url: teamsurl,
+                    fields: [{
+                        name: "⏰ ­  Début  ­  ⏰",
+                        value: "Bientôt (non spécifié)­",
+                        inline: true
+                    }, {
+                        name: "🕛  ­  Fin  ­  🕛",
+                        value: "Non spécifié\n­",
+                        inline: true
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "BIE Version " + version + " | Programmé par Jules ꓶ"
+                    }
+                }
+            })
+        } else if (arg.length == 3) { // url [1] + heure début
+            var teamsurl = arg[1]
+            var heuredebut = arg[2]
+            efficomsalon.send("<@&775833208012800050>")
+            efficomsalon.send({
+                embed: {
+                    color: 4673464,
+                    thumbnail: {
+                        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png"
+                    },
+                    author: {
+                        name: "Une réunion va ou vient de commencer !\n­",
+                    },
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    url: teamsurl,
+                    fields: [{
+                        name: "⏰ ­  Début  ­  ⏰",
+                        value: arg[2] + "\n­",
+                        inline: true
+                    }, {
+                        name: "🕛  ­  Fin  ­  🕛",
+                        value: "Non spécifié\n­",
+                        inline: true
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "BIE Version " + version + " | Programmé par Jules ꓶ"
+                    }
+                }
+            })
+        } else if (arg.length == 4) { // URL, Heure début, et fin
+            var teamsurl = arg[1]
+            var heuredebut = arg[2]
+            var heurefin = arg[3]
+            efficomsalon.send("<@&775833208012800050>")
+            efficomsalon.send({
+                embed: {
+                    color: 4673464,
+                    thumbnail: {
+                        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png"
+                    },
+                    author: {
+                        name: "Une réunion va ou vient de commencer !\n­",
+                    },
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    url: teamsurl,
+                    fields: [{
+                        name: "⏰ ­  Début  ­  ⏰",
+                        value: arg[2] + "\n­",
+                        inline: true
+                    }, {
+                        name: "🕛  ­  Fin  ­  🕛",
+                        value: heurefin + "\n­",
+                        inline: true
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "BIE Version " + version + " | Programmé par Jules ꓶ"
+                    }
+                }
+            })
+        } else if (arg.length > 4) { // et la desc :)
+            var teamsurl = arg[1]
+            var heuredebut = arg[2]
+            var heurefin = arg[3]
+            if (arg.length == 5) { //desc
+                var desc = arg[4]
+            } else if (arg.length == 6) {
+                var desc = arg[4] + " " + arg[5]
+            } else if (arg.length == 7) {
+                var desc = arg[4] + " " + arg[5] + " " + arg[6]
+            } else if (arg.length == 8) {
+                var desc = arg[4] + " " + arg[5] + " " + arg[6] + " " + arg[7]
+            } else {
+                var desc = arg[4] + " " + arg[5] + " " + arg[6] + " " + arg[7] + " " + arg[8] 
+            }
+            efficomsalon.send("<@&775833208012800050>")
+            efficomsalon.send({
+                embed: {
+                    color: 4673464,
+                    thumbnail: {
+                        url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png"
+                    },
+                    author: {
+                        name: "Une réunion va ou vient de commencer !\n­",
+                    },
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    url: teamsurl,
+                    description: "📚 Cours : " + desc +"\n­",
+                    fields: [{
+                        name: "⏰ ­  Début  ­  ⏰",
+                        value: arg[2] + "\n­",
+                        inline: true
+                    }, {
+                        name: "🕛  ­  Fin  ­  🕛",
+                        value: heurefin + "\n­",
+                        inline: true
+                    }],
+                    timestamp: new Date(),
+                    footer: {
+                        text: "BIE Version " + version + " | Programmé par Jules ꓶ"
+                    }
+                }
+            })
+        } else return msg.reply("une erreure s'est produite :(")
+        // efficomsalon.send("<@&775833208012800050>");
         return;
     }
-    // open close BUREAU DE JULES
+    // BUREAU DE JULES
     if(msg.content.toLowerCase().startsWith("$open")) {
         if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")}
         let salon = client.channels.cache.get("781439824665116682")
@@ -66,6 +203,33 @@ client.on('message', msg => {
         let salon = client.channels.cache.get("781439824665116682")
         salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: false })
         msg.reply("j'ai bien fermé le bureau de Jules 🔒")
+    }
+    if (msg.content.toLowerCase().startsWith("$j")) {
+        msg.channel.send("<@697717795227697173> l'utilisateur <@" + msg.author.id + "> veut rejoindre le salon.\nVous avez 5 minutes pour accepter, refuser, mettre en attente, ou bloquer la demande.").then(msg2 => {
+            msg2.react('✅')
+            msg2.react('❎');
+            msg2.react('🕦');
+            msg2.react('⛔');
+            msg2.react('📄');
+            msg2.awaitReactions((reaction, user) => user.id == "697717795227697173" && (reaction.emoji.name == '✅' || reaction.emoji.name == '❎' || reaction.emoji.name == '🕦' || reaction.emoji.name == '⛔' || reaction.emoji.name == '📄'), { max: 1, time: 300000 }).then(collected => {
+                                    if (collected.first().emoji.name == '✅') {
+                                            msg.reply("vous avez été accepté. 😎");
+                                            membreamoove = client.users.cache.get(msg.author.id);
+                                            channelamoove = client.channels.cache.get("781439824665116682")
+                                            // membreamoove.voice.setChannel(channelamoove);
+                                    } else if (collected.first().emoji.name == '❎') {
+                                            msg.reply("vous avez été refusé... 😥");
+                                    } else if (collected.first().emoji.name == '🕦') {
+                                            msg.reply("vous êtes en attente, contactez <@697717795227697173> pour savoir dans combien de temps il vous acceptera. 🕘");
+                                    } else if (collected.first().emoji.name == '⛔') {
+                                            msg.reply("vous avez été refusé...");
+                                    } else if (collected.first().emoji.name == '📄') {
+                                            msg.reply("vous allez être enregistré dans la liste des utilisateurs autorisés constamment. 😊");
+                                    }
+                        }).catch(() => {msg.reply('malheureusement il vous a ignoré... 😟');});
+            })
+        // personne = client.users.cache.get(msg.author.id);
+        // personne.setVoiceChannel("781439824665116682");
     }
 
     // jeux
@@ -214,8 +378,8 @@ client.on('message', msg => {
                         name: "`$pfc` / `$pierrefeuilleciseau`",
                         value: "Lance une partie de pierre feuille ciseau contre moi ! Vous pouvez répondre `p` `f` ou `c` à la place de pierre feuille ou ciseau... C'est plus rapide !\n­"
                     }, {
-                        name: "`$teams [link]`",
-                        value: "Mets un message dans le salon <#762698661892849714> pour prévenir d'une réunion sur Teams qui commence. Mettez dans la variable `link` le lien de cette réunion.\n­"
+                        name: "`$teams [Lien_cliquable/URL_cliquable] [Texte_Horraire_Début] [Texte_Horraire_Fin] [Nom_Du_Cours]`",
+                        value: "Mets un message dans le salon <#762698661892849714> pour prévenir d'une réunion sur Teams qui commence. Mettez dans la variable au minimum `link`, le lien de cette réunion. Le nombre de mots dans le nom du cours est limité.\n­"
                     }, {
                         name: "`$help image` / `$help i` / `$h i`",
                         value: "Il y a plusieurs commandes pour générer des images. Grâce à ça vous pourrez avoir leur liste.\n­"
