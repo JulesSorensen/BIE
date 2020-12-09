@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.4.0";
+let version = "1.4.1";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -66,7 +66,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
                     url: teamsurl,
                     fields: [{
                         name: "⏰ ­  Début  ­  ⏰",
@@ -96,7 +96,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
                     url: teamsurl,
                     fields: [{
                         name: "⏰ ­  Début  ­  ⏰",
@@ -127,7 +127,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
                     url: teamsurl,
                     fields: [{
                         name: "⏰ ­  Début  ­  ⏰",
@@ -169,7 +169,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
                     url: teamsurl,
                     description: "📚 Cours : " + desc +"\n­",
                     fields: [{
