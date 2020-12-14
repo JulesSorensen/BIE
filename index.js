@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const { get } = require("snekfetch"); 
 const fs = require('fs');
 let prefix = "$"
-let version = "1.4.2";
+let version = "1.4.3";
 let efficomstud = ["427408019114950667", "160804942565736449", "220571668458766337", "394929882049675264", "697717795227697173", "231827158878781441", "400318649191104522", "105457483740368896", "765135022985707542", "228599908939202560", "233248965032804353", "608379884548653068", "763108903201538069", "448796874183540736", "304366314850353154", "762699664184967240", "475986569455599616", "345681524386955265", "235723505604362240", "336458121180610560"];
 let swimagefichier = fs.readFileSync("./sw.txt").toString();
 let swimages = swimagefichier.split("\n");
@@ -92,7 +92,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
                     url: teamsurl,
                     fields: [{
                         name: "⏰ ­  Début  ­  ⏰",
@@ -123,7 +123,7 @@ client.on('message', msg => {
                     author: {
                         name: "Une réunion va ou vient de commencer !\n­\n­",
                     },
-                    title: "⮞ Rejoindre la réunion ⮜\n­\n­",
+                    title: "⮞ Rejoindre la réunion ⮜\n­",
                     url: teamsurl,
                     fields: [{
                         name: "⏰ ­  Début  ­  ⏰",
@@ -193,24 +193,28 @@ client.on('message', msg => {
         let salon = client.channels.cache.get("781439824665116682")
         salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: true })
         msg.reply("j'ai bien ouvert le bureau de Jules 🔓")
+        return;
     }
     if(msg.content.toLowerCase().startsWith("$close")) {
         if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")}
         let salon = client.channels.cache.get("781439824665116682")
         salon.updateOverwrite(salon.guild.roles.everyone, { CONNECT: false })
         msg.reply("j'ai bien fermé le bureau de Jules 🔒")
+        return;
     }
     if(msg.content.toLowerCase().startsWith("$unhide")) {
         if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")}
         let salon = client.channels.cache.get("781439824665116682")
         salon.updateOverwrite(salon.guild.roles.everyone, { VIEW_CHANNEL: true })
         msg.reply("le salon est réapparu 🕶")
+        return;
     }
     if(msg.content.toLowerCase().startsWith("$hide")) {
         if (msg.author.id != "697717795227697173" && msg.author.id != "304366314850353154") {return msg.reply("vous n'êtes pas autorisé à faire ceci.")}
         let salon = client.channels.cache.get("781439824665116682")
         salon.updateOverwrite(salon.guild.roles.everyone, { VIEW_CHANNEL: false })
         msg.reply("j'ai bien caché le salon 👓")
+        return;
     }
     if (msg.content.toLowerCase().startsWith("$j")) {
         msg.channel.send("<@697717795227697173> l'utilisateur <@" + msg.author.id + "> veut rejoindre le salon.\nVous avez 5 minutes pour accepter, refuser, mettre en attente, ou bloquer la demande.").then(msg2 => {
