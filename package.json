@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gledelig/Glede.git"
+    "url": "git+https://github.com/JulesSorensen/Glede.git"
   },
   "keywords": [
     "glede"
@@ -16,11 +16,13 @@
   "author": "Nekewo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Gledelig/Glede/issues"
+    "url": "https://github.com/JulesSorensen/Glede/issues"
   },
-  "homepage": "https://github.com/Gledelig/Glede#readme",
+  "homepage": "https://github.com/JulesSorensen/Glede#readme",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "express": "^4.17.1",
     "fs": "^0.0.1-security"
-  }
+  },
+  "devDependencies": {}
 }

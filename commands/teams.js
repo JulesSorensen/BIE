@@ -1,10 +1,11 @@
 module.exports = {
     name: 'teams',
     description: 'Information about the arguments provided.',
-    args: true,
+    args: false,
     usage: '[Lien] [HeureDuDébut] [HeureDeFin] [NomDuCours]',
     execute(msg, args, client, prefix, getca, version) {
         if (msg.guild.id != "762698485011054602") return;
+        if (!args[0]) return;
         msg.delete({ timeout: 10 });
         const arg = msg.content.slice(prefix.length).split(' ');
         let efficomsalon = client.channels.cache.get("762698661892849714");

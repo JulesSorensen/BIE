@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'annonce',
 	description: 'Information about the arguments provided.',
-    args: true,
+    args: false,
 	usage: 'test',
 	execute(msg, args, client, prefix, getca, version) {
         if (msg.guild.id != "762698485011054602") return;
