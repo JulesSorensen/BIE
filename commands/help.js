@@ -41,7 +41,7 @@ module.exports = {
                             text: "Demande d'aide demandé par " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else if (lang[msg.author.id] === "NO") {
                 return msg.channel.send({
                     embed: {
@@ -76,7 +76,7 @@ module.exports = {
                             text: "Hjelpe kommando forespurt av " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else {
                 return msg.channel.send({
                     embed: {
@@ -111,7 +111,7 @@ module.exports = {
                             text: "Help command requested by " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             }
         }
         // categories
@@ -153,7 +153,7 @@ module.exports = {
                             text: "Commande d'aide demandé par " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else if (lang[msg.author.id] === "NO") {
                 return msg.channel.send({
                     embed: {
@@ -188,7 +188,7 @@ module.exports = {
                             text: "Hjelpe kommando forespurt av " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else {
                 return msg.channel.send({
                     embed: {
@@ -223,7 +223,7 @@ module.exports = {
                             text: "Help command requested by " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             }
         } else if (args[0].toLowerCase() === "clan" || args[0].toLowerCase() === "clans") {
             // clan
@@ -250,10 +250,16 @@ module.exports = {
                         }, {
                             name: prefix + "clan leave",
                             value: "Permet de quitter votre clan.\n­"
+                        }, {
+                            name: prefix + "clan members",
+                            value: "Permet de voir la liste des membres de votre clan, ou d'un autre clan en rajoutant son nom après la commande.\n­"
+                        }, {
+                            name: prefix + "clan leaderboard",
+                            value: "Permet de voir la liste des clans qui ont le plus gros niveau.\n­"
                         }
                         ]
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
                 return msg.channel.send({
                     embed: {
                         color: 14396152,
@@ -290,7 +296,7 @@ module.exports = {
                             text: "Commande d'aide demandé par " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else if (lang[msg.author.id] === "NO") {
                 msg.channel.send({
                     embed: {
@@ -314,10 +320,16 @@ module.exports = {
                         }, {
                             name: prefix + "clan leave",
                             value: "Lar deg forlate klanen din.\n­"
+                        }, {
+                            name: prefix + "clan members",
+                            value: "Lar deg se listen over medlemmene i klanen din, eller en annen klan ved å legge til navnet etter kommandoen.\n­"
+                        }, {
+                            name: prefix + "clan leaderboard",
+                            value: "Lar deg se listen over klaner som har høyest nivå.\n­"
                         }
                         ]
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
                 return msg.channel.send({
                     embed: {
                         color: 14396152,
@@ -354,7 +366,7 @@ module.exports = {
                             text: "Hjelpe kommando forespurt av " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else {
                 msg.channel.send({
                     embed: {
@@ -378,10 +390,16 @@ module.exports = {
                         }, {
                             name: prefix + "clan leave",
                             value: "Allows you to leave your clan.\n­"
+                        }, {
+                            name: prefix + "clan members",
+                            value: "Allows you to see the list of the members of your clan, or of another clan by adding its name after the command.\n­"
+                        }, {
+                            name: prefix + "clan leaderboard",
+                            value: "Allows you to see the list of clans that have the highest level.\n­"
                         }
                         ]
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
                 return msg.channel.send({
                     embed: {
                         color: 14396152,
@@ -418,7 +436,7 @@ module.exports = {
                             text: "Help command requested by " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             }
         } else if (args[0].toLowerCase() === "notification" || args[0].toLowerCase() === "notif" || args[0].toLowerCase() === "notifications") {
             // notification
@@ -447,7 +465,7 @@ module.exports = {
                             text: "Commande d'aide demandé par " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else if (lang[msg.author.id] === "NO") {
                 return msg.channel.send({
                     embed: {
@@ -473,7 +491,7 @@ module.exports = {
                             text: "Hjelpe kommando forespurt av " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else {
                 return msg.channel.send({
                     embed: {
@@ -499,7 +517,7 @@ module.exports = {
                             text: "Help command requested by " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             }
         } else if (args[0].toLowerCase() === "misc" || args[0].toLowerCase() === "divers") {
             // misc
@@ -526,6 +544,9 @@ module.exports = {
                         }, {
                             name: prefix + "suggestion [Votre Suggestion]",
                             value: "Envoi votre suggestion sur le serveur officiel de Glede. Tout les utilisateurs pourront voter pour donner leur avis.\n­"
+                        }, {
+                            name: prefix + "guilde",
+                            value: "Affiche le classement des membres ayant envoyé le plus de messages dans le serveur Discord dans lequel vous tappez la commande."
                         }
                         ],
                         timestamp: new Date(),
@@ -534,7 +555,7 @@ module.exports = {
                             text: "Commande d'aide demandé par " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else if (lang[msg.author.id] === "NO") {
                 return msg.channel.send({
                     embed: {
@@ -558,6 +579,9 @@ module.exports = {
                         }, {
                             name: prefix + "suggestion [Ditt Forslag]",
                             value: "Send ditt forslag til den offisielle Glede-serveren. Alle brukere vil kunne stemme for å si sin mening.\n­"
+                        }, {
+                            name: prefix + "guild",
+                            value: "Viser rangeringen av medlemmene som sendte flest meldinger til Discord-serveren der du skriver kommandoen."
                         }
                         ],
                         timestamp: new Date(),
@@ -566,7 +590,7 @@ module.exports = {
                             text: "Hjelpe kommando forespurt av " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             } else {
                 return msg.channel.send({
                     embed: {
@@ -590,6 +614,9 @@ module.exports = {
                         }, {
                             name: prefix + "suggestion [Your Suggestion]",
                             value: "Send your suggestion to the official Glede server. All users will be able to vote to give their opinion.\n­"
+                        }, {
+                            name: prefix + "guild",
+                            value: "Shows the ranking of the members who sent the most messages to the Discord server where you type the command."
                         }
                         ],
                         timestamp: new Date(),
@@ -598,7 +625,7 @@ module.exports = {
                             text: "Help command requested by " + msg.author.tag
                         }
                     }
-                }).catch(()=>{;});
+                }).catch(() => { ; });
             }
         }
     }

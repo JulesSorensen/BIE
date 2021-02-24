@@ -11,6 +11,8 @@ module.exports = {
         let profile = getca(`profile`);
         let lang = getca(`language`);
         let userLang = lang[msg.author.id];
+        // bannedNames
+        let bannedNames = ["­", "create", "owner", "kick", "delete", "remove", "ban", "description", "member", "members", "leaderboard", "join", "leave", "private", "public", "color", "image", "picture", "aucun", "none", "ingen", "false", "profile"];
         // function if url
         function validURL(str) {
             var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -23,6 +25,41 @@ module.exports = {
         }
         // function for show the clan infos if !args[0] or research ...
         function printClan(clanname) {
+            // xp progression
+            var levelTableClan = [`0-19999`, `20000-99999`, `100000-499999`, `500000-999999`, `1000000-1499999`, `1500000-2499999`, `2500000-4999999`, `5000000-9999999`, `10000000-49999999`, `50000000-10000000000`];
+            var levelStatus = `▰▰▰▰▰▰▰▰▰▰`;
+            for (i in levelTableClan) {
+                a = levelTableClan[i].split(`-`);
+                if ((clan[clanname].experience >= a[0]) && (a[1] >= clan[clanname].experience)) {
+                    a[0] = parseInt(a[0]);
+                    a[1] = parseInt(a[1]);
+                    var pourc = (((clan[clanname].experience - a[0]) * 100) / (a[1] - a[0]));
+                    switch (true) {
+                        case (pourc >= 0 && 10 > pourc):
+                            levelStatus = `▰▱▱▱▱▱▱▱▱▱`; break;
+                        case (pourc >= 10 && 20 > pourc):
+                            levelStatus = `▰▰▱▱▱▱▱▱▱▱`; break;
+                        case (pourc >= 20 && 30 > pourc):
+                            levelStatus = `▰▰▰▱▱▱▱▱▱▱`; break;
+                        case (pourc >= 30 && 40 > pourc):
+                            levelStatus = `▰▰▰▰▱▱▱▱▱▱`; break;
+                        case (pourc >= 40 && 50 > pourc):
+                            levelStatus = `▰▰▰▰▰▱▱▱▱▱`; break;
+                        case (pourc >= 50 && 60 > pourc):
+                            levelStatus = `▰▰▰▰▰▰▱▱▱▱`; break;
+                        case (pourc >= 60 && 70 > pourc):
+                            levelStatus = `▰▰▰▰▰▰▰▱▱▱`; break;
+                        case (pourc >= 70 && 80 > pourc):
+                            levelStatus = `▰▰▰▰▰▰▰▰▱▱`; break;
+                        case (pourc >= 80 && 90 > pourc):
+                            levelStatus = `▰▰▰▰▰▰▰▰▰▱`; break;
+                        case (pourc >= 90 && 100 >= pourc):
+                            levelStatus = `▰▰▰▰▰▰▰▰▰▰`; break;
+                        default:
+                            levelStatus = `▰▰▰▰▰▰▰▰▰▰`; break;
+                    }
+                }
+            }
             if (lang[clan[clanname].owner] == `FR`) {
                 var clanMessage = `Clan :`; var membersMessage = `Membres`; var levelMessage = `Niveau`; var messagesMessage = `Messages`; var statusMessage = `Statut`; var statusMessage = `Statut`; var statusMessageName = clan[clanname].status ? `Publique` : `Privé`;
             } else if (lang[clan[clanname].owner] == `NO`) {
@@ -36,34 +73,30 @@ module.exports = {
                     author: {
                         name: `${clanMessage} ${clanname}`
                     },
-                    description: clan[clanname].description,
+                    description: clan[clanname].description + `\n­`,
                     thumbnail: { url: clan[clanname].picture },
                     fields: [{
                         name: `${membersMessage}`,
-                        value: `${clan[clanname].membersnb}/${clan[clanname].membersnblimit}\n­`,
-                        inline: true
-                    }, {
-                        name: `${levelMessage}`,
-                        value: `${clan[clanname].level}\n­`,
-                        inline: true
-                    }, {
-                        name: `XP`,
-                        value: `${clan[clanname].experience}\n­`,
+                        value: `${clan[clanname].membersnb}/${clan[clanname].membersnblimit}`,
                         inline: true
                     }, {
                         name: `${messagesMessage}`,
-                        value: `${clan[clanname].messages}\n­`,
+                        value: `${clan[clanname].messages}`,
                         inline: true
                     }, {
                         name: `${statusMessage}`,
                         value: `${statusMessageName}`,
+                        inline: true
+                    }, {
+                        name: `${levelMessage}`,
+                        value: `${clan[clanname].level} | ${levelStatus}`,
                         inline: true
                     }
                     ]
                 }
             }).catch(() => { ; });
         }
-        function printClanLeaderboard(clanname) {
+        function printClanMembers(clanname) {
             if (lang[clan[clanname].owner] == `FR`) {
                 var clanMessage = `Clan :`; var membersMessage = `Membres`;
             } else if (lang[clan[clanname].owner] == `NO`) {
@@ -72,19 +105,79 @@ module.exports = {
                 var clanMessage = `Clan:`; var membersMessage = `Members`;
             }
             var leaderboard = ``
-            for (i in clan[clanname].members) {
-                leaderboard += `${profile[(clan[clanname].members)[i]].clanexperience} XP ➫ ${profile[(clan[clanname].members)[i]].name}\n`
+            // combine the arrays
+            var list = [];
+            for (var j = 0; j < (clan[clanname].members).length; j++)
+                list.push({ 'members': (clan[clanname].members)[j], 'XP': (clan[clanname].membersexperience)[j] });
+
+            // sort
+            list.sort(function (a, b) {
+                return ((a.XP > b.XP) ? -1 : ((a.XP == b.XP) ? 0 : 1));
+            });
+
+            // separate them back out
+            var leaderboard = ""; var leaderboard2 = "";
+            for (var k = 0; k < list.length; k++) {
+                if (k > 25) { leaderboard2 += `${list[k].XP} XP ➫ ${(profile[list[k].members].name)}\n`; }
+                else { leaderboard += `${list[k].XP} XP ➫ ${(profile[list[k].members].name)}\n`; }
             }
-            return msg.channel.send({
+            msg.channel.send({
                 embed: {
                     color: clan[clanname].color,
                     author: {
                         name: `${clanMessage} ${clanname}`
                     },
-                    description: clan[clanname].description,
+                    description: clan[clanname].description + `\nXP total : ${clan[clanname].experience}`,
                     thumbnail: { url: clan[clanname].picture },
                     fields: [{
                         name: `${membersMessage}`,
+                        value: `${leaderboard}`
+                    }
+                    ]
+                }
+            }).catch(() => { ; });
+            if (leaderboard2 == "") return;
+            msg.channel.send({
+                embed: {
+                    color: clan[clanname].color,
+                    description: `${leaderboard2}`
+                }
+            }).catch(() => { ; });
+        }
+        function printClanLeaderboard() {
+            if (lang[msg.author.id] == `FR`) {
+                var clanMessage = `Classement des clans`; var clanMessageDesc = "Voici le top 10 des meilleurs clans.";
+            } else if (lang[msg.author.id] == `NO`) {
+                var clanMessage = `Ledertavle for klaner`; var clanMessageDesc = "Her er topp 10 av de beste klanene.";
+            } else {
+                var clanMessage = `Clan leaderboard`; var clanMessageDesc = "Here is the top 10 of the best clans.";
+            }
+            var leaderboard = ``
+            // combine the arrays
+            var list = [];
+            for (j in clan)
+                list.push({ 'clan': j, 'XP': (clan[j].experience) });
+
+            // sort
+            list.sort(function (a, b) {
+                return ((a.XP > b.XP) ? -1 : ((a.XP == b.XP) ? 0 : 1));
+            });
+
+            // separate them back out
+            var leaderboard = "";
+            for (var k = 0; k < list.length; k++) {
+                if (k > 10) { break; }
+                else { leaderboard += `${list[k].clan} ➫ ${list[k].XP} XP\n`; }
+            }
+            msg.channel.send({
+                embed: {
+                    color: 14396152,
+                    author: {
+                        name: `${clanMessage}`
+                    },
+                    description: `${clanMessageDesc}`,
+                    fields: [{
+                        name: `­`,
                         value: `${leaderboard}`
                     }
                     ]
@@ -104,7 +197,7 @@ module.exports = {
             } else if (args[0].toLowerCase() == `create`) { // clan create
                 if (!args[1]) return;
                 var clanName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
-                if (!(15 >= clanName.length && 2 <= clanName.length) || clanName.includes(`­`) || clanName.toLowerCase().startsWith(`kick`) || clanName.toLowerCase().startsWith(`delete`) || clanName.toLowerCase().startsWith(`remove`) || clanName.toLowerCase().startsWith(`ban`) || clanName.toLowerCase().startsWith(`description`) || clanName.toLowerCase().startsWith(`member`) || clanName.toLowerCase().startsWith(`members`) || clanName.toLowerCase().startsWith(`leaderboard`) || clanName.toLowerCase().startsWith(`join`) || clanName.toLowerCase().startsWith(`leave`) || clanName.toLowerCase().startsWith(`private`) || clanName.toLowerCase().startsWith(`public`) || clanName.toLowerCase().startsWith(`color`) || clanName.toLowerCase().startsWith(`image`) || clanName.toLowerCase().startsWith(`picture`) || clanName.toLowerCase().startsWith(`aucun`) || clanName.toLowerCase().startsWith(`none`) || clanName.toLowerCase().startsWith(`ingen`)) {
+                if (!(15 >= clanName.length && 2 <= clanName.length) || clanName.toLowerCase().includes("­") || bannedNames.includes(clanName.toLowerCase())) {
                     if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Ce nom n'est pas autorisé. Pour rappel, il doit avoir entre 2 et 15 caractères <@${msg.author.id}>.`).catch(() => { ; });
                     else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 2 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
                     else return msg.channel.send(`${uncheckIcon} This name is not allowed. As a reminder, it must be between 2 and 15 characters long <@${msg.author.id}>.`).catch(() => { ; });
@@ -129,15 +222,15 @@ module.exports = {
                         else return msg.channel.send(`${uncheckIcon} You already belong to a clan (**__${profile[msg.author.id].clan}__** of **${profile[clan[profile[msg.author.id].clan].owner].name}**)!`)
                     }
                 }
-            } else if (args[0].toLowerCase() == `member` || args[0].toLowerCase() == `members` || args[0].toLowerCase() == `leaderboard`) { // clan leaderboard / clan members
+            } else if (args[0].toLowerCase() == `member` || args[0].toLowerCase() == `members`) { // clan members
                 if (profile[msg.author.id].clan == false) return;
                 if (!args[1]) {
-                    printClanLeaderboard(profile[msg.author.id].clan); return;
+                    printClanMembers(profile[msg.author.id].clan); return;
                 } else {
                     var clanName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
                     for (i in clan) {
                         if (i.toLowerCase() == clanName.toLowerCase()) {
-                            printClanLeaderboard(i); return;
+                            printClanMembers(i); return;
                         }
                     }
                     if (userLang == `FR`) return msg.channel.send(`<@${msg.author.id}> le clan **__${clanName}__** n'existe pas.`).catch(() => { ; });
@@ -145,6 +238,8 @@ module.exports = {
                     else return msg.channel.send(`<@${msg.author.id}> Clan **__${clanName}__** does not exist.`).catch(() => { ; });
 
                 }
+            } else if (args[0].toLowerCase() == `leaderboard`) { // clan leaderboard
+                printClanLeaderboard();
             } else if (args[0].toLowerCase() == `join`) { // if clan join
                 if ((profile[msg.author.id].clan == false)) {
                     if (!args[1]) {
@@ -224,9 +319,9 @@ module.exports = {
                             else if (userLang == `NO`) return msg.channel.send(`Brukeren er ikke engang registrert. `).catch(() => { ; });
                             else return msg.channel.send(`The user is not even registered.`).catch(() => { ; });
                         } else if (profile[args[1]].clan != profile[msg.author.id].clan) { // user not in the same clan
-                            if (userLang == `FR`) return msg.channel.send(`L'utilisateur n'est pas dans votre clan, il est dans **__${profile[args[1]].clan}__** <@${msg.author.id}>`).catch(() => { ; });
-                            else if (userLang == `NO`) return msg.channel.send(`Brukeren er ikke i klanen din, han er i **__${profile[args[1]].clan}__** <@${msg.author.id}>`).catch(() => { ; });
-                            else return msg.channel.send(`The user is not in your clan, he is in     **__${profile[args[1]].clan}__** <@${msg.author.id}>`).catch(() => { ; });
+                            if (userLang == `FR`) return msg.channel.send(`L'utilisateur n'est pas dans votre clan <@${msg.author.id}>.`).catch(() => { ; });
+                            else if (userLang == `NO`) return msg.channel.send(`Brukeren er ikke i klanen din <@${msg.author.id}>.`).catch(() => { ; });
+                            else return msg.channel.send(`The user is not in your clan <@${msg.author.id}>.`).catch(() => { ; });
                         } else if (profile[args[1]].clan == profile[msg.author.id].clan) {
                             if (args[1] == msg.author.id) return;
                             getca(`clankick`, msg, args[1]);
@@ -411,9 +506,9 @@ module.exports = {
                         else return msg.channel.send(`You must put the link to your image <@${msg.author.id}>.`).catch(() => { ; });
                     }
                     getca(`clanpicture`, msg, profile[msg.author.id].clan, args[1]);
-                    if (userLang == `FR`) {msg.channel.send(`${checkIcon} L'image a bien été mise à jour <@${msg.author.id}> ! La voici :`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; });}
-                    if (userLang == `NO`) {msg.channel.send(`${checkIcon} Bildet er oppdatert <@${msg.author.id}> ! La voici :`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; });}
-                    else {msg.channel.send(`${checkIcon} The image has been updated <@${msg.author.id}> ! Here it is:`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; });}
+                    if (userLang == `FR`) { msg.channel.send(`${checkIcon} L'image a bien été mise à jour <@${msg.author.id}> ! La voici :`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; }); }
+                    if (userLang == `NO`) { msg.channel.send(`${checkIcon} Bildet er oppdatert <@${msg.author.id}> ! La voici :`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; }); }
+                    else { msg.channel.send(`${checkIcon} The image has been updated <@${msg.author.id}> ! Here it is:`).catch(() => { ; }); return msg.channel.send(`${args[1]}`).catch(() => { ; }); }
                 }
             } else { // for see a clan info
                 var clanName = ""; for (let i = 0; i < args.length; i++) { if (i == 0) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };

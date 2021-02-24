@@ -46,9 +46,9 @@ module.exports = {
             { max: 1, time: 30000 }).then(collected => {
                 if (collected.first().emoji.name == `Check`) {
                     sendSuggestion(msg, suggestion);
-                    if (userLang == `FR`) return msg.channel.send(`Votre suggestion a bien été envoyée <@${msg.author.id}>`);
-                    else if (userLang == `NO`) return msg.channel.send(`Forslaget ditt er sendt <@${msg.author.id}>`);
-                    else return msg.channel.send(`Your suggestion has been sent <@${msg.author.id}>`);
+                    if (userLang == `FR`) return msg.channel.send(`Votre suggestion a bien été envoyée <@${msg.author.id}>.`);
+                    else if (userLang == `NO`) return msg.channel.send(`Forslaget ditt er sendt <@${msg.author.id}>.`);
+                    else return msg.channel.send(`Your suggestion has been sent <@${msg.author.id}>.`);
                 } else {
                     if (userLang == `FR`) return msg.channel.send(`Votre suggestion a été annulée <@${msg.author.id}>.`).catch(()=>{;});
                     else if (userLang == `NO`) return msg.channel.send(`Forslaget ditt er kansellert <@${msg.author.id}>.`).catch(()=>{;});

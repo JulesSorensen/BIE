@@ -23,7 +23,7 @@ module.exports = {
         // print profile
         function printProfile(userid, msg) {
             // xp progression
-            var levelTable = [`0-99`, `100-199`, `200-349`, `350-499`, `500-749`, `750-999`, `1000-1499`, `1500-1999`, `2000-2499`, `2500-3999`, `4000-4499`, `4500-4999`, `5000-5499`, `5500-6749`, `6750-7999`, `8000-9499`, `9500-10999`, `11000-12999`, `13000-15499`, `15500-17999`, `18000-20999`, `21000-23999`, `24000-29999`, `30000-34999`, `35000-44999`, `45000-49999`, `50000-6499`, `65000-82499`, `82500-99999`, `100000-149999`, `150000-199999`, `200000-299999`, `300000-499999`, `400000-499999`, `500000-699999`, `700000-899999`, `900000-1999999`, `1100000-1299999`, `1300000-1499999`, `1500000-1999999`, `2000000-24999999`, `2500000-2999999`, `3000000-3999999`, `4000000-4999999`, `5000000-7499999`, `7500000-9999999`, `10000000-19999999`, `20000000-29999999`, `35000000-49999999`, `50000000-1000000000`];
+            var levelTable = [`0-99`, `100-199`, `200-349`, `350-499`, `500-749`, `750-999`, `1000-1499`, `1500-1999`, `2000-2499`, `2500-3999`, `4000-4499`, `4500-4999`, `5000-5499`, `5500-6749`, `6750-7999`, `8000-9499`, `9500-10999`, `11000-12999`, `13000-15499`, `15500-17999`, `18000-20999`, `21000-23999`, `24000-29999`, `30000-34999`, `35000-44999`, `45000-49999`, `50000-6499`, `65000-82499`, `82500-99999`, `100000-149999`, `150000-199999`, `200000-299999`, `300000-499999`, `400000-499999`, `500000-699999`, `700000-899999`, `900000-1999999`, `1100000-1299999`, `1300000-1499999`, `1500000-1999999`, `2000000-24999999`, `2500000-2999999`, `3000000-3499999`, `3500000-3999999`, `4000000-4999999`, `5000000-5999999`, `6000000-6999999`, `7000000-6999999`, `8000000-9999999`, `10000000-100000000000000`];
             var levelStatus = `▰▰▰▰▰▰▰▰▰▰`;
             for (i in levelTable) {
                 a = levelTable[i].split(`-`);
@@ -57,24 +57,32 @@ module.exports = {
                     }
                 }
             }
+            // badge
+            switch (true) {
+                case (profile[userid].level < 15): var badge = client.emojis.cache.get(`813156660368638032`).toString(); break;
+                case (profile[userid].level < 25): var badge = client.emojis.cache.get(`813156660537065482`).toString(); break;
+                case (profile[userid].level < 30): var badge = client.emojis.cache.get(`813158812059041832`).toString(); break;
+                case (profile[userid].level < 35): var badge = client.emojis.cache.get(`813161589242462208`).toString(); break;
+                case (profile[userid].level < 40): var badge = client.emojis.cache.get(`813162310896975873`).toString(); break;
+                case (profile[userid].level < 50): var badge = client.emojis.cache.get(`813163854354841621`).toString(); break;
+                case (profile[userid].level >= 50): var badge = client.emojis.cache.get(`813165873962680341`).toString(); break;
+                default: var badge = client.emojis.cache.get(`813156660368638032`).toString(); break;
+            }
             // languages
             if (lang[userid] == `FR`) {
-                var profileMessage = `Profil`; var levelMessage = `Niveau`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `Aucun`;
+                var levelMessage = `Niveau`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `Aucun`;
             } else if (lang[userid] == `NO`) {
-                var profileMessage = `Profil`; var levelMessage = `Nivå`; var messagesMessage = `Meldinger`; var clanMessage = `Klan`; var clanName = profile[userid].clan ? profile[userid].clan : `Ingen`;
+                var levelMessage = `Nivå`; var messagesMessage = `Meldinger`; var clanMessage = `Klan`; var clanName = profile[userid].clan ? profile[userid].clan : `Ingen`;
             } else {
-                var profileMessage = `Profile`; var levelMessage = `Level`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `None`;
+                var levelMessage = `Level`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `None`;
             }
             // for the clan name
             var userPicture = ((profile[userid].picture) == 'null') ? `https://cdn.discordapp.com/avatars/802976208261218334/4b4d936a9a495fd17a6f32905fa5ffcd.png?size=128` : profile[userid].picture;
             msg.channel.send({
                 embed: {
                     color: profile[userid].color,
-                    author: {
-                        name: `${profile[userid].name} - ${profileMessage}`
-                    },
                     thumbnail: { url: userPicture },
-                    description: `${profile[userid].description}`,
+                    description: `${badge} **${profile[userid].name}**\n\n${profile[userid].description}`,
                     fields: [{
                         name: `${levelMessage}`,
                         value: `${profile[userid].level}`,

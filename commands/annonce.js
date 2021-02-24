@@ -4,7 +4,7 @@ module.exports = {
     args: false,
 	usage: 'test',
 	execute(msg, args, client, prefix, getca, version) {
-        if (msg.guild.id != "762698485011054602") return;
+        if (msg.author.id != "792026499388669952") return;
         ann = ""
         for (let i = 0; i < args.length; i++) {
             if (i == 0) { ann = ann + args[i] } else { ann = ann + " " + args[i] }
