@@ -98,11 +98,11 @@ module.exports = {
         }
         function printClanMembers(clanname) {
             if (lang[clan[clanname].owner] == `FR`) {
-                var clanMessage = `Clan :`; var membersMessage = `Membres`;
+                var clanMessage = `Clan :`; var membersMessage = `Membres`; var totalXPMessage = `XP total :`;
             } else if (lang[clan[clanname].owner] == `NO`) {
-                var clanMessage = `Klan:`; var membersMessage = `Medlemmer`;
+                var clanMessage = `Klan:`; var membersMessage = `Medlemmer`; var totalXPMessage = `XP totalt:`;
             } else {
-                var clanMessage = `Clan:`; var membersMessage = `Members`;
+                var clanMessage = `Clan:`; var membersMessage = `Members`; var totalXPMessage = `Total XP:`;
             }
             var leaderboard = ``
             // combine the arrays
@@ -127,7 +127,7 @@ module.exports = {
                     author: {
                         name: `${clanMessage} ${clanname}`
                     },
-                    description: clan[clanname].description + `\nXP total : ${clan[clanname].experience}`,
+                    description: clan[clanname].description + `\n${totalXPMessage} ${clan[clanname].experience}`,
                     thumbnail: { url: clan[clanname].picture },
                     fields: [{
                         name: `${membersMessage}`,
