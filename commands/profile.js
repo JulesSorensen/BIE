@@ -2,10 +2,11 @@ module.exports = {
     name: 'profile',
     description: 'Information about the arguments provided.',
     args: false,
+    guildOnly: true,
     usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // check + cross icon
-        let checkIcon = client.emojis.cache.get(`806094704206676019`).toString(); let uncheckIcon = client.emojis.cache.get(`806094704190029856`).toString();
+        let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
         // getter
         let profile = getca(`profile`);
         let lang = getca(`language`);
@@ -25,8 +26,8 @@ module.exports = {
             // xp progression
             var levelTable = [`0-99`, `100-199`, `200-349`, `350-499`, `500-749`, `750-999`, `1000-1499`, `1500-1999`, `2000-2499`, `2500-3999`, `4000-4499`, `4500-4999`, `5000-5499`, `5500-6749`, `6750-7999`, `8000-9499`, `9500-10999`, `11000-12999`, `13000-15499`, `15500-17999`, `18000-20999`, `21000-23999`, `24000-29999`, `30000-34999`, `35000-44999`, `45000-49999`, `50000-6499`, `65000-82499`, `82500-99999`, `100000-149999`, `150000-199999`, `200000-299999`, `300000-499999`, `400000-499999`, `500000-699999`, `700000-899999`, `900000-1999999`, `1100000-1299999`, `1300000-1499999`, `1500000-1999999`, `2000000-24999999`, `2500000-2999999`, `3000000-3499999`, `3500000-3999999`, `4000000-4999999`, `5000000-5999999`, `6000000-6999999`, `7000000-6999999`, `8000000-9999999`, `10000000-100000000000000`];
             var levelStatus = `▰▰▰▰▰▰▰▰▰▰`;
-            for (i in levelTable) {
-                a = levelTable[i].split(`-`);
+            for (var i in levelTable) {
+                var a = levelTable[i].split(`-`);
                 if ((profile[userid].experience >= a[0]) && (a[1] >= profile[userid].experience)) {
                     a[0] = parseInt(a[0]);
                     a[1] = parseInt(a[1]);
@@ -59,14 +60,14 @@ module.exports = {
             }
             // badge
             switch (true) {
-                case (profile[userid].level < 15): var badge = client.emojis.cache.get(`813156660368638032`).toString(); break;
-                case (profile[userid].level < 25): var badge = client.emojis.cache.get(`813156660537065482`).toString(); break;
-                case (profile[userid].level < 30): var badge = client.emojis.cache.get(`813158812059041832`).toString(); break;
-                case (profile[userid].level < 35): var badge = client.emojis.cache.get(`813161589242462208`).toString(); break;
-                case (profile[userid].level < 40): var badge = client.emojis.cache.get(`813162310896975873`).toString(); break;
-                case (profile[userid].level < 50): var badge = client.emojis.cache.get(`813163854354841621`).toString(); break;
-                case (profile[userid].level >= 50): var badge = client.emojis.cache.get(`813165873962680341`).toString(); break;
-                default: var badge = client.emojis.cache.get(`813156660368638032`).toString(); break;
+                case (profile[userid].level < 20): var badge = client.emojis.cache.get(`842418674861735958`).toString(); break;
+                case (profile[userid].level < 30): var badge = client.emojis.cache.get(`842418674476122154`).toString(); break;
+                case (profile[userid].level < 35): var badge = client.emojis.cache.get(`842418674840240128`).toString(); break;
+                case (profile[userid].level < 40): var badge = client.emojis.cache.get(`842418674744295515`).toString(); break;
+                case (profile[userid].level < 45): var badge = client.emojis.cache.get(`842418674828836924`).toString(); break;
+                case (profile[userid].level < 50): var badge = client.emojis.cache.get(`842418674483724349`).toString(); break;
+                case (profile[userid].level >= 50): var badge = client.emojis.cache.get(`842418674487787552`).toString(); break;
+                default: var badge = client.emojis.cache.get(`842418674861735958`).toString(); break;
             }
             // languages
             if (lang[userid] == `FR`) {
@@ -77,7 +78,9 @@ module.exports = {
                 var levelMessage = `Level`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `None`;
             }
             // for the clan name
-            var userPicture = ((profile[userid].picture) == 'null') ? `https://cdn.discordapp.com/avatars/802976208261218334/4b4d936a9a495fd17a6f32905fa5ffcd.png?size=128` : profile[userid].picture;
+            var userPicture = ((profile[userid].picture) == 'default') ? `${msg.author.avatarURL({ format: `png`, dynamic: true, size: 128 })}` : profile[userid].picture;
+            if (profile[userid].experience >= 1000000) {var expText = Math.floor(profile[userid].experience * 0.000001) + "," + (Math.floor(profile[userid].experience)).toString().substr(-6,1) + "M";} else if (profile[userid].experience >= 1000) {var expText = Math.floor(profile[userid].experience * 0.001) + "k";} else {var expText = profile[userid].experience;}
+            if (profile[userid].messages >= 1000000) {var msgText = Math.floor(profile[userid].messages * 0.000001) + "," + (Math.floor(profile[userid].messages)).toString().substr(-6,3) + "M";} else if (profile[userid].messages >= 1000) {var msgText = Math.floor(profile[userid].messages * 0.001) + "," + (Math.floor(profile[userid].messages)).toString().substr(-3,1) + "k";} else {var msgText = profile[userid].messages;}
             msg.channel.send({
                 embed: {
                     color: profile[userid].color,
@@ -89,7 +92,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: `${messagesMessage}`,
-                        value: `${profile[userid].messages}`,
+                        value: `${msgText}`,
                         inline: true
                     }, {
                         name: `${clanMessage}`,
@@ -97,7 +100,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: `XP`,
-                        value: `${levelStatus} | ${profile[userid].experience}`,
+                        value: `${levelStatus} | ${expText}`,
                         inline: true
                     }
                     ]
@@ -125,7 +128,7 @@ module.exports = {
                 else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 2 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
                 else return msg.channel.send(`${uncheckIcon} This name is not allowed. It must be between 2 and 15 characters long. <@${msg.author.id}>.`).catch(() => { ; });
             }
-            for (i in profile) {
+            for (var i in profile) {
                 if ((profile[i].name).toLowerCase() == userName.toLowerCase()) {
                     if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Quelqu'un s'appelle déjà comme ça <@${msg.author.id}>...`).catch(() => { ; });
                     else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Noen har allerede dette navnet <@${msg.author.id}>...`).catch(() => { ; });
@@ -225,7 +228,7 @@ module.exports = {
                 }
             } else {
                 var userName = ""; for (let i = 0; i < args.length; i++) { if (i == 0) { userName = userName + args[i] } else { userName = userName + " " + args[i] } };
-                for (i in profile) {
+                for (var i in profile) {
                     if ((profile[i].name).toLowerCase() == userName.toLowerCase()) {
                         printProfile(i, msg); return;
                     }

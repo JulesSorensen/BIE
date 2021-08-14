@@ -2,6 +2,7 @@ module.exports = {
     name: 'guild',
     description: 'Information about the arguments provided.',
     args: false,
+    guildOnly: true,
     usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // getter
@@ -38,8 +39,6 @@ module.exports = {
                 if (k == 0) { var membersList = `🥇 ${list[k].messages} ➩ <@${list[k].members}>\n`; }
                 else if (k == 1) { membersList += `🥈 ${list[k].messages} ➩ <@${list[k].members}>\n`; }
                 else if (k == 2) { membersList += `🥉 ${list[k].messages} ➩ <@${list[k].members}>\n`; }
-                else if (k > 0) { membersList += `\n­`; break; }
-                else if (k == (list.length - 1)) { membersList += ` ­ ­ ­ ­ ­ ­ ­ ${list[k].messages} ➩ <@${list[k].members}>\n­`; }
                 else { membersList += ` ­ ­ ­ ­ ­ ­ ­ ${list[k].messages} ➩ <@${list[k].members}>\n`; }
             } else break;
         }

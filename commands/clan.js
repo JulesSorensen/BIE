@@ -2,10 +2,11 @@ module.exports = {
     name: 'clan',
     description: 'Information about the argsuments provided.',
     args: false,
+    guildOnly: true,
     usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // check + cross icon
-        let checkIcon = client.emojis.cache.get(`806094704206676019`).toString(); let uncheckIcon = client.emojis.cache.get(`806094704190029856`).toString();
+        let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
         // getter
         let clan = getca(`clan`);
         let profile = getca(`profile`);
@@ -28,8 +29,8 @@ module.exports = {
             // xp progression
             var levelTableClan = [`0-19999`, `20000-99999`, `100000-499999`, `500000-999999`, `1000000-1499999`, `1500000-2499999`, `2500000-4999999`, `5000000-9999999`, `10000000-49999999`, `50000000-10000000000`];
             var levelStatus = `▰▰▰▰▰▰▰▰▰▰`;
-            for (i in levelTableClan) {
-                a = levelTableClan[i].split(`-`);
+            for (var i in levelTableClan) {
+                var a = levelTableClan[i].split(`-`);
                 if ((clan[clanname].experience >= a[0]) && (a[1] >= clan[clanname].experience)) {
                     a[0] = parseInt(a[0]);
                     a[1] = parseInt(a[1]);
@@ -67,6 +68,7 @@ module.exports = {
             } else {
                 var clanMessage = `Clan:`; var membersMessage = `Members`; var levelMessage = `Level`; var messagesMessage = `Messages`; var statusMessage = `Status`; var statusMessage = `Status`; var statusMessageName = clan[clanname].status ? `Public` : `Private`;
             }
+            if (clan[clanname].messages >= 1000000) {var msgText = Math.floor(clan[clanname].messages * 0.000001) + "M " + Math.floor(clan[clanname].messages * 0.001) + "k";} else if (clan[clanname].messages >= 1000) {var msgText = Math.floor(clan[clanname].messages * 0.001) + "," + (Math.floor(clan[clanname].messages)).toString().substr(-3,1) + "k";} else {var msgText = clan[clanname].messages;}
             return msg.channel.send({
                 embed: {
                     color: clan[clanname].color,
@@ -81,7 +83,7 @@ module.exports = {
                         inline: true
                     }, {
                         name: `${messagesMessage}`,
-                        value: `${clan[clanname].messages}`,
+                        value: `${msgText}`,
                         inline: true
                     }, {
                         name: `${statusMessage}`,
@@ -155,7 +157,7 @@ module.exports = {
             var leaderboard = ``
             // combine the arrays
             var list = [];
-            for (j in clan)
+            for (var j in clan)
                 list.push({ 'clan': j, 'XP': (clan[j].experience) });
 
             // sort
@@ -203,7 +205,7 @@ module.exports = {
                     else return msg.channel.send(`${uncheckIcon} This name is not allowed. As a reminder, it must be between 2 and 15 characters long <@${msg.author.id}>.`).catch(() => { ; });
                 } else {
                     // if a clan already have this name
-                    for (i in clan) {
+                    for (var i in clan) {
                         if (i.toLowerCase() == clanName.toLowerCase()) {
                             if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Le clan **__${i}__** de **${profile[clan[i].owner].name}** existe déjà !`).catch(() => { ; });
                             else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} **__${i}__** klanen til **${profile[clan[i].owner].name}** eksisterer allerede!`).catch(() => { ; });
@@ -228,7 +230,7 @@ module.exports = {
                     printClanMembers(profile[msg.author.id].clan); return;
                 } else {
                     var clanName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
-                    for (i in clan) {
+                    for (var i in clan) {
                         if (i.toLowerCase() == clanName.toLowerCase()) {
                             printClanMembers(i); return;
                         }
@@ -249,7 +251,7 @@ module.exports = {
                     }
                     var clanName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
                     // search the clan
-                    for (i in clan) {
+                    for (var i in clan) {
                         if (i.toLowerCase() == clanName.toLowerCase()) {
                             if (clan[i].status == false) { // private clan
                                 if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Le clan **__${profile[clan[i].owner].clan}__** est privé <@${msg.author.id}>, vous devez demander à **${profile[clan[i].owner].name}** de vous inviter.`).catch(() => { ; });
@@ -330,7 +332,7 @@ module.exports = {
                             else return msg.channel.send(`${checkIcon} ${profile[args[1]].name} has been excluded from your clan **__${profile[msg.author.id].clan}__** <@${msg.author.id}>.`).catch(() => { ; });
                         } else return msg.channel.send(`Error CN-KK1`).catch(() => { ; });
                     } else { // kick by user's name
-                        for (i in clan[profile[msg.author.id].clan].members) {
+                        for (var i in clan[profile[msg.author.id].clan].members) {
                             if (profile[(clan[profile[msg.author.id].clan].members)[i]].name == args[1]) {
                                 if ((clan[profile[msg.author.id].clan].members)[i] == msg.author.id) return;
                                 if (profile[(clan[profile[msg.author.id].clan].members)[i]].clan != profile[msg.author.id].clan) { // user not in the clan
@@ -512,7 +514,7 @@ module.exports = {
                 }
             } else { // for see a clan info
                 var clanName = ""; for (let i = 0; i < args.length; i++) { if (i == 0) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
-                for (i in clan) {
+                for (var i in clan) {
                     if (i.toLowerCase() == clanName.toLowerCase()) {
                         printClan(i); return;
                     }

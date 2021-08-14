@@ -2,6 +2,7 @@ module.exports = {
     name: 'remindme',
     description: 'Information about the arguments provided.',
     args: false,
+    guildOnly: false,
     execute(msg, args, client, prefix, getca, version) {
         lang = getca("language", msg)
         if (!args[0]) {

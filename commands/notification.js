@@ -2,6 +2,7 @@ module.exports = {
     name: 'notification',
     description: 'Information about the arguments provided.',
     args: false,
+    guildOnly: true,
     usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         let notification = getca(`notification`);
@@ -9,7 +10,7 @@ module.exports = {
         let lang = getca(`language`);
         let userLang = lang[msg.author.id];
         // check + cross icon
-        let checkIcon = client.emojis.cache.get(`806094704206676019`).toString(); let uncheckIcon = client.emojis.cache.get(`806094704190029856`).toString();
+        let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
         if (!args[0]) {
             if (!notification[msg.author.id] || notification[msg.author.id] == `off`) {
                 if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Les messages de gain de niveau sont **désactivés** <@${msg.author.id}>.\nPrésisez "on" ou "off" après la commande pour désactiver ou activer les messages privés quand vous passez un niveau.`).catch(()=>{;});

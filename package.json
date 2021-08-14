@@ -1,10 +1,10 @@
 {
-  "name": "glede",
-  "version": "1.0.0",
-  "description": "Glede Bot made by Nekewo",
+  "name": "bie",
+  "version": "2.0.0",
+  "description": "BIE Bot made by Nekewo",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/JulesSorensen/Glede#readme",
   "dependencies": {
-    "discord.js": "^12.5.1",
-    "express": "^4.17.1",
-    "fs": "^0.0.1-security"
-  },
-  "devDependencies": {}
+    "discord-buttons": "^4.0.0",
+    "discord-reply": "^0.1.2",
+    "discord.js": "^12.5.3",
+    "fs": "^0.0.1-security",
+    "node-fetch": "^2.6.1"
+  }
 }
