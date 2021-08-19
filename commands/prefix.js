@@ -1,9 +1,6 @@
 module.exports = {
     name: 'prefix',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: '[NewPrefix]',
     execute(msg, args, client, prefix, getca, version) {
         lang = getca("language", msg)
         customprefix = getca("customprefix", msg)

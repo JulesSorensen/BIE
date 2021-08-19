@@ -1,9 +1,6 @@
 module.exports = {
     name: 'language',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: false,
-    usage: '[EN,FR,NO]',
     execute(msg, args, client, prefix, getca) {
         lang = getca("language", msg)
         // default

@@ -1,9 +1,6 @@
 module.exports = {
     name: 'notification',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         let notification = getca(`notification`);
         let guildnotification = getca(`guildnotification`);

@@ -1,9 +1,6 @@
 module.exports = {
     name: 'help',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: '[command]',
     execute(msg, args, client, prefix, getca, version) {
         lang = getca("language", msg)
         const arrow = client.emojis.cache.get("842384331329634304").toString();
@@ -118,7 +115,7 @@ module.exports = {
         // categories
         if (args[0].toLowerCase() === "ping") {
             // ping
-        } else if (args[0].toLowerCase() === "profil" || args[0].toLowerCase() === "profile") {
+        } else if (args[0].toLowerCase() === "profil" || args[0].toLowerCase() === "profile" || args[0].toLowerCase() === "p") {
             // profil
             if (lang[msg.author.id] === "FR") {
                 return msg.channel.send({
@@ -226,7 +223,7 @@ module.exports = {
                     }
                 }).catch(() => { ; });
             }
-        } else if (args[0].toLowerCase() === "clan" || args[0].toLowerCase() === "clans") {
+        } else if (args[0].toLowerCase() === "clan" || args[0].toLowerCase() === "clans" || args[0].toLowerCase() === "c") {
             // clan
             if (lang[msg.author.id] === "FR") {
                 msg.channel.send({
@@ -556,7 +553,7 @@ module.exports = {
                     }
                 }).catch(() => { ; });
             }
-        } else if (args[0].toLowerCase() === "misc" || args[0].toLowerCase() === "divers" || args[0].toLowerCase() === "language" || args[0].toLowerCase() === "langage") {
+        } else if (args[0].toLowerCase() === "misc" || args[0].toLowerCase() === "divers" || args[0].toLowerCase() === "language" || args[0].toLowerCase() === "langage" || args[0].toLowerCase() === "m") {
             // misc
             if (lang[msg.author.id] === "FR") {
                 return msg.channel.send({

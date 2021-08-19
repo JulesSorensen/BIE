@@ -1,18 +1,15 @@
 module.exports = {
     name: 'suggestion',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: false,
-    usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // check + cross icon
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
         function sendSuggestion(msg, sugg) {
-            let suggsalon = client.channels.cache.get("870941577881726977");
+            let suggsalon = client.channels.cache.get("831823187213680685");
             var userPicture = ((profile[msg.author.id].picture) == 'default') ? msg.author.avatarURL({ format: `png`, dynamic: true, size: 128 }) : profile[msg.author.id].picture;
             suggsalon.send({
                 embed: {
-                    color: 14396152,
+                    color: 10767175,
                     author: {
                         name: profile[msg.author.id].name,
                         icon_url: userPicture

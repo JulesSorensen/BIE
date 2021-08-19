@@ -1,9 +1,6 @@
 module.exports = {
     name: 'guild',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // getter
         let guildmessage = getca(`guildmessage`);
@@ -45,7 +42,7 @@ module.exports = {
         membersList += `­`;
         msg.channel.send({
             embed: {
-                color: 14396152,
+                color: 10767175,
                 author: {
                     name: `${msg.guild.name}`
                 },

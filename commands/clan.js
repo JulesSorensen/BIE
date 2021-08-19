@@ -1,9 +1,6 @@
 module.exports = {
     name: 'clan',
-    description: 'Information about the argsuments provided.',
-    args: false,
     guildOnly: true,
-    usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // check + cross icon
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
@@ -13,7 +10,7 @@ module.exports = {
         let lang = getca(`language`);
         let userLang = lang[msg.author.id];
         // bannedNames
-        let bannedNames = ["­", "create", "owner", "kick", "delete", "remove", "ban", "description", "member", "members", "leaderboard", "join", "leave", "private", "public", "color", "image", "picture", "aucun", "none", "ingen", "false", "profile"];
+        let bannedNames = ["­", "create", "owner", "kick", "delete", "remove", "ban", "description", "member", "members", "leaderboard", "join", "leave", "private", "public", "color", "colour", "image", "picture", "aucun", "none", "ingen", "false", "profile", "profil"];
         // function if url
         function validURL(str) {
             var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -199,10 +196,10 @@ module.exports = {
             } else if (args[0].toLowerCase() == `create`) { // clan create
                 if (!args[1]) return;
                 var clanName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { clanName = clanName + args[i] } else { clanName = clanName + " " + args[i] } };
-                if (!(15 >= clanName.length && 2 <= clanName.length) || clanName.toLowerCase().includes("­") || bannedNames.includes(clanName.toLowerCase())) {
-                    if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Ce nom n'est pas autorisé. Pour rappel, il doit avoir entre 2 et 15 caractères <@${msg.author.id}>.`).catch(() => { ; });
-                    else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 2 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
-                    else return msg.channel.send(`${uncheckIcon} This name is not allowed. As a reminder, it must be between 2 and 15 characters long <@${msg.author.id}>.`).catch(() => { ; });
+                if (!(15 >= clanName.length && 3 <= clanName.length) || clanName.toLowerCase().includes("­") || bannedNames.includes(clanName.toLowerCase())) {
+                    if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Ce nom n'est pas autorisé. Pour rappel, il doit avoir entre 3 et 15 caractères <@${msg.author.id}>.`).catch(() => { ; });
+                    else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 3 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
+                    else return msg.channel.send(`${uncheckIcon} This name is not allowed. As a reminder, it must be between 3 and 15 characters long <@${msg.author.id}>.`).catch(() => { ; });
                 } else {
                     // if a clan already have this name
                     for (var i in clan) {
@@ -224,7 +221,7 @@ module.exports = {
                         else return msg.channel.send(`${uncheckIcon} You already belong to a clan (**__${profile[msg.author.id].clan}__** of **${profile[clan[profile[msg.author.id].clan].owner].name}**)!`)
                     }
                 }
-            } else if (args[0].toLowerCase() == `member` || args[0].toLowerCase() == `members`) { // clan members
+            } else if (args[0].toLowerCase() == `member` || args[0].toLowerCase() == `members` || args[0].toLowerCase() == `m`) { // clan members
                 if (profile[msg.author.id].clan == false) return;
                 if (!args[1]) {
                     printClanMembers(profile[msg.author.id].clan); return;
@@ -240,9 +237,9 @@ module.exports = {
                     else return msg.channel.send(`<@${msg.author.id}> Clan **__${clanName}__** does not exist.`).catch(() => { ; });
 
                 }
-            } else if (args[0].toLowerCase() == `leaderboard`) { // clan leaderboard
+            } else if (args[0].toLowerCase() == `leaderboard` || args[0].toLowerCase() == `l`) { // clan leaderboard
                 printClanLeaderboard();
-            } else if (args[0].toLowerCase() == `join`) { // if clan join
+            } else if (args[0].toLowerCase() == `join` || args[0].toLowerCase() == `j`) { // if clan join
                 if ((profile[msg.author.id].clan == false)) {
                     if (!args[1]) {
                         if (userLang == `FR`) return msg.channel.send(`Vous devez taper le nom du clan que vous souhaitez rejoindre <@${msg.author.id}>.`).catch(() => { ; });
@@ -373,7 +370,7 @@ module.exports = {
                         }).catch(() => { ; });
                 } else return;
 
-            } else if (args[0].toLowerCase() == `description`) { // clan description
+            } else if (args[0].toLowerCase() == `description` || args[0].toLowerCase() == `d`) { // clan description
                 if ((profile[msg.author.id].clan != false) && (clan[profile[msg.author.id].clan].owner == msg.author.id)) {
                     if (!args[1] || args[1].toLowerCase() == "reset") { // reset description
                         getca(`clandescriptionreset`, msg);
@@ -419,7 +416,7 @@ module.exports = {
                     }
                 } else return;
 
-            } else if (args[0].toLowerCase() == `invite`) { // clan invitation
+            } else if (args[0].toLowerCase() == `invite` || args[0].toLowerCase() == `i`) { // clan invitation
                 if ((profile[msg.author.id].clan != false) && (clan[profile[msg.author.id].clan].owner == msg.author.id)) {
                     // if clan is full
                     if (clan[profile[msg.author.id].clan].membersnb >= clan[profile[msg.author.id].clan].membersnblimit) { // full clan
@@ -469,7 +466,7 @@ module.exports = {
                     } else return msg.channel.send(`Error CN-IE1`).catch(() => { ; });
                 } else return;
 
-            } else if (args[0].toLowerCase() == `color`) { // clan color
+            } else if (args[0].toLowerCase() == `color` || args[0].toLowerCase() == `c`) { // clan color
                 if ((profile[msg.author.id].clan != false) && (clan[profile[msg.author.id].clan].owner == msg.author.id)) {
                     if (!args[1]) {
                         if (userLang == `FR`) return msg.channel.send(`Vous devez mettre une couleur en code décimal, ou hexadecimal (avec un # devant) <@${msg.author.id}>.`).catch(() => { ; });
@@ -492,7 +489,7 @@ module.exports = {
                     else if (userLang == `NO`) return msg.channel.send(`${checkIcon} Fargen på klanen har endret seg \`${args[1]}\` <@${msg.author.id}> !`).catch(() => { ; });
                     else return msg.channel.send(`${checkIcon} The color of the clan has changed in \`${args[1]}\` <@${msg.author.id}> !`).catch(() => { ; });
                 }
-            } else if (args[0].toLowerCase() == `picture` || args[0].toLowerCase() == `image`) { // clan picture
+            } else if (args[0].toLowerCase() == `picture` || args[0].toLowerCase() == `image` || args[0].toLowerCase() == `p`) { // clan picture
                 if ((profile[msg.author.id].clan != false) && (clan[profile[msg.author.id].clan].owner == msg.author.id)) {
                     try {
                         if (args[1].toLowerCase() == "reset") {

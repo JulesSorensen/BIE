@@ -1,9 +1,6 @@
 module.exports = {
 	name: 'role',
-	description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-	usage: 'test',
 	execute(msg, args, client, prefix, getca, version) {
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
         let customrole = getca(`customrole`);

@@ -1,21 +1,16 @@
 module.exports = {
     name: 'teams',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: '[Lien] [HeureDuDébut] [HeureDeFin] [NomDuCours]',
     execute(msg, args, client, prefix, getca, version) {
         if (msg.guild.id != "762698485011054602") return;
         if (!args[0]) return msg.channel.send(`Voici comment utiliser la commande: \`&teams [Lien] [HeureDuDébut] [HeureDeFin] [NomDuCours]\``).catch(()=>{;});
         msg.delete({ timeout: 10 }).catch(()=>{;});
-        let efficomsalon = client.channels.cache.get("762698661892849714");
+        let efficomsalon = client.channels.cache.get("762698661892849714").catch(()=>{;});
         var link = args[0];
         var heured = (!args[1]) ? (`Non spécifié`) : args[1];
         var heuref = (!args[2]) ? (`Non spécifié`) : args[2];
         var nomducours = (!args[3]) ? (``) : (`📚 Cours : ${args.slice(3).join(' ')}\n­`);
-
-        efficomsalon.send("<@&875369959503581244>").catch(()=>{;});
-        efficomsalon.send({
+        efficomsalon.send("<@&875369959503581244>", {
             embed: {
                 color: 4673464,
                 thumbnail: {

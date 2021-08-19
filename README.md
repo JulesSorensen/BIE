@@ -5,15 +5,17 @@
 
 ## Last update
 
-- ✅ Update 2.0 public
-    - Released on ??/08/2021
+- ✅ Reminders    commands
 - ✅ Custom roles commands
-- ✅ All the bugs have been fixed
+- ✅ All the bugs have been fixed in update 2.0.1
 
 ## Latest news and important objectives
 
+- ✅ Update 2.0 public
+    - Released on 15/08/2021
+
 - ✅ Update 1.0 public
-    - Released on 02/14/2020
+    - Released on 14/02/2020
 
 - ✅ Glede is constantly working
     - 5 to 10 minutes of maintenance with each update

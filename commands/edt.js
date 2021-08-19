@@ -1,9 +1,6 @@
 module.exports = {
 	name: 'edt',
-	description: 'PRIVATE CMD',
-    args: false,
     guildOnly: false,
-	usage: 'test',
 	execute(msg, args, client, prefix, getca, version) {
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString(); let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
         if(msg.guild.id != `762698485011054602` && msg.guild.id != `831823187213680682`) return;

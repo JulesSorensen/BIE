@@ -1,9 +1,6 @@
 module.exports = {
     name: 'profile',
-    description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-    usage: 'test',
     execute(msg, args, client, prefix, getca, version) {
         // check + cross icon
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
@@ -11,6 +8,8 @@ module.exports = {
         let profile = getca(`profile`);
         let lang = getca(`language`);
         let userLang = lang[msg.author.id];
+        // bannedNames
+        let bannedNames = ["­", "kick", "delete", "create", "owner", "kick", "remove", "ban", "description", "member", "members", "leaderboard", "join", "leave", "private", "public", "color", "image", "picture", "name", "rename", "username", "colour", "aucun", "none", "ingen", "false", "profile", "profil"];
         // function if url
         function validURL(str) {
             var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
@@ -78,7 +77,7 @@ module.exports = {
                 var levelMessage = `Level`; var messagesMessage = `Messages`; var clanMessage = `Clan`; var clanName = profile[userid].clan ? profile[userid].clan : `None`;
             }
             // for the clan name
-            var userPicture = ((profile[userid].picture) == 'default') ? `${msg.author.avatarURL({ format: `png`, dynamic: true, size: 128 })}` : profile[userid].picture;
+            if (!client.users.cache.get(userid)) {var userPicture = `https://i.imgur.com/ST5Q7hj.jpg`;} else {var userPicture = ((profile[userid].picture) == 'default') ? (client.users.cache.get(userid)).avatarURL({ format: `png`, dynamic: true, size: 128 }) : profile[userid].picture;};
             if (profile[userid].experience >= 1000000) {var expText = Math.floor(profile[userid].experience * 0.000001) + "," + (Math.floor(profile[userid].experience)).toString().substr(-6,1) + "M";} else if (profile[userid].experience >= 1000) {var expText = Math.floor(profile[userid].experience * 0.001) + "k";} else {var expText = profile[userid].experience;}
             if (profile[userid].messages >= 1000000) {var msgText = Math.floor(profile[userid].messages * 0.000001) + "," + (Math.floor(profile[userid].messages)).toString().substr(-6,3) + "M";} else if (profile[userid].messages >= 1000) {var msgText = Math.floor(profile[userid].messages * 0.001) + "," + (Math.floor(profile[userid].messages)).toString().substr(-3,1) + "k";} else {var msgText = profile[userid].messages;}
             msg.channel.send({
@@ -116,17 +115,17 @@ module.exports = {
                 printProfile(msg.author.id, msg); return;
             }
 
-        } else if (args[0].toLowerCase() == `name` || args[0].toLowerCase() == `rename` || args[0].toLowerCase() == `username`) { // name changement
+        } else if (args[0].toLowerCase() == `name` || args[0].toLowerCase() == `rename` || args[0].toLowerCase() == `username` || args[0].toLowerCase() == `n` || args[0].toLowerCase() == `r`) { // name changement
             if (!args[1]) {
                 if (userLang == `FR`) return msg.channel.send(`Vous devez mettre votre nouveau nom après la commande <@${msg.author.id}>.`).catch(() => { ; });
                 else if (userLang == `NO`) return msg.channel.send(`Du må sette ditt nye navn etter kommandoen <@${msg.author.id}>.`).catch(() => { ; });
                 else return msg.channel.send(`You have to put your new name after the command <@${msg.author.id}>.`).catch(() => { ; });
             }
             var userName = ""; for (let i = 1; i < args.length; i++) { if (i == 1) { userName = userName + args[i] } else { userName = userName + " " + args[i] } };
-            if (!(15 >= userName.length && 2 <= userName.length) || userName.includes(`­`) || userName.toLowerCase() == (`kick`) || userName.toLowerCase() == (`delete`) || userName.toLowerCase() == (`remove`) || userName.toLowerCase() == (`ban`) || userName.toLowerCase() == (`description`) || userName.toLowerCase() == (`member`) || userName.toLowerCase() == (`members`) || userName.toLowerCase() == (`leaderboard`) || userName.toLowerCase() == (`join`) || userName.toLowerCase() == (`leave`) || userName.toLowerCase() == (`private`) || userName.toLowerCase() == (`public`) || userName.toLowerCase() == (`color`) || userName.toLowerCase() == (`image`) || userName.toLowerCase() == (`picture`) || userName.toLowerCase() == (`name`) || userName.toLowerCase() == (`rename`) || userName.toLowerCase() == (`username`) || userName.toLowerCase() == (`colour`)) {
-                if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Ce nom n'est pas autorisé. Pour rappel, il doit avoir entre 2 et 15 caractères <@${msg.author.id}>.`).catch(() => { ; });
-                else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 2 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
-                else return msg.channel.send(`${uncheckIcon} This name is not allowed. It must be between 2 and 15 characters long. <@${msg.author.id}>.`).catch(() => { ; });
+            if (!(15 >= userName.length && 3 <= userName.length) || clanName.toLowerCase().includes("­") || bannedNames.includes(userName.toLowerCase())) {
+                if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Ce nom n'est pas autorisé. Pour rappel, il doit avoir entre 3 et 15 caractères <@${msg.author.id}>.`).catch(() => { ; });
+                else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Dette navnet er ikke tillatt. Som en påminnelse må den være på mellom 3 og 15 tegn <@${msg.author.id}>.`).catch(() => { ; });
+                else return msg.channel.send(`${uncheckIcon} This name is not allowed. It must be between 3 and 15 characters long. <@${msg.author.id}>.`).catch(() => { ; });
             }
             for (var i in profile) {
                 if ((profile[i].name).toLowerCase() == userName.toLowerCase()) {
@@ -166,7 +165,7 @@ module.exports = {
                     else if (userLang == `NO`) return msg.channel.send(`${uncheckIcon} Du har ikke endret kallenavnet ditt. <@${msg.author.id}>.`).catch(() => { ; });
                     else return msg.channel.send(`${uncheckIcon} You have not changed your name <@${msg.author.id}>.`).catch(() => { ; });
                 });
-        } else if (args[0].toLowerCase() == `picture` || args[0].toLowerCase() == `image`) {  // profile picture
+        } else if (args[0].toLowerCase() == `picture` || args[0].toLowerCase() == `image` || args[0].toLowerCase() == `p` || args[0].toLowerCase() == `i`) {  // profile picture
             try {
                 if (args[1].toLowerCase() == `reset`) {
                     getca(`profilepicturereset`, msg);
@@ -186,7 +185,7 @@ module.exports = {
             msg.channel.send(`${args[1]}`).catch(() => { ; });
             getca(`profilepicture`, msg, args[1]); return;
 
-        } else if (args[0].toLowerCase() == `color` || args[0].toLowerCase() == `colour`) { // profile color
+        } else if (args[0].toLowerCase() == `color` || args[0].toLowerCase() == `colour` || args[0].toLowerCase() == `c`) { // profile color
             try { args[1] = (args[1].startsWith(`#`) == true) ? args[1].toString(16) : parseInt(args[1]); } catch { ; };
             if ((!args[1]) || (args[1].length > 8) || args[1] == `NaN`) {
                 if (userLang == `FR`) return msg.channel.send(`${uncheckIcon} Vous devez mettre une couleur en code décimal, ou hexadecimal (avec un # devant) <@${msg.author.id}>.`).catch(() => { ; });
@@ -198,7 +197,7 @@ module.exports = {
             else msg.channel.send(`${checkIcon} The color of your profile has changed into \`${args[1]}\` <@${msg.author.id}>!`).catch(() => { ; });
             getca(`profilecolor`, msg, args[1]); return;
 
-        } else if (args[0].toLowerCase() == `description`) { // profile description
+        } else if (args[0].toLowerCase() == `description` || args[0].toLowerCase() == `d`) { // profile description
             if (!args[1]) return;
             if (args[1].toLowerCase() == `reset`) {
                 getca(`profiledescriptionreset`, msg);

@@ -1,13 +1,10 @@
 module.exports = {
 	name: 'reminder',
-	description: 'Information about the arguments provided.',
-    args: false,
     guildOnly: true,
-	usage: 'test',
 	execute(msg, args, client, prefix, getca, version) {
         var action = ((msg.content.split(" "))[1]).toLowerCase();
         let lang = getca(`language`);
-        if (action == `add`) {
+        if (action == `add` || action == `a`) {
             function error(msg) {
                 if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(()=>{;});
                 else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(()=>{;});
@@ -26,7 +23,7 @@ module.exports = {
                 else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Du må være administrator for å gjøre dette <@${msg.author.id}>!`).catch(()=>{;});
                 else return msg.channel.send(`You must be an administrator to do this <@${msg.author.id}>!`).catch(()=>{;});
             }
-        } else if (action == `delete` || action == `remove`) {
+        } else if (action == `delete` || action == `remove` || action == `d` || action == `r`) {
             function error(msg) {
                 if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder delete [id]\`, pour trouver l'ID tapez \`&reminder list\` <@${msg.author.id}> !`).catch(()=>{;});
                 else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder delete [id]\`, for å finne ID, skrive \`&reminder list\` <@${msg.author.id}> !`).catch(()=>{;});
@@ -48,7 +45,7 @@ module.exports = {
                 else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Du må være administrator for å gjøre dette <@${msg.author.id}>!`).catch(()=>{;});
                 else return msg.channel.send(`You must be an administrator to do this <@${msg.author.id}>!`).catch(()=>{;});
             }
-        } else if (action == `list` || action == `show`) {
+        } else if (action == `list` || action == `show` || action == `l` || action == `s`) {
             return getca(`reminderlist`, msg);
         }
 	}
