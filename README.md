@@ -22,7 +22,7 @@
 - ❌ Glede validated on Discord
 
 ## Table of important files and folders
-index.js | data | commands | config
+glede.js | data | commands | config
 ------------ | ------------- | ------------ | -------------
 Main file, by default everything is in English, but the robot texts are each translated into English, French and Norwegian. | Database file in JSON. The users and servers are registered there thanks to their ID inserted at the beginning. | All commands are located in this folder, although private commands can be found in index.js | Configuration file folder. In config.json you can find the default prefix if it has not been changed by the server, and the owner ID for the moment.
 

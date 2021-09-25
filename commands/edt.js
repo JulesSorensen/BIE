@@ -3,7 +3,7 @@ module.exports = {
     guildOnly: false,
 	execute(msg, args, client, prefix, getca, version) {
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString(); let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
-        if(msg.guild.id != `762698485011054602` && msg.guild.id != `831823187213680682`) return;
+        if(msg.guild.id != `762698485011054602` && msg.guild.id != `831823187213680682` && msg.guild.id != `783679631101526056`) return;
         let edt = getca(`edt`);
         
         if (!args[0]) {
@@ -25,12 +25,12 @@ module.exports = {
             var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
             if(!edt[datefinale]) {
                 msg.react(searchIcon).catch(()=>{;});
-                return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> \`${msg.channel.id}\`-\`${msg.id}\` attends l'emploi du temps ${searchIcon}...`).catch(()=>{;});
+                return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> \`${msg.channel.id}\`-\`${msg.id}\` attend l'EDT 1 ${searchIcon}...\n\`&edt send ${datefinale} ${msg.channel.id} ${msg.author.id}\``).catch(()=>{;});
             } else {
                 if (edt[datefinale].desc == 0) {
                     msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 } else {
-                    msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:** ${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
+                    msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 }
                 return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  send to <@${msg.author.id}>`).catch(()=>{;});
             }
@@ -45,12 +45,12 @@ module.exports = {
             var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
             if(!edt[datefinale]) {
                 msg.react(searchIcon).catch(()=>{;});
-                return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> \`${msg.channel.id}\`-\`${msg.id}\` attends l'emploi du temps de la semaine prochaine ${searchIcon}...`).catch(()=>{;});
+                return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> \`${msg.channel.id}\`-\`${msg.id}\` attend l'EDT 2 ${searchIcon}...\n\`&edt send ${datefinale} ${msg.channel.id} ${msg.author.id} 2\``).catch(()=>{;});
             } else {
                 if (edt[datefinale].desc == 0) {
                     msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 } else {
-                    msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:** ${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
+                    msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 }
                 return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 send to <@${msg.author.id}>`).catch(()=>{;});
             }
@@ -74,7 +74,7 @@ module.exports = {
                     } else {
                         try{msg2.lineReply(`🗓️ **__[${args[1]}]__ | Voici l'emploi du temps de ${semaine}**\n**Détails:**\n${edt[args[1]].desc}`, { files: [edt[args[1]].link]}); msg2.reactions.cache.get('868852714690478090').remove();}catch(error){() => {;}}
                     }
-                    return;
+                    return msg.react(client.emojis.cache.get(`866581082551615489`).toString()).catch(()=>{;});
                 } else if (args[0].toLowerCase() == `sendmp`) {
                     if (!args[2]) return msg.reply(`&edt sendmp [!date] [!userID] [?2:semaineprochaine]`).catch(()=>{;});
                     var semaine = (!args[3]) ? "cette semaine" : "la semaine prochaine"
@@ -84,7 +84,7 @@ module.exports = {
                     } else {
                         try{userToSend.send(`🗓️ **__[${args[1]}]__ | Voici l'emploi du temps de ${semaine}**\n**Détails:**\n${edt[args[1]].desc}`, { files: [edt[args[1]].link]}).catch(()=>{;});}catch(error){() => {;}}
                     }
-                    return;
+                    return msg.react(client.emojis.cache.get(`866581082551615489`).toString()).catch(()=>{;});
                 } else if (args[0].toLowerCase() == `rmd` || args[0].toLowerCase() == `remindme`) {
                     if(!args[1]) return msg.channel.send(`&edt rmd [s1,s2] h1,h2,??,h4,h5,??,??`).catch(()=>{;});
                     if(args[1] == `show`) {
@@ -95,7 +95,7 @@ module.exports = {
                     if(!args[2]) return msg.channel.send(`&edt rmd [s1,s2] h1,h2,??,h4,h5,??,??`).catch(()=>{;});
                     let edtremind = getca(`edtremind`);
                     args[2] = args[2].split(`,`);
-                    if (args[1] == `1` || args[1] == `s1`) {
+                    if (args[1] == `1` || args[1].toLowerCase() == `s1`) {
                         var date = new Date();
                         var day = date.getDay();
                         var prevMonday = new Date();
@@ -115,7 +115,7 @@ module.exports = {
                                 getca(`edtremindadd`, msg, datefinale, item);
                             }
                         })
-                    } else if (args[1] == `2` || args[1] == `s2`) {
+                    } else if (args[1] == `2` || args[1].toLowerCase() == `s2`) {
                         var nextMonday = new Date();
                         nextMonday.setDate(nextMonday.getDate() + 1);
                         nextMonday.setDate(nextMonday.getDate() + (1 + 7 - nextMonday.getDay()) % 7);
@@ -132,7 +132,7 @@ module.exports = {
                         })
                     } else return msg.channel.send(`&edt rmd [s1,s2] h1,h2,??,h4,h5,??,??`).catch(()=>{;});
                     msg.channel.send(`Fait, \`&edt rmd show\` pour afficher le fichier`).catch(()=>{;});
-                } else if (args[0].toLowerCase() == `changement`) {
+                } else if (args[0].toLowerCase() == `changement` || args[0].toLowerCase() == `chm`) {
                     if(!args[1] || args[1] == `1`) {
                         var msg = `🗓️ Un changement a été effectué sur l'emploi du temps de cette semaine.`;
                     } else {

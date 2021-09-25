@@ -49,7 +49,7 @@ module.exports = {
                 thumbnail: { url: msg.guild.iconURL() },
                 description: `${desc}\n\n${membersList}`,
                 footer: {
-                    text: `Glede V ${version}`
+                    text: `Glede v${version}`
                 }
             }
         }).catch(() => { ; });

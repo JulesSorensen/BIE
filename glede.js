@@ -4,7 +4,8 @@ const Discord = require(`discord.js`);
 const { Attachement } = require(`discord.js`);
 const config = require(`./config/config.json`);
 let prefix = config.prefix;
-let version = "2.0.1";
+let version = "2.0.5";
+require('dotenv').config()
 
 require('discord-reply');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], });
@@ -45,11 +46,11 @@ function gameverify() {
         });
         tab = tab.reverse();
         nbpg['nb'] = firstid; fs.writeFile(`./data/nbpg.json`, JSON.stringify(nbpg), err => { if (err) throw err; });
-        let channelForGames = client.channels.cache.get("870733524372717619");
+        let channelForGames = client.channels.cache.get("840106181661163522");
         tab.forEach((item, index) => {
             var enddate = item.end_date == `N/A` ? `Unknown` : `${((item.end_date).split(' '))[0]}\n${((item.end_date).split(' '))[1]}`;
             var oldprice = item.worth == `N/A` ? `­` : `~~${item.worth}~~`;
-            channelForGames.send(`<@&871436818032259102>`, {
+            channelForGames.send(`@ FREE GAME`, {
                 embed: {
                     color: 5794282,
                     thumbnail: {
@@ -116,8 +117,11 @@ function edtremindfunction() {
 }
 
 client.on('ready', () => {
+    const thisDate = new Date();
+    console.log(thisDate)
+    const dI = { hour: (thisDate.getHours() + 2), min: thisDate.getMinutes(), day: thisDate.getDate(), mounth: (thisDate.getMonth() + 1) };
     var millis = Date.now() - start; var sec = Math.floor((millis / 1000) % 60); millis = (millis.toString()).substring((millis.toString().length - 3));
-    console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\nStart: ${sec}.${millis}s\n-----\n`);
+    console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\nStart: ${sec}.${millis}s (${dI.day}/${dI.mounth} ${dI.hour}:${dI.min})\n-----\n`);
     client.user.setPresence({
         activity: {
             name: '&help',
@@ -141,21 +145,6 @@ fs.readdir(`./commands/`, (error, files) => {
         client.commands.set(command.name, command);
     });
 });
-
-// user mention
-function getUserFromMention(mention) {
-    if (!mention) return;
-
-    if (mention.startsWith('<@') && mention.endsWith('>')) {
-        mention = mention.slice(2, -1);
-
-        if (mention.startsWith('!')) {
-            mention = mention.slice(1);
-        }
-
-        return client.users.cache.get(mention);
-    }
-}
 
 // for get something here inside a command file
 function getca(thing, msg, arg1, arg2, arg3) {
@@ -583,13 +572,13 @@ client.on('clickMenu', async (menu) => {
         });
         var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
         if (!edt[datefinale]) {
-            menu.clicker.user.send(`🗓️ Erreur lors de la réception de l'emploi du temps ${searchIcon}\nVous le recevrez dès qu'il sera chargé...`).catch(() => { ; });
-            return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${menu.clicker.user.id}> attends l'emploi du temps de cette semaine en MP ${searchIcon}...`).catch(() => { ; });
+            menu.clicker.user.send(`🗓️ **__Erreur lors de la réception de l'emploi du temps__** ${searchIcon}\nVous le recevrez dès qu'il sera chargé, merci de ne pas générer à nouveau la commande`).catch(() => { ; });
+            return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${menu.clicker.user.id}> attend l'EDT 1MP ${searchIcon}...\n\`&edt sendmp ${datefinale} ${menu.clicker.user.id}\``).catch(() => { ; });
         } else {
             if (edt[datefinale].desc == 0) {
                 menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**`, { files: [edt[datefinale].link] }).catch(() => { ; });
             } else {
-                menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:** ${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
+                menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
             }
             (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  send to <@${menu.clicker.user.id}>`).catch(() => { ; });
         }
@@ -605,13 +594,13 @@ client.on('clickMenu', async (menu) => {
         });
         var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
         if (!edt[datefinale]) {
-            (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${menu.clicker.user.id}> attends l'emploi du temps de la semaine prochaine en MP ${searchIcon}...`).catch(() => { ; });
-            menu.clicker.user.send(`🗓️ Erreur lors de la réception de l'emploi du temps ${searchIcon}\nVous le recevrez dès qu'il sera chargé...`).catch(() => { ; });
+            (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${menu.clicker.user.id}> attend l'EDT-2MP ${searchIcon}...\n\`&edt sendmp ${datefinale} ${menu.clicker.user.id} 2\``).catch(() => { ; });
+            menu.clicker.user.send(`🗓️ **__Erreur lors de la réception de l'emploi du temps__** ${searchIcon}\nVous le recevrez dès qu'il sera chargé, merci de ne pas générer à nouveau la commande`).catch(() => { ; });
         } else {
             if (edt[datefinale].desc == 0) {
                 menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**`, { files: [edt[datefinale].link] }).catch(() => { ; });
             } else {
-                menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:** ${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
+                menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
             }
             (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 send to <@${menu.clicker.user.id}>`).catch(() => { ; });
         }
@@ -681,9 +670,9 @@ function commandLaunch(msg) {
         case 'autoreminder':
         case 'rm':
         case 'reminder': // reminder
-            commandName = 'reminder'; try { if (args[0].toLowerCase() == `add`) { args = msg.content.split('"'); args[0] = args[0].split(" ")[2]; var secondArgs = args[2].split(" "); args[2] = secondArgs[1]; args.push(secondArgs[2]); break; } } catch (error) { if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); }; break;
+            commandName = 'reminder'; try { if (args[0].toLowerCase() == `add`) { args = msg.content.split('"'); args[0] = args[0].split(" ")[2]; var secondArgs = args[2].split(" "); args[2] = secondArgs[1]; args.push(secondArgs[2]); break; } } catch (error) { if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, rollen som skal nevnes er ikke obligatorisk!`).catch(() => { ; }); else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, the role to be mentioned is not mandatory!`).catch(() => { ; }); }; break;
         case 'save': // save command PRIVATE
-            if (msg.author.id == `676690539126718467`) { msg.channel.send("**LAST DATA FILES**", { files: ["data/clan.json", "data/customrole.json", "data/guildmessage.json", "data/guildnotification.json", "data/lang.json", "data/notification.json", "data/prefix.json", "data/profile.json", "data/reminder.json", "data/servperm.json"] }); } return;
+            if (msg.author.id == `676690539126718467`) { msg.channel.send("**LAST DATA FILES**", { files: ["data/clan.json", "data/customrole.json", "data/guildmessage.json", "data/guildnotification.json", "data/lang.json", "data/notification.json", "data/prefix.json", "data/profile.json", "data/reminder.json", "data/servperm.json"] }).catch(() => { ; }); } return;
         case 'edt':
         case 'emploidutemps': // role command PRIVATE
             commandName = 'edt'; break;
@@ -915,4 +904,4 @@ client.on('messageReactionRemove', (reaction, user) => {
 })
 
 // login
-client.login(config.token);
+client.login(process.env.TOKEN);
