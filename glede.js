@@ -3,11 +3,13 @@ const fs = require('fs');
 const Discord = require(`discord.js`);
 const { Attachement } = require(`discord.js`);
 const config = require(`./config/config.json`);
+const sha1 = require('sha1');
 let prefix = config.prefix;
-let version = "2.0.5";
+let version = "2.0.6";
 require('dotenv').config()
 
 require('discord-reply');
+const moment = require('moment');
 const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], });
 client.commands = new Discord.Collection();
 const disbut = require('discord-buttons');
@@ -26,26 +28,27 @@ let guildmessage = require(`./data/guildmessage.json`);
 let customrole = require('./data/customrole.json');
 let servperm = require('./data/servperm.json');
 let reminder = require(`./data/reminder.json`);
-let nbpg = require(`./data/nbpg.json`);
+let gpname = require(`./data/gpname.json`);
 // efficom
 let edt = require('./data/edt.json');
 let edtremind = require('./data/edtremind.json');
+let devoir = require('./data/devoir.json');
 
 function gameverify() {
     fetch('https://www.gamerpower.com/api/giveaways?platform=pc').then(res => res.json()).then(json => {
         var tab = [];
         var stop = false;
-        var firstid = 0;
-        json.forEach((item, index) => {
-            if (firstid == 0) { firstid = item.id; }
-            if (stop === false) {
-                if (item.id == nbpg['nb']) {
+        var firstName = false;
+        json.forEach((item) => {
+            if (!firstName) { firstName = sha1(item.title); }
+            if (!stop) {
+                if (sha1(item.title) == gpname['name']) {
                     stop = true;
                 } else tab.push(item);
             }
         });
         tab = tab.reverse();
-        nbpg['nb'] = firstid; fs.writeFile(`./data/nbpg.json`, JSON.stringify(nbpg), err => { if (err) throw err; });
+        gpname['name'] = firstName; fs.writeFile(`./data/gpname.json`, JSON.stringify(gpname), err => { if (err) throw err; });
         let channelForGames = client.channels.cache.get("840106181661163522");
         tab.forEach((item, index) => {
             var enddate = item.end_date == `N/A` ? `Unknown` : `${((item.end_date).split(' '))[0]}\n${((item.end_date).split(' '))[1]}`;
@@ -77,7 +80,7 @@ function gameverify() {
                 }
             }).then(msgb => { msgb.crosspost().catch(() => { ; }); }).catch(() => { ; });
         });
-    });
+    }).catch(() => { ; });
 }
 function reminderCheck() {
     var date = new Date();
@@ -110,16 +113,15 @@ function edtremindfunction() {
     var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
     if (!edtremind[datefinale]) return;
     if (date.getHours() >= 19 && date.getMinutes() >= 30) {
-        let channel = client.channels.cache.get(`762698661892849714`).catch(() => { ; });
-        channel.send(`<@&871298355161> <a:bell:868901922483097661> Vous commencez à **${edtremind[datefinale]}** demain !`).catch(() => { ; });
+        let channel = client.channels.cache.get(`762698661892849714`);
+        channel.send(`<@&871298355161092186> <a:bell:868901922483097661> Vous commencez à **${edtremind[datefinale]}** demain !`).catch(() => { ; });
         delete edtremind[datefinale]; fs.writeFile(`./data/edtremind.json`, JSON.stringify(edtremind), err => { if (err) throw err; });
     }
 }
 
 client.on('ready', () => {
     const thisDate = new Date();
-    console.log(thisDate)
-    const dI = { hour: (thisDate.getHours() + 2), min: thisDate.getMinutes(), day: thisDate.getDate(), mounth: (thisDate.getMonth() + 1) };
+    const dI = { hour: (thisDate.getHours()), min: thisDate.getMinutes(), day: thisDate.getDate(), mounth: (thisDate.getMonth() + 1) };
     var millis = Date.now() - start; var sec = Math.floor((millis / 1000) % 60); millis = (millis.toString()).substring((millis.toString().length - 3));
     console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\nStart: ${sec}.${millis}s (${dI.day}/${dI.mounth} ${dI.hour}:${dI.min})\n-----\n`);
     client.user.setPresence({
@@ -231,6 +233,10 @@ function getca(thing, msg, arg1, arg2, arg3) {
             edtremindshow(msg); break;
         case `edtremindreset`:
             edtremindreset(msg); break;
+        case `devoiradd`:
+            devoiradd(msg, arg1, arg2, arg3); break;
+        case `devoirdelete`:
+            devoirdelete(msg, arg1, arg2); break;
         case `notification`:
             return notification;
         case `guildnotification`:
@@ -253,6 +259,8 @@ function getca(thing, msg, arg1, arg2, arg3) {
             return edt;
         case `edtremind`:
             return edtremind;
+        case `devoir`:
+            return devoir;
         default:
             break;
     }
@@ -549,11 +557,25 @@ function edtremindreset(msg) {
     let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
     edtremind = {}; fs.writeFile(`./data/edtremind.json`, JSON.stringify(edtremind), err => { if (err) throw err; }); msg.react(checkIcon);
 }
+function devoiradd(msg, date, matiere, text) {
+    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
+    if (!devoir[date]) {
+        devoir[date] = {}; devoir[date][matiere] = text; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
+    } else {
+        devoir[date][matiere] = text; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
+    }
+}
+function devoirdelete(msg, date, matiere) {
+    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
+    if (!devoir[date]) return msg.reply(`aucun devoir détecté pour cette date`);
+    if (!devoir[date][matiere]) return msg.reply(`matière non trouvé sur cette date`);
+    delete devoir[date][matiere]; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
+}
 
 // private menu
 client.on('clickMenu', async (menu) => {
     let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
-    if (menu.message.channel.id != `868524232898908190`) return;
+    if (menu.message.channel.id != `868524232898908190` && menu.message.channel.id != `874251750092206081`) return;
     if (menu.values[0] == `edt1`) {
         function getPreviousMonday() {
             var date = new Date();
@@ -580,7 +602,7 @@ client.on('clickMenu', async (menu) => {
             } else {
                 menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
             }
-            (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  send to <@${menu.clicker.user.id}>`).catch(() => { ; });
+            (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${menu.clicker.user.username}`).catch(() => { ; });
         }
         return await menu.reply.defer().catch(() => { ; });
     }
@@ -602,13 +624,39 @@ client.on('clickMenu', async (menu) => {
             } else {
                 menu.clicker.user.send(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link] }).catch(() => { ; });
             }
-            (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 send to <@${menu.clicker.user.id}>`).catch(() => { ; });
+            (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${menu.clicker.user.username}`).catch(() => { ; });
         }
+        return await menu.reply.defer().catch(() => { ; });
+    }
+    if (menu.values[0] == `devoir`) {
+        var today = moment(new Date(), 'DD/MM/YYYY');
+        var devoirs = [];
+        for (const [key, value] of Object.entries(devoir)) {
+            if (moment(key, 'DD/MM/YYYY') >= today) {
+                for (const [key2, value2] of Object.entries(value)) {
+                    devoirs.push({ name: `${moment(key, 'DD/MM/YYYY').format('DD/MM/YYYY')} - ${key2.split(/(?=[A-Z])/).join(` `)}`, value: value2 });
+                }
+            }
+        }
+        let isS = ''; let isS2 = 'le prochain devoir';
+        if (devoirs.length < 1) {
+            return menu.clicker.user.send(`<@${menu.clicker.user.id}> c'est incroyable, il n'y a même pas de devoirs !`).catch(() => { ; });
+        } else if (devoirs.length > 1) {
+            isS = 's'; isS2 = 'la liste des prochains devoirs';
+        }
+        menu.clicker.user.send({
+            embed: {
+                color: 14261890,
+                title: `📔 Devoir${isS} à venir`,
+                description: `Voici ${isS2}, les anciens n'y apparaissent plus\n­`,
+                fields: devoirs
+            }
+        }).catch(() => { ; });
         return await menu.reply.defer().catch(() => { ; });
     }
     if (menu.values[0] == `reload`) {
         await menu.reply.defer().catch(() => { ; });
-        return (client.channels.cache.get(`874251822045487125`)).send(`🔃 EDT reload by <@${menu.clicker.user.id}>`).catch(() => { ; });
+        return (client.channels.cache.get(`874251822045487125`)).send(`🔃 EDT reloaded by ${menu.clicker.user.username}`).catch(() => { ; });
     }
 });
 
@@ -672,10 +720,24 @@ function commandLaunch(msg) {
         case 'reminder': // reminder
             commandName = 'reminder'; try { if (args[0].toLowerCase() == `add`) { args = msg.content.split('"'); args[0] = args[0].split(" ")[2]; var secondArgs = args[2].split(" "); args[2] = secondArgs[1]; args.push(secondArgs[2]); break; } } catch (error) { if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, rollen som skal nevnes er ikke obligatorisk!`).catch(() => { ; }); else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, the role to be mentioned is not mandatory!`).catch(() => { ; }); }; break;
         case 'save': // save command PRIVATE
-            if (msg.author.id == `676690539126718467`) { msg.channel.send("**LAST DATA FILES**", { files: ["data/clan.json", "data/customrole.json", "data/guildmessage.json", "data/guildnotification.json", "data/lang.json", "data/notification.json", "data/prefix.json", "data/profile.json", "data/reminder.json", "data/servperm.json"] }).catch(() => { ; }); } return;
+            if (msg.author.id == `676690539126718467`) { msg.channel.send("**LAST DATA FILES**", { files: ["data/clan.json", "data/customrole.json", "data/gpname.json", "data/guildmessage.json", "data/guildnotification.json", "data/lang.json", "data/notification.json", "data/prefix.json", "data/profile.json", "data/reminder.json", "data/servperm.json"] }).catch(() => { ; }); } return;
         case 'edt':
-        case 'emploidutemps': // role command PRIVATE
+        case 'emploidutemps': // edt command PRIVATE
             commandName = 'edt'; break;
+        case 'devoirs': // devoir command PRIVATE
+            commandName = 'devoir'; break;
+        case 'bie': // bie command PRIVATE
+            {
+                if (msg.author.id != `676690539126718467`) return;
+                let option1 = new MessageMenuOption().setLabel(`EDT - Cette semaine`).setEmoji('893889890108981278').setValue(`edt1`).setDescription(`Recevoir l'emploi du temps de cette semaine`);
+                let option2 = new MessageMenuOption().setLabel(`EDT - Semaine prochaine`).setEmoji('893889890108981278').setValue(`edt2`).setDescription(`Recevoir l'emploi du temps de la semaine prochaine`);
+                let option3 = new MessageMenuOption().setLabel(`Devoirs - Actuels`).setEmoji('893971159933145140').setValue(`devoir`).setDescription(`Recevoir la liste des prochains devoirs`);
+                let option4 = new MessageMenuOption().setLabel(`Recharger les options`).setEmoji('868852714690478090').setValue(`reload`).setDescription(`Pour pouvoir choisir de nouveau une autre option`);
+                let select = new MessageMenu().setID(`customid`).setPlaceholder(`🧑‍💻 Choisissez une commande`).addOption(option1).addOption(option2).addOption(option3).addOption(option4);
+
+                msg.channel.send(`**Bonjour <@&775833208012800050> ! :wave:**\n\n<a:gear:893920078024831017> **Voici les commandes importantes à connaître concernant Efficom :**\n\`&emploidutemps\` pour recevoir l'emploi du temps de la semaine actuelle (raccourci: \`&edt\`)\n\`&emploidutemps suivant\` pour recevoir l'emploi du temps de la semaine prochaine (r: \`&edt s\`)\n\`&devoirs\` pour recevoir les prochains devoirs à faire (\`&devoirs stats\` pour avoir plus de statisques)\n\n\`&teams [LienDeRéunion] [HeureDebut] [HeureFin] [NomDuCours]\` pour prévenir la classe d'une réunion Teams\n\`&note [Matière]\` pour prévenir la classe d'une nouvelle note sur MyGes\n\n<a:thumbsup:893920077974499388> **Réactions**\nCliquez sur 🔔 pour être notifié tout les soirs à 19h30 de l'heure à laquelle vous commencez le lendemain\nCliquez sur 💯 pour être notifié dès qu'une nouvelle note apparaît sur MyGes\nCliquez sur 📔 pour être notifié à l'ajout d'un nouveau devoir\nCliquez sur <:teams:875369282207354920> pour être notifié à chaque réunion Teams\n\n<a:gift:893921102361931807> **D'autres commandes:**\n\`&role create\` pour créer un rôle personnalisé pour vous sur le serveur (r: \`&r cr\`)\n\`&role nom [VotreNom]\` pour changer le nom de votre rôle (r: \`&r n [VotreNom]\`)\n\`&role couleur [#Couleur]\` pour changer la couleur de votre rôle (r: \`&r c [#Couleur]\`), vous devez mettre un code hexadécimal commençant par un #, ou une couleur comme \`rouge\`, \`bleu\` etc...\n­`, select).then(msgb => { msgb.react(`🔔`).catch(() => { ; }); msgb.react(`💯`).catch(() => { ; }); msgb.react(`📔`).catch(() => { ; }); msgb.react(`875369282207354920`).catch(() => { ; }); }).catch((e) => { console.log(e); });
+                return;
+            }
         default:
             break;
     }
@@ -689,7 +751,7 @@ function commandLaunch(msg) {
         command.execute(msg, args, client, prefix, getca, version);
     } catch (error) {
         console.error(error);
-        msg.channel.send(`Error CMD${commandName.toLowerCase()} was generated`).catch(() => { ; });
+        msg.channel.send(`Error CMD[${sha1(commandName.toLowerCase())}] was generated`).catch(() => { ; });
     }
 };
 
@@ -885,6 +947,8 @@ client.on('messageReactionAdd', (reaction, user) => {
             try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`871298355161092186`).id); } catch (error) { ; };
         } else if (reaction.emoji.name == `💯`) {
             try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`871298481233494027`).id); } catch (error) { ; };
+        } else if (reaction.emoji.name == `📔`) {
+            try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`893923446940123137`).id); } catch (error) { ; };
         } else if (reaction.emoji.id == `875369282207354920`) {
             try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`875369959503581244`).id); } catch (error) { ; };
         }
@@ -897,6 +961,8 @@ client.on('messageReactionRemove', (reaction, user) => {
             try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`871298355161092186`).id); } catch (error) { ; };
         } else if (reaction.emoji.name == `💯`) {
             try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`871298481233494027`).id); } catch (error) { ; };
+        } else if (reaction.emoji.name == `📔`) {
+            try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`893923446940123137`).id); } catch (error) { ; };
         } else if (reaction.emoji.id == `875369282207354920`) {
             try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`875369959503581244`).id); } catch (error) { ; };
         }

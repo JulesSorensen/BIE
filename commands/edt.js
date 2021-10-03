@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'edt',
-    guildOnly: false,
+    guildOnly: true,
 	execute(msg, args, client, prefix, getca, version) {
         let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString(); let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
         if(msg.guild.id != `762698485011054602` && msg.guild.id != `831823187213680682` && msg.guild.id != `783679631101526056`) return;
@@ -32,7 +32,7 @@ module.exports = {
                 } else {
                     msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 }
-                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  send to <@${msg.author.id}>`).catch(()=>{;});
+                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${msg.author.username}`).catch(()=>{;});
             }
     } else if (args[0] == `2` || args[0].toLowerCase() == `suivant` || args[0].toLowerCase() == `s`) {
             var nextMonday = new Date();
@@ -52,7 +52,7 @@ module.exports = {
                 } else {
                     msg.lineReply(`🗓️ **__[${datefinale}]__ | Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[datefinale].desc}`, { files: [edt[datefinale].link]}).catch(()=>{;});
                 }
-                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 send to <@${msg.author.id}>`).catch(()=>{;});
+                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${msg.author.username}`).catch(()=>{;});
             }
         }
         if(msg.author.id == `676690539126718467`) {
@@ -63,8 +63,8 @@ module.exports = {
                     getca(`edtadd`, msg, args[1], args[2], desc);
                     return (client.channels.cache.get(`874251822045487125`)).send(`➕ EDT ${args[1]} ajouté`).catch(()=>{;});
                 } else if (args[0].toLowerCase() == `reset` || args[0].toLowerCase() == `r`) {return getca(`edtreset`, msg);
-                } else if (args[0].toLowerCase() == `show`) {return msg.channel.send("**LAST EDT DATA FILE**", { files: ["data/edt.json"] });
-                } else if (args[0].toLowerCase() == `send`) {
+                } else if (args[0].toLowerCase() == `show` || args[0].toLowerCase() == `sh`) {return msg.channel.send("**LAST EDT DATA FILE**", { files: ["data/edt.json"] });
+                } else if (args[0].toLowerCase() == `send` || args[0].toLowerCase() == `se`) {
                     if (!args[3]) return msg.reply(`&edt send [!date] [!channelID] [!msgID] [?2:semaineprochaine]`);
                     var semaine = (!args[4]) ? "cette semaine" : "la semaine prochaine"
                     let ch2 = client.channels.cache.get(args[2]);
@@ -75,7 +75,7 @@ module.exports = {
                         try{msg2.lineReply(`🗓️ **__[${args[1]}]__ | Voici l'emploi du temps de ${semaine}**\n**Détails:**\n${edt[args[1]].desc}`, { files: [edt[args[1]].link]}); msg2.reactions.cache.get('868852714690478090').remove();}catch(error){() => {;}}
                     }
                     return msg.react(client.emojis.cache.get(`866581082551615489`).toString()).catch(()=>{;});
-                } else if (args[0].toLowerCase() == `sendmp`) {
+                } else if (args[0].toLowerCase() == `sendmp` || args[0].toLowerCase() == `semp`) {
                     if (!args[2]) return msg.reply(`&edt sendmp [!date] [!userID] [?2:semaineprochaine]`).catch(()=>{;});
                     var semaine = (!args[3]) ? "cette semaine" : "la semaine prochaine"
                     let userToSend = client.users.cache.get(args[2]);
