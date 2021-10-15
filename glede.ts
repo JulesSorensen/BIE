@@ -1,34 +1,33 @@
 const start = Date.now();
-const fs = require('fs');
-const Discord = require(`discord.js`);
-const { Attachement } = require(`discord.js`);
-const config = require(`./config/config.json`);
-const sha1 = require('sha1');
+import fs from 'fs';
+import Discord from 'discord.js';
+import config from './config/config.json';
+import sha1 from 'sha1';
 let prefix = config.prefix;
-let version = "2.0.6";
+let version = "2.1.0";
 require('dotenv').config()
 
 require('discord-reply');
-const moment = require('moment');
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], });
+import moment from 'moment';
+const client: any = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], });
 client.commands = new Discord.Collection();
-const disbut = require('discord-buttons');
+import disbut from 'discord-buttons';
 disbut(client);
-const { MessageMenuOption, MessageMenu } = require('discord-buttons');
-const fetch = require('node-fetch');
+import { MessageMenuOption, MessageMenu } from 'discord-buttons';
+import fetch from 'node-fetch';
 
 // DATA BASE
-let customprefix = require(`./data/prefix.json`);
-let lang = require(`./data/lang.json`);
-let profile = require(`./data/profile.json`);
-let clan = require(`./data/clan.json`);
-let notification = require(`./data/notification.json`);
-let guildnotification = require(`./data/guildnotification.json`);
-let guildmessage = require(`./data/guildmessage.json`);
+let customprefix = require('./data/prefix.json');
+let lang = require('./data/lang.json');
+let profile = require('./data/profile.json');
+let clan = require('./data/clan.json');
+let notification = require('./data/notification.json');
+let guildnotification = require('./data/guildnotification.json');
+let guildmessage = require('./data/guildmessage.json');
 let customrole = require('./data/customrole.json');
 let servperm = require('./data/servperm.json');
-let reminder = require(`./data/reminder.json`);
-let gpname = require(`./data/gpname.json`);
+let reminder = require('./data/reminder.json');
+let gpname = require('./data/gpname.json');
 // efficom
 let edt = require('./data/edt.json');
 let edtremind = require('./data/edtremind.json');
@@ -122,7 +121,7 @@ function edtremindfunction() {
 client.on('ready', () => {
     const thisDate = new Date();
     const dI = { hour: (thisDate.getHours()), min: thisDate.getMinutes(), day: thisDate.getDate(), mounth: (thisDate.getMonth() + 1) };
-    var millis = Date.now() - start; var sec = Math.floor((millis / 1000) % 60); millis = (millis.toString()).substring((millis.toString().length - 3));
+    var millis: string | number = Date.now() - start; var sec = Math.floor((millis / 1000) % 60); millis = (millis.toString()).substring((millis.toString().length - 3));
     console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\nStart: ${sec}.${millis}s (${dI.day}/${dI.mounth} ${dI.hour}:${dI.min})\n-----\n`);
     client.user.setPresence({
         activity: {
@@ -283,7 +282,6 @@ function createclan(name, msg) { // clans
     clan[name] = {
         version: "2.0",
         owner: msg.author.id,
-        picture: false,
         members: [msg.author.id],
         membersexperience: [0],
         status: true,
@@ -482,7 +480,7 @@ function reminderadd(msg, args) {
         var roleID = !args[3] ? false : args[3];
         reminder[msg.guild.id] = [{ "id": 1, "date": args[0], "name": args[1], "channelID": args[2], "roleID": roleID }]; fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
     } else {
-        var id = (reminder[msg.guild.id].length >= 1) ? ((reminder[msg.guild.id][reminder[msg.guild.id].length - 1].id) + 1) : (1);
+        var id: number = (reminder[msg.guild.id].length >= 1) ? ((reminder[msg.guild.id][reminder[msg.guild.id].length - 1].id) + 1) : (1);
         var roleID = !args[3] ? false : args[3];
         reminder[msg.guild.id].push({ "id": id, "date": args[0], "name": args[1], "channelID": args[2], "roleID": roleID }); fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
     }
@@ -862,7 +860,7 @@ client.on('message', msg => {
         // verify if author has a account
         if (!profile[msg.author.id]) {
             // random color
-            var randomColor = (('#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6)).toString(16))
+            var randomColor = (('#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6)).toString())
             // create account
             profile[msg.author.id] = {
                 version: "2.0",
@@ -890,13 +888,13 @@ client.on('message', msg => {
                 var levelTableClan = [`0-19999`, `20000-99999`, `100000-499999`, `500000-999999`, `1000000-1499999`, `1500000-2499999`, `2500000-4999999`, `5000000-9999999`, `10000000-49999999`, `50000000-10000000000`];
                 if ((clan[profile[msg.author.id].clan].experience) >= 20000) {
                     for (var i in levelTableClan) {
-                        var a = levelTableClan[i].split(`-`); // a[0] a[1]
+                        var a: any = levelTableClan[i].split(`-`); // a[0] a[1]
                         a[0] = parseInt(a[0]); a[1] = parseInt(a[1]);
                         if ((a[1] > (clan[profile[msg.author.id].clan].experience)) && ((clan[profile[msg.author.id].clan].experience) > a[0])) {
-                            i = parseInt(i);
-                            if ((clan[profile[msg.author.id].clan].level) != (i + 1)) {
-                                clanLevelUpMessage(profile[msg.author.id].clan, msg, (i + 1));
-                                clan[profile[msg.author.id].clan].level = parseInt(i + 1); clan[profile[msg.author.id].clan].membersnblimit += 5; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
+                            var j: number = parseInt(i);
+                            if ((clan[profile[msg.author.id].clan].level) != (j + 1)) {
+                                clanLevelUpMessage(profile[msg.author.id].clan, msg, (j + 1));
+                                clan[profile[msg.author.id].clan].level = (j + 1); clan[profile[msg.author.id].clan].membersnblimit += 5; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
                             }; break;
                         }
                     }
@@ -928,7 +926,7 @@ client.on('message', msg => {
                 a = levelTable[i].split(`-`); // a[0] a[1]
                 a[0] = parseInt(a[0]); a[1] = parseInt(a[1]);
                 if ((a[1] > (profile[msg.author.id].experience)) && ((profile[msg.author.id].experience) > a[0])) {
-                    i = parseInt(i); if (profile[msg.author.id].level != (i + 1)) { levelUpMessage(msg, (i + 1)); profile[msg.author.id].level = (i + 1); fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; }); } break;
+                    var j: number = parseInt(i); if (profile[msg.author.id].level != (j + 1)) { levelUpMessage(msg, (j + 1)); profile[msg.author.id].level = (j + 1); fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; }); } break;
                 }
             }
         }
