@@ -1,0 +1,6 @@
+- passer la bdd en cloud
+- architecturer les fonctions / fichiers
+clans :
+    - idée pour visibilité des clans (par serveur et interserveurs) -> à réfléchir
+    - ajouter la création de rôle par le owner avec une histoire de permissions par rôle
+- pour les fonctions qui fonctionnent en on/off regrouper le fonctionnement dans une seule fonction (!boolean)

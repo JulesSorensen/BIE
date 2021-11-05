@@ -4,7 +4,8 @@
   "description": "Glede Bot made by Nekewo",
   "main": "glede.js",
   "scripts": {
-    "start": "node ./glede.js"
+    "start": "node ./glede.ts",
+    "dev": "node ./glede.ts"
   },
   "repository": {
     "type": "git",
@@ -22,11 +23,14 @@
   "dependencies": {
     "discord-buttons": "^4.0.0",
     "discord-reply": "^0.1.2",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
-    "fs": "^0.0.1-security",
+    "fs": "0.0.1-security",
     "moment": "^2.29.1",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.6",
     "sha1": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.6"
   }
 }

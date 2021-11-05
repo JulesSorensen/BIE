@@ -1,5 +1,5 @@
 const start = Date.now();
-import fs from 'fs';
+// import * as fs from "fs";
 import Discord from 'discord.js';
 import config from './config/config.json';
 import sha1 from 'sha1';
@@ -9,7 +9,7 @@ require('dotenv').config()
 
 require('discord-reply');
 import moment from 'moment';
-const client: any = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], });
+const client: any = new Discord.Client({ intents: null });
 client.commands = new Discord.Collection();
 import disbut from 'discord-buttons';
 disbut(client);
@@ -33,54 +33,56 @@ let edt = require('./data/edt.json');
 let edtremind = require('./data/edtremind.json');
 let devoir = require('./data/devoir.json');
 
-function gameverify() {
-    fetch('https://www.gamerpower.com/api/giveaways?platform=pc').then(res => res.json()).then(json => {
-        var tab = [];
-        var stop = false;
-        var firstName = false;
-        json.forEach((item) => {
-            if (!firstName) { firstName = sha1(item.title); }
-            if (!stop) {
-                if (sha1(item.title) == gpname['name']) {
-                    stop = true;
-                } else tab.push(item);
-            }
-        });
-        tab = tab.reverse();
-        gpname['name'] = firstName; fs.writeFile(`./data/gpname.json`, JSON.stringify(gpname), err => { if (err) throw err; });
-        let channelForGames = client.channels.cache.get("840106181661163522");
-        tab.forEach((item, index) => {
-            var enddate = item.end_date == `N/A` ? `Unknown` : `${((item.end_date).split(' '))[0]}\n${((item.end_date).split(' '))[1]}`;
-            var oldprice = item.worth == `N/A` ? `­` : `~~${item.worth}~~`;
-            channelForGames.send(`@ FREE GAME`, {
-                embed: {
-                    color: 5794282,
-                    thumbnail: {
-                        url: `${item.image}`
-                    },
-                    author: {
-                        name: `New ${item.type}\n`
-                    },
-                    title: `⇒ ${item.title} ⇐\n`,
-                    url: item.open_giveaway,
-                    description: `On ${item.platforms}\n${item.description}\n`,
-                    fields: [{
-                        name: `💰  ­  Price  ­  💰`,
-                        value: `FREE!\n${oldprice}`,
-                        inline: true
-                    }, {
-                        name: `🕛  ­  End  ­  🕛`,
-                        value: enddate,
-                        inline: true
-                    }],
-                    footer: {
-                        text: `Free Games Notifications By Nekewo#0001`
-                    }
-                }
-            }).then(msgb => { msgb.crosspost().catch(() => { ; }); }).catch(() => { ; });
-        });
-    }).catch(() => { ; });
-}
+// function gameverify() {
+//     fetch('https://www.gamerpower.com/api/giveaways?platform=pc').then(res => res.json()).then(json => {
+//         var tab = [];
+//         var stop = false;
+//         var firstName = false;
+//         json.forEach((item) => {
+//             if (!firstName) { firstName = sha1(item.title); }
+//             if (!stop) {
+//                 if (sha1(item.title) == gpname['name']) {
+//                     stop = true;
+//                 } else tab.push(item);
+//             }
+//         });
+//         tab = tab.reverse();
+//         gpname['name'] = firstName; fs.writeFile(`./data/gpname.json`, JSON.stringify(gpname), err => { if (err) throw err; });
+//         let channelForGames = client.channels.cache.get("840106181661163522");
+//         tab.forEach((item, index) => {
+//             var enddate = item.end_date == `N/A` ? `Unknown` : `${((item.end_date).split(' '))[0]}\n${((item.end_date).split(' '))[1]}`;
+//             var oldprice = item.worth == `N/A` ? `­` : `~~${item.worth}~~`;
+//             channelForGames.send(`@ FREE GAME`, {
+//                 embed: {
+//                     color: 5794282,
+//                     thumbnail: {
+//                         url: `${item.image}`
+//                     },
+//                     author: {
+//                         name: `New ${item.type}\n`
+//                     },
+//                     title: `⇒ ${item.title} ⇐\n`,
+//                     url: item.open_giveaway,
+//                     description: `On ${item.platforms}\n${item.description}\n`,
+//                     fields: [{
+//                         name: `💰  ­  Price  ­  💰`,
+//                         value: `FREE!\n${oldprice}`,
+//                         inline: true
+//                     }, {
+//                         name: `🕛  ­  End  ­  🕛`,
+//                         value: enddate,
+//                         inline: true
+//                     }],
+//                     footer: {
+//                         text: `Free Games Notifications By Nekewo#0001`
+//                     }
+//                 }
+//             }).then(msgb => { msgb.crosspost().catch(() => { ; }); }).catch(() => { ; });
+//         });
+//     }).catch(() => { ; });
+// }
+
+// vérification de rappel demandé par l'utilisateur
 function reminderCheck() {
     var date = new Date();
     var datesplit = (date.toLocaleString('en', { dateStyle: 'short' }).toString().split(`/`));
@@ -102,6 +104,8 @@ function reminderCheck() {
         } catch (e) { ; };
     };
 }
+
+// pareil qu'au dessus sauf que c'est pour le serveur Efficom
 function edtremindfunction() {
     var date = new Date();
     date.setDate(date.getDate() + 1);
@@ -118,11 +122,9 @@ function edtremindfunction() {
     }
 }
 
+
 client.on('ready', () => {
-    const thisDate = new Date();
-    const dI = { hour: (thisDate.getHours()), min: thisDate.getMinutes(), day: thisDate.getDate(), mounth: (thisDate.getMonth() + 1) };
-    var millis: string | number = Date.now() - start; var sec = Math.floor((millis / 1000) % 60); millis = (millis.toString()).substring((millis.toString().length - 3));
-    console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\nStart: ${sec}.${millis}s (${dI.day}/${dI.mounth} ${dI.hour}:${dI.min})\n-----\n`);
+    console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\n-----\n`);
     client.user.setPresence({
         activity: {
             name: '&help',
@@ -151,51 +153,51 @@ fs.readdir(`./commands/`, (error, files) => {
 function getca(thing, msg, arg1, arg2, arg3) {
     switch (thing) {
         case `changeprefix`:
-            changeprefix(arg1, msg); break;
+            changePrefix(arg1, msg); break;
         case `changelanguage`:
-            changelanguage(arg1, msg); break;
+            changeLanguage(arg1, msg); break;
         case `createclan`:
-            createclan(arg1, msg); break;
+            createClan(arg1, msg); break;
         case `clandescription`:
-            clandescription(arg1, arg2, msg); break;
+            clanDescription(arg1, arg2, msg); break;
         case `clandescriptionreset`:
-            clandescriptionreset(msg); break;
+            clanDescriptionReset(msg); break;
         case `clandelete`:
-            clandelete(arg1, msg); break;
+            clanDelete(arg1, msg); break;
         case `clanleave`:
-            clanleave(msg); break;
+            clanLeave(msg); break;
         case `clanjoin`:
-            clanjoin(arg1, msg); break;
+            clanJoin(arg1, msg); break;
         case `clankick`:
-            clankick(msg, arg1); break;
+            clanKick(msg, arg1); break;
         case `clanpublic`:
-            clanpublic(arg1, msg); break;
+            clanPublic(arg1, msg); break;
         case `clanprivate`:
-            clanprivate(arg1, msg); break;
+            clanPrivate(arg1, msg); break;
         case `clancolor`:
-            clancolor(arg1, arg2, msg); break;
+            clanColor(arg1, arg2, msg); break;
         case `clanpicture`:
-            clanpicture(arg1, arg2, msg); break;
+            clanPicture(arg1, arg2, msg); break;
         case `clanpicturereset`:
-            clanpicturereset(arg1); break;
+            clanPictureReset(arg1); break;
         case `claninvite`:
-            claninvite(arg1, arg2, msg); break;
+            clanInvite(arg1, arg2, msg); break;
         case `profilecolor`:
-            profilecolor(msg, arg1); break;
+            profileColor(msg, arg1); break;
         case `profilepicture`:
-            profilepicture(msg, arg1); break;
+            profilePicture(msg, arg1); break;
         case `profilepicturereset`:
-            profilepicturereset(msg); break;
+            profilePictureReset(msg); break;
         case `profiledescription`:
-            profiledescription(msg, arg1); break;
+            profileDescription(msg, arg1); break;
         case `profiledescriptionreset`:
-            profiledescriptionreset(msg); break;
+            profileDescriptionReset(msg); break;
         case `profilerename`:
-            profilerename(msg, arg1); break;
+            profileRename(msg, arg1); break;
         case `notificationoff`:
-            notificationoff(msg); break;
+            notificationOff(msg); break;
         case `notificationon`:
-            notificationon(msg); break;
+            notificationOn(msg); break;
         case `guildnotificationoff`:
             guildnotificationoff(msg); break;
         case `guildnotificationon`:
@@ -265,19 +267,22 @@ function getca(thing, msg, arg1, arg2, arg3) {
     }
 }
 // functions for edit json files | data base
-function changeprefix(pref, msg) { // prefix
+function changePrefix(pref, msg) { // prefix
     customprefix[msg.guild.id] = pref
     fs.writeFile(`./data/prefix.json`, JSON.stringify(customprefix), err => {
         if (err) throw err;
     });
 }
-function changelanguage(language, msg) { // languages
+
+// changer la langue
+function changeLanguage(language, msg) { // languages
     lang[msg.author.id] = language
     fs.writeFile(`./data/lang.json`, JSON.stringify(lang), err => {
         if (err) throw err;
     });
 }
-function createclan(name, msg) { // clans
+
+function createClan(name, msg) { // clans
     // create clan
     clan[name] = {
         version: "2.0",
@@ -297,24 +302,29 @@ function createclan(name, msg) { // clans
     // user in the clan
     profile[msg.author.id].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function clandescription(desc, name, msg) {
+
+function clanDescription(desc, name, msg) {
     clan[name].description = desc; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clandescriptionreset(msg) {
+
+function clanDescriptionReset(msg) {
     clan[profile[msg.author.id].clan].description = ""; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clanleave(msg) {
+
+function clanLeave(msg) {
     (clan[profile[msg.author.id].clan].membersexperience).splice((clan[profile[msg.author.id].clan].members).indexOf(msg.author.id), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     clan[profile[msg.author.id].clan].membersnb -= 1; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     (clan[profile[msg.author.id].clan].members).splice((clan[profile[msg.author.id].clan].members).indexOf(msg.author.id), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     profile[msg.author.id].clan = false; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function clanjoin(name, msg) {
+
+function clanJoin(name, msg) {
     clan[name].membersnb += 1; (clan[name].membersexperience).push(0); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     (clan[name].members).push(msg.author.id); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     profile[msg.author.id].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function clandelete(name, msg) {
+
+function clanDelete(name, msg) {
     for (var i in clan[name].members) {
         var userKick = client.users.cache.get((clan[name].members)[i]);
         profile[((clan[name].members)[i])].clan = false; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
@@ -327,7 +337,8 @@ function clandelete(name, msg) {
     // delete all clan informations in clan.json
     delete clan[name]; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clankick(msg, userid) {
+
+function clanKick(msg, userid) {
     clan[profile[msg.author.id].clan].membersnb -= 1; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     clan[profile[msg.author.id].clan].membersexperience.splice((clan[profile[msg.author.id].clan].members).indexOf(userid), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     clan[profile[msg.author.id].clan].members.splice((clan[profile[msg.author.id].clan].members).indexOf(userid), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
@@ -339,57 +350,73 @@ function clankick(msg, userid) {
         else userKick.send(`You have been excluded from the clan **__${profile[msg.author.id].clan}__**.`).catch(() => { ; });
     }
 }
-function clanpublic(name, msg) {
+
+function clanPublic(name, msg) {
     clan[name].status = true; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clanprivate(name, msg) {
+
+function clanPrivate(name, msg) {
     clan[name].status = false; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function claninvite(name, userid, msg) {
+
+function clanInvite(name, userid, msg) {
     clan[name].membersnb += 1; (clan[name].membersexperience).push(0); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     (clan[name].members).push(userid); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
     profile[userid].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function clancolor(name, color, msg) {
+
+function clanColor(name, color, msg) {
     clan[name].color = color; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clanpicture(name, picture, msg) {
+
+function clanPicture(name, picture, msg) {
     clan[name].picture = picture; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
-function clanpicturereset(name) {
+
+function clanPictureReset(name) {
     clan[name].picture = "https://i.imgur.com/7jUvHRY.png"; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
 }
 
-function profilecolor(msg, color) {
+function profileColor(msg, color) {
     profile[msg.author.id].color = color; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function profilepicture(msg, picture) {
+
+function profilePicture(msg, picture) {
     profile[msg.author.id].picture = picture; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function profilepicturereset(msg) {
+
+function profilePictureReset(msg) {
     profile[msg.author.id].picture = `default`; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function profiledescription(msg, description) {
+
+function profileDescription(msg, description) {
     profile[msg.author.id].description = description + `\n­`; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function profiledescriptionreset(msg) {
+
+function profileDescriptionReset(msg) {
     profile[msg.author.id].description = ""; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
-function profilerename(msg, name) {
+
+function profileRename(msg, name) {
     profile[msg.author.id].name = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
     profile[msg.author.id].namechangement -= 1; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
 }
 
-function notificationon(msg) {
+// notification en mp lorsque le clan ou l'utilisateur passe un niveau
+function notificationOn(msg) {
     notification[msg.author.id] = `on`; fs.writeFile(`./data/notification.json`, JSON.stringify(notification), err => { if (err) throw err; });
 }
-function notificationoff(msg) {
+
+function notificationOff(msg) {
     notification[msg.author.id] = `off`; fs.writeFile(`./data/notification.json`, JSON.stringify(notification), err => { if (err) throw err; });
 }
-function guildnotificationon(msg) {
+
+// notification de serveur quand quelqu'un change de niveau
+function guildNotificationOn(msg) {
     guildnotification[msg.guild.id] = `on`; fs.writeFile(`./data/guildnotification.json`, JSON.stringify(guildnotification), err => { if (err) throw err; });
 }
-function guildnotificationoff(msg) {
+
+function guildNotificationOff(msg) {
     guildnotification[msg.guild.id] = `off`; fs.writeFile(`./data/guildnotification.json`, JSON.stringify(guildnotification), err => { if (err) throw err; });
 }
 
