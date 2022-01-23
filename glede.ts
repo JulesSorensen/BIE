@@ -1,37 +1,38 @@
-const start = Date.now();
-// import * as fs from "fs";
-import Discord from 'discord.js';
-import config from './config/config.json';
-import sha1 from 'sha1';
-let prefix = config.prefix;
-let version = "2.1.0";
-require('dotenv').config()
+// const start = Date.now();
+// // import * as fs from "fs";
+// import Discord from 'discord.js';
+// // @ts-ignore
+// import config from './src/config/config.json';
+// import sha1 from 'sha1';
+// let prefix = config.prefix;
+// let version = "2.1.0";
+// require('dotenv').config()
 
-require('discord-reply');
-import moment from 'moment';
-const client: any = new Discord.Client({ intents: null });
-client.commands = new Discord.Collection();
-import disbut from 'discord-buttons';
-disbut(client);
-import { MessageMenuOption, MessageMenu } from 'discord-buttons';
-import fetch from 'node-fetch';
+// require('discord-reply');
+// import moment from 'moment';
+// const client: any = new Discord.Client({ intents: null });
+// client.commands = new Discord.Collection();
+// import disbut from 'discord-buttons';
+// disbut(client);
+// import { MessageMenuOption, MessageMenu } from 'discord-buttons';
+// import fetch from 'node-fetch';
 
-// DATA BASE
-let customprefix = require('./data/prefix.json');
-let lang = require('./data/lang.json');
-let profile = require('./data/profile.json');
-let clan = require('./data/clan.json');
-let notification = require('./data/notification.json');
-let guildnotification = require('./data/guildnotification.json');
-let guildmessage = require('./data/guildmessage.json');
-let customrole = require('./data/customrole.json');
-let servperm = require('./data/servperm.json');
-let reminder = require('./data/reminder.json');
-let gpname = require('./data/gpname.json');
-// efficom
-let edt = require('./data/edt.json');
-let edtremind = require('./data/edtremind.json');
-let devoir = require('./data/devoir.json');
+// // DATA BASE
+// let customprefix = require('./data/prefix.json');
+// let lang = require('./data/lang.json');
+// let profile = require('./data/profile.json');
+// let clan = require('./data/clan.json');
+// let notification = require('./data/notification.json');
+// let guildnotification = require('./data/guildnotification.json');
+// let guildmessage = require('./data/guildmessage.json');
+// let customrole = require('./data/customrole.json');
+// let servperm = require('./data/servperm.json');
+// let reminder = require('./data/reminder.json');
+// let gpname = require('./data/gpname.json');
+// // efficom
+// let edt = require('./data/edt.json');
+// let edtremind = require('./data/edtremind.json');
+// let devoir = require('./data/devoir.json');
 
 // function gameverify() {
 //     fetch('https://www.gamerpower.com/api/giveaways?platform=pc').then(res => res.json()).then(json => {
@@ -82,28 +83,7 @@ let devoir = require('./data/devoir.json');
 //     }).catch(() => { ; });
 // }
 
-// vérification de rappel demandé par l'utilisateur
-function reminderCheck() {
-    var date = new Date();
-    var datesplit = (date.toLocaleString('en', { dateStyle: 'short' }).toString().split(`/`));
-    datesplit.forEach((item, index) => {
-        if (index == 2) { datesplit[index] = `20${item}`; } else if (item.length == 1) { datesplit[index] = `0${item}`; }
-    });
-    var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
 
-    for (var value in reminder) {
-        try {
-            reminder[value].forEach((item, index) => {
-                if (item.date == datefinale) {
-                    var role = item.roleID ? `<@&${item.roleID}> ` : ``;
-                    (client.channels.cache.get(item.channelID)).send(`${role}<a:bell:868901922483097661> **${item.name}**`).catch(() => { ; });
-                    reminder[value].splice(reminder[value].indexOf(item), 1); fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
-                    if (!(reminder[value].length >= 1)) { delete reminder[value]; fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; }); throw Error(); }
-                }
-            })
-        } catch (e) { ; };
-    };
-}
 
 // pareil qu'au dessus sauf que c'est pour le serveur Efficom
 function edtremindfunction() {
@@ -123,20 +103,20 @@ function edtremindfunction() {
 }
 
 
-client.on('ready', () => {
-    console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\n-----\n`);
-    client.user.setPresence({
-        activity: {
-            name: '&help',
-            type: `WATCHING`
-        }
-    });
-    setInterval(function () {
-        // gameverify(); // not stable
-        edtremindfunction();
-        reminderCheck();
-    }, 55000);
-});
+// client.on('ready', () => {
+//     console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\n-----\n`);
+//     client.user.setPresence({
+//         activity: {
+//             name: '&help',
+//             type: `WATCHING`
+//         }
+//     });
+//     setInterval(function () {
+//         // gameverify(); // not stable
+//         edtremindfunction();
+//         reminderCheck();
+//     }, 55000);
+// });
 
 // read / set commands files
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -199,45 +179,45 @@ function getca(thing, msg, arg1, arg2, arg3) {
         case `notificationon`:
             notificationOn(msg); break;
         case `guildnotificationoff`:
-            guildnotificationoff(msg); break;
+            guildNotificationOff(msg); break;
         case `guildnotificationon`:
-            guildnotificationon(msg); break;
+            guildNotificationOn(msg); break;
         case `rolecreateuser`:
-            rolecreateuser(msg, arg1); break;
+            roleCreateUser(msg, arg1); break;
         case `roleadduser`:
-            roleadduser(msg, arg1); break;
+            roleAddUser(msg, arg1); break;
         case `roleeditname`:
-            roleeditname(msg, arg1, arg2); break;
+            roleEditName(msg, arg1, arg2); break;
         case `roleeditcolor`:
-            roleeditcolor(msg, arg1, arg2); break;
+            roleEditColor(msg, arg1, arg2); break;
         case `roleon`:
-            roleon(msg); break;
+            roleOn(msg); break;
         case `roleoff`:
-            roleoff(msg); break;
+            roleOff(msg); break;
         case `rolepos`:
-            roleposition(msg, arg1); break;
+            rolePosition(msg, arg1); break;
         case `roledelete`:
-            roledelete(msg, arg1); break;
+            roleDelete(msg, arg1); break;
         case `reminderadd`:
-            reminderadd(msg, arg1); break;
+            reminderAdd(msg, arg1); break;
         case `reminderlist`:
-            reminderlist(msg); break;
+            reminderList(msg); break;
         case `reminderdelete`:
-            reminderdelete(msg, arg1); break;
+            reminderDelete(msg, arg1); break;
         case `edtreset`:
-            edtreset(msg); break;
+            edtReset(msg); break;
         case `edtadd`:
-            edtadd(msg, arg1, arg2, arg3); break;
+            edtAdd(msg, arg1, arg2, arg3); break;
         case `edtremindadd`:
-            edtremindadd(msg, arg1, arg2); break;
+            edtRemindAdd(msg, arg1, arg2); break;
         case `edtremindshow`:
-            edtremindshow(msg); break;
+            edtRemindShow(msg); break;
         case `edtremindreset`:
-            edtremindreset(msg); break;
+            edtRemindReset(msg); break;
         case `devoiradd`:
-            devoiradd(msg, arg1, arg2, arg3); break;
+            devoirAdd(msg, arg1, arg2, arg3); break;
         case `devoirdelete`:
-            devoirdelete(msg, arg1, arg2); break;
+            devoirDelete(msg, arg1, arg2); break;
         case `notification`:
             return notification;
         case `guildnotification`:
@@ -266,338 +246,14 @@ function getca(thing, msg, arg1, arg2, arg3) {
             break;
     }
 }
-// functions for edit json files | data base
-function changePrefix(pref, msg) { // prefix
-    customprefix[msg.guild.id] = pref
-    fs.writeFile(`./data/prefix.json`, JSON.stringify(customprefix), err => {
-        if (err) throw err;
-    });
-}
 
-// changer la langue
-function changeLanguage(language, msg) { // languages
-    lang[msg.author.id] = language
-    fs.writeFile(`./data/lang.json`, JSON.stringify(lang), err => {
-        if (err) throw err;
-    });
-}
 
-function createClan(name, msg) { // clans
-    // create clan
-    clan[name] = {
-        version: "2.0",
-        owner: msg.author.id,
-        members: [msg.author.id],
-        membersexperience: [0],
-        status: true,
-        membersnb: 1,
-        membersnblimit: 5,
-        description: ``,
-        picture: `https://i.imgur.com/7jUvHRY.png`,
-        color: 0,
-        level: 1,
-        messages: 1,
-        experience: 0
-    }; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    // user in the clan
-    profile[msg.author.id].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
 
-function clanDescription(desc, name, msg) {
-    clan[name].description = desc; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
 
-function clanDescriptionReset(msg) {
-    clan[profile[msg.author.id].clan].description = ""; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
 
-function clanLeave(msg) {
-    (clan[profile[msg.author.id].clan].membersexperience).splice((clan[profile[msg.author.id].clan].members).indexOf(msg.author.id), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    clan[profile[msg.author.id].clan].membersnb -= 1; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    (clan[profile[msg.author.id].clan].members).splice((clan[profile[msg.author.id].clan].members).indexOf(msg.author.id), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    profile[msg.author.id].clan = false; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
 
-function clanJoin(name, msg) {
-    clan[name].membersnb += 1; (clan[name].membersexperience).push(0); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    (clan[name].members).push(msg.author.id); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    profile[msg.author.id].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
 
-function clanDelete(name, msg) {
-    for (var i in clan[name].members) {
-        var userKick = client.users.cache.get((clan[name].members)[i]);
-        profile[((clan[name].members)[i])].clan = false; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-        if (userKick) {
-            if (lang[userKick.id] == `FR`) userKick.send(`Le clan **__${name}__** vient d'être supprimé, vous n'êtes plus dans un clan désormais.`).catch(() => { ; });
-            else if (lang[userKick.id] == `NO`) userKick.send(`Klanen **__${name}__** er nettopp slettet, du er ikke i en klan lenger.`).catch(() => { ; });
-            else userKick.send(`The clan **__${name}__** has just been deleted, you are not in a clan anymore.`).catch(() => { ; });
-        }
-    }
-    // delete all clan informations in clan.json
-    delete clan[name]; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function clanKick(msg, userid) {
-    clan[profile[msg.author.id].clan].membersnb -= 1; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    clan[profile[msg.author.id].clan].membersexperience.splice((clan[profile[msg.author.id].clan].members).indexOf(userid), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    clan[profile[msg.author.id].clan].members.splice((clan[profile[msg.author.id].clan].members).indexOf(userid), 1); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    profile[userid].clan = false; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-    var userKick = client.users.cache.get(userid);
-    if (userKick) {
-        if (lang[userid] == `FR`) userKick.send(`Vous avez été exclu du clan **__${profile[msg.author.id].clan}__**.`).catch(() => { ; });
-        else if (lang[userid] == `NO`) userKick.send(`Du har blitt ekskludert fra klanen **__${profile[msg.author.id].clan}__**.`).catch(() => { ; });
-        else userKick.send(`You have been excluded from the clan **__${profile[msg.author.id].clan}__**.`).catch(() => { ; });
-    }
-}
-
-function clanPublic(name, msg) {
-    clan[name].status = true; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function clanPrivate(name, msg) {
-    clan[name].status = false; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function clanInvite(name, userid, msg) {
-    clan[name].membersnb += 1; (clan[name].membersexperience).push(0); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    (clan[name].members).push(userid); fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-    profile[userid].clan = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function clanColor(name, color, msg) {
-    clan[name].color = color; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function clanPicture(name, picture, msg) {
-    clan[name].picture = picture; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function clanPictureReset(name) {
-    clan[name].picture = "https://i.imgur.com/7jUvHRY.png"; fs.writeFile(`./data/clan.json`, JSON.stringify(clan), err => { if (err) throw err; });
-}
-
-function profileColor(msg, color) {
-    profile[msg.author.id].color = color; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function profilePicture(msg, picture) {
-    profile[msg.author.id].picture = picture; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function profilePictureReset(msg) {
-    profile[msg.author.id].picture = `default`; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function profileDescription(msg, description) {
-    profile[msg.author.id].description = description + `\n­`; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function profileDescriptionReset(msg) {
-    profile[msg.author.id].description = ""; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-function profileRename(msg, name) {
-    profile[msg.author.id].name = name; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-    profile[msg.author.id].namechangement -= 1; fs.writeFile(`./data/profile.json`, JSON.stringify(profile), err => { if (err) throw err; });
-}
-
-// notification en mp lorsque le clan ou l'utilisateur passe un niveau
-function notificationOn(msg) {
-    notification[msg.author.id] = `on`; fs.writeFile(`./data/notification.json`, JSON.stringify(notification), err => { if (err) throw err; });
-}
-
-function notificationOff(msg) {
-    notification[msg.author.id] = `off`; fs.writeFile(`./data/notification.json`, JSON.stringify(notification), err => { if (err) throw err; });
-}
-
-// notification de serveur quand quelqu'un change de niveau
-function guildNotificationOn(msg) {
-    guildnotification[msg.guild.id] = `on`; fs.writeFile(`./data/guildnotification.json`, JSON.stringify(guildnotification), err => { if (err) throw err; });
-}
-
-function guildNotificationOff(msg) {
-    guildnotification[msg.guild.id] = `off`; fs.writeFile(`./data/guildnotification.json`, JSON.stringify(guildnotification), err => { if (err) throw err; });
-}
-
-function rolecreateuser(msg, pos) {
-    customrole[msg.author.id] = { guild: [0], role: [0] };
-    fs.writeFile(`./data/customrole.json`, JSON.stringify(customrole), err => { if (err) throw err; });
-    roleadduser(msg, pos);
-}
-function roleadduser(msg, pos) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    try {
-        msg.guild.roles.create({ data: { name: `${msg.author.username}#${msg.author.discriminator}`, color: `#000000`, }, reason: `Bot custom role creation, one role per user` }).then(role => {
-            for (var roleselected of role.guild.roles.cache) {
-                if (roleselected[1].name == `${msg.author.username}#${msg.author.discriminator}`) {
-                    var roleid = roleselected[1].id;
-                }
-            }
-            (msg.guild.roles.cache.get(roleid)).setPosition(pos);
-            msg.member.roles.add(msg.guild.roles.cache.get(roleid).id);
-            customrole[msg.author.id].guild.push(msg.guild.id)
-            customrole[msg.author.id].role.push({
-                realname: `${msg.author.username}#${msg.author.discriminator}`,
-                name: `${msg.author.username}#${msg.author.discriminator}`,
-                color: `#000000`,
-                roleid: `${roleid}`
-            });
-            fs.writeFile(`./data/customrole.json`, JSON.stringify(customrole), err => { if (err) throw err; });
-            if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} Votre rôle a bien été crée <@${msg.author.id}>.\nTapez \`&role name [nom]\` pour changer son nom, ou \`&role color [#HEXcode]\` pour changer sa couleur.`).catch(() => { ; });
-            else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} Rollen din er opprettet <@${msg.author.id}>.\nSkriv \`&role name [nom]\` for å endre navnet hans, eller \`&role color [#HEXcode]\` for å endre farge.`).catch(() => { ; });
-            else return msg.channel.send(`${checkIcon} Your role has been created <@${msg.author.id}>.\nType \`&role name [nom]\` to change its name, or \`&role color [#HEXcode]\` to change its colour.`).catch(() => { ; });
-        });
-    } catch (error) { };
-}
-function roleeditname(msg, name, indexId) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    var userrole = msg.guild.roles.cache.get(customrole[msg.author.id].role[indexId].roleid);
-    try { userrole.edit({ name: `${name}` }); } catch (error) { };
-    customrole[msg.author.id].role[indexId].name = name; fs.writeFile(`./data/customrole.json`, JSON.stringify(customrole), err => { if (err) throw err; });
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} Le nom de votre rôle <@${msg.author.id}> est désormais \`${name}\`.`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} Navnet på rollen din <@${msg.author.id}> er nå \`${name}\`.`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} Your role's name <@${msg.author.id}> is now \`${name}\`.`).catch(() => { ; });
-}
-function roleeditcolor(msg, color, indexId) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    var userrole = msg.guild.roles.cache.get(customrole[msg.author.id].role[indexId].roleid);
-    try { userrole.edit({ color: `${color}` }); } catch (error) { };
-    customrole[msg.author.id].role[indexId].color = color; fs.writeFile(`./data/customrole.json`, JSON.stringify(customrole), err => { if (err) throw err; });
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} La couleur de votre rôle <@${msg.author.id}> est désormais \`${color}\`.`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} Fargen på rollen din <@${msg.author.id}> er nå \`${color}\`.`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} Your role's color <@${msg.author.id}> is now \`${color}\`.`).catch(() => { ; });
-}
-function roledelete(msg, index) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    var userrole = msg.guild.roles.cache.get(customrole[msg.author.id].role[index].roleid);
-    customrole[msg.author.id].role.splice(index, 1);
-    customrole[msg.author.id].guild.splice(index, 1); fs.writeFile(`./data/customrole.json`, JSON.stringify(customrole), err => { if (err) throw err; });
-    try { userrole.delete() } catch (error) { };
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} <@${msg.author.id}> votre rôle a bien été supprimé !`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} <@${msg.author.id}> rollen din er slettet!`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} <@${msg.author.id}> your role has been deleted!`).catch(() => { ; });
-}
-function roleon(msg) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    servperm[msg.guild.id] = 1; fs.writeFile(`./data/servperm.json`, JSON.stringify(servperm), err => { if (err) throw err; });
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} <@${msg.author.id}> vous avez bien activé cette fonctionnalité !\nChaque utilisateur pourra créer et personnaliser son propre rôle.\nPour changer la position des rôles, tapez la commande \`&role position [nombre]\`.`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} <@${msg.author.id}> du har aktivert denne funksjonen!\nHver bruker vil kunne lage og tilpasse sin egen rolle.\nFor å endre posisjonen til rollene, skriv inn kommandoen \`&role position [antall]\`.`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} <@${msg.author.id}> you have enabled this feature!\nEach user will be able to create and customise their own role.\nTo change the position of the roles, type the command \`&role position [number]\`.`).catch(() => { ; });
-}
-function roleoff(msg) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    delete servperm[msg.guild.id]; fs.writeFile(`./data/servperm.json`, JSON.stringify(servperm), err => { if (err) throw err; });
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} <@${msg.author.id}> vous avez bien désactivé cette fonctionnalité !`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} <@${msg.author.id}> du har deaktivert denne funksjonen!`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} <@${msg.author.id}> you have deactivated this feature!`).catch(() => { ; });
-}
-function roleposition(msg, pos) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    servperm[msg.guild.id] = pos; fs.writeFile(`./data/servperm.json`, JSON.stringify(servperm), err => { if (err) throw err; });
-    if (lang[msg.author.id] === "FR") return msg.channel.send(`${checkIcon} <@${msg.author.id}> la position des rôles sera \`${pos}\` désormais !`).catch(() => { ; });
-    else if (lang[msg.author.id] === "NO") return msg.channel.send(`${checkIcon} <@${msg.author.id}> stillingen til rollene vil nå være \`${pos}\`!`).catch(() => { ; });
-    else return msg.channel.send(`${checkIcon} <@${msg.author.id}> the position of the roles will be \`${pos}\` from now!`).catch(() => { ; });
-}
-
-function reminderadd(msg, args) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    if (!reminder[msg.guild.id]) {
-        var id = 1;
-        var roleID = !args[3] ? false : args[3];
-        reminder[msg.guild.id] = [{ "id": 1, "date": args[0], "name": args[1], "channelID": args[2], "roleID": roleID }]; fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
-    } else {
-        var id: number = (reminder[msg.guild.id].length >= 1) ? ((reminder[msg.guild.id][reminder[msg.guild.id].length - 1].id) + 1) : (1);
-        var roleID = !args[3] ? false : args[3];
-        reminder[msg.guild.id].push({ "id": id, "date": args[0], "name": args[1], "channelID": args[2], "roleID": roleID }); fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
-    }
-    if (lang[msg.author.id] === `FR`) return msg.channel.send(`${checkIcon} <@${msg.author.id}> vous avez bien créer le rappel \`${args[1]}\`, ID: \`${id}\`.`).catch(() => { });
-    else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${checkIcon} <@${msg.author.id}> du har opprettet påminnelsen \`${args[1]}\`, ID: \`${id}\`.`).catch(() => { });
-    else return msg.channel.send(`${checkIcon} <@${msg.author.id}> you have created the reminder \`${args[1]}\`, ID: \`${id}\`.`).catch(() => { });
-}
-function reminderlist(msg) {
-    let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
-    if (!reminder[msg.guild.id]) {
-        if (lang[msg.author.id] === `FR`) return msg.channel.send(`${uncheckIcon} Il n'y a pas de rappels crées sur le serveur <@${msg.author.id}> !`).catch(() => { ; });
-        else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${uncheckIcon} Det er ingen påminnelser opprettet på serveren <@${msg.author.id}> !`).catch(() => { ; });
-        else return msg.channel.send(`${uncheckIcon} There are no reminders created on the server <@${msg.author.id}> !`).catch(() => { ; });
-    } else if (!(reminder[msg.guild.id].length >= 1)) {
-        if (lang[msg.author.id] === `FR`) return msg.channel.send(`${uncheckIcon} Il n'y a pas de rappels crées sur le serveur <@${msg.author.id}> !`).catch(() => { ; });
-        else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${uncheckIcon} Det er ingen påminnelser opprettet på serveren <@${msg.author.id}> !`).catch(() => { ; });
-        else return msg.channel.send(`${uncheckIcon} There are no reminders created on the server <@${msg.author.id}> !`).catch(() => { ; });
-    }
-    var sentence = `\n`;
-    reminder[msg.guild.id].forEach((item, index) => {
-        var role = (item.roleID) ? ` ROLE-ID: \`${item.roleID}\`` : ``;
-        sentence += `ID: \`${item.id.toString()}\` DATE: \`${item.date}\` NAME: \`${item.name}\` CHANNEL: <#${item.channelID}>${role}\n`;
-    })
-    if (lang[msg.author.id] === `FR`) return msg.channel.send(`Voici la liste de vos rappels:\n${sentence}`).catch(() => { ; });
-    else if (lang[msg.author.id] === `FR`) return msg.channel.send(`Her er listen over tilbakekallinger:\n${sentence}`).catch(() => { ; });
-    else return msg.channel.send(`Here is the list of your reminders:\n${sentence}`).catch(() => { ; });
-}
-function reminderdelete(msg, id) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString(); let uncheckIcon = client.emojis.cache.get(`866581082870513684`).toString();
-    if (!reminder[msg.guild.id]) {
-        if (lang[msg.author.id] === `FR`) return msg.channel.send(`${uncheckIcon} Il n'y a pas de rappels crées sur le serveur <@${msg.author.id}> !`).catch(() => { ; });
-        else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${uncheckIcon} Det er ingen påminnelser opprettet på serveren <@${msg.author.id}> !`).catch(() => { ; });
-        else return msg.channel.send(`${uncheckIcon} There are no reminders created on the server <@${msg.author.id}> !`).catch(() => { ; });
-    } else {
-        var guildIndex = false;
-        var reminderName = false;
-        reminder[msg.guild.id].forEach((item, index) => {
-            if (item.id == id) {
-                guildIndex = index.toString();
-                reminderName = item.name;
-            }
-        });
-        if (!guildIndex) {
-            if (lang[msg.author.id] === `FR`) return msg.channel.send(`${uncheckIcon} <@${msg.author.id}> cet ID est introuvable...`).catch(() => { ; });
-            else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${uncheckIcon} <@${msg.author.id}> denne IDen ble ikke funnet...`).catch(() => { ; });
-            else return msg.channel.send(`${uncheckIcon} <@${msg.author.id}> this ID can't be found...`).catch(() => { ; });
-        } else {
-            reminder[msg.guild.id].splice(parseInt(guildIndex), 1); fs.writeFile(`./data/reminder.json`, JSON.stringify(reminder), err => { if (err) throw err; });
-            if (lang[msg.author.id] === `FR`) return msg.channel.send(`${checkIcon} <@${msg.author.id}> j'ai bien supprimé le rappel \`${id}\` (\`${reminderName}\`) !`).catch(() => { ; });
-            else if (lang[msg.author.id] === `NO`) return msg.channel.send(`${checkIcon} <@${msg.author.id}> jeg slettet påminnelsen \`${id}\` (\`${reminderName}\`) !`).catch(() => { ; });
-            else return msg.channel.send(`${checkIcon} <@${msg.author.id}> I removed the reminder \`${id}\` (\`${reminderName}\`) !`).catch(() => { ; });
-        }
-    }
-}
-
-function edtreset(msg) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    edt = {}; fs.writeFile(`./data/edt.json`, JSON.stringify(edt), err => { if (err) throw err; }); msg.react(checkIcon);
-}
-function edtadd(msg, date, link, desc) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    edt[date] = { link: link, desc: desc }; fs.writeFile(`./data/edt.json`, JSON.stringify(edt), err => { if (err) throw err; }); msg.react(checkIcon);
-}
-function edtremindadd(msg, date, heure) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    edtremind[date] = heure; fs.writeFile(`./data/edtremind.json`, JSON.stringify(edtremind), err => { if (err) throw err; }); msg.react(checkIcon);
-}
-function edtremindshow(msg) {
-    msg.channel.send("**LAST EDT-REMIND DATA FILE**", { files: ["data/edtremind.json"] });
-}
-function edtremindreset(msg) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    edtremind = {}; fs.writeFile(`./data/edtremind.json`, JSON.stringify(edtremind), err => { if (err) throw err; }); msg.react(checkIcon);
-}
-function devoiradd(msg, date, matiere, text) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    if (!devoir[date]) {
-        devoir[date] = {}; devoir[date][matiere] = text; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
-    } else {
-        devoir[date][matiere] = text; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
-    }
-}
-function devoirdelete(msg, date, matiere) {
-    let checkIcon = client.emojis.cache.get(`866581082551615489`).toString();
-    if (!devoir[date]) return msg.reply(`aucun devoir détecté pour cette date`);
-    if (!devoir[date][matiere]) return msg.reply(`matière non trouvé sur cette date`);
-    delete devoir[date][matiere]; fs.writeFile(`./data/devoir.json`, JSON.stringify(devoir), err => { if (err) throw err; }); msg.react(checkIcon);
-}
-
-// private menu
+// private menu Efficom
 client.on('clickMenu', async (menu) => {
     let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
     if (menu.message.channel.id != `868524232898908190` && menu.message.channel.id != `874251750092206081`) return;
@@ -686,104 +342,13 @@ client.on('clickMenu', async (menu) => {
 });
 
 // on message = commands let's find the command file
-function commandLaunch(msg) {
-    // custom prefix
-    let prefix = config.prefix;
-    if (msg.channel.type != `dm`) {
-        if (!customprefix[msg.guild.id]) {
-            prefix = config.prefix;
-        } else {
-            prefix = customprefix[msg.guild.id];
-        }
-    } else prefix = config.prefix;
-    if (msg.content.toLowerCase() == `&prefix`) return msg.reply(`\`${prefix}\` is the current prefix.`).catch(() => { ; });
-    if (!msg.content.startsWith(prefix)) return;
-    let args = msg.content.slice(prefix.length).split(/ +/);
-    let commandName = args.shift().toLowerCase();
-    // alias
-    switch (commandName) {
-        case 'h':
-        case 'aide':
-        case 'hjelp': // help
-            commandName = 'help'; break;
-        case 'rmd':
-        case 'rmdm':
-        case 'rmdme': // remind me
-            commandName = 'remindme'; break;
-        case 'lang':
-        case 'langue':
-        case 'språk':
-        case 'sprak': // language
-            commandName = 'language'; break;
-        case 'invite':
-        case 'invitasjon':
-        case 'invitere ': // invitation
-            commandName = 'invitation'; break;
-        case 'p':
-        case 'profil': // profile
-            commandName = 'profile'; break;
-        case 'not':
-            commandName = 'notification'; break;
-        case 'klan':
-        case 'c': // clan
-            commandName = 'clan'; break;
-        case 'suggestions':
-        case 'sugg': // suggestion
-            commandName = 'suggestion'; break;
-        case 'server':
-        case 'serveur':
-        case 'g':
-        case 'guilde': // guild
-            commandName = 'guild'; break;
-        case 'ro':
-        case 'r': // role
-            commandName = 'role'; break;
-        case 'remind':
-        case 'autoremind':
-        case 'autoreminder':
-        case 'rm':
-        case 'reminder': // reminder
-            commandName = 'reminder'; try { if (args[0].toLowerCase() == `add`) { args = msg.content.split('"'); args[0] = args[0].split(" ")[2]; var secondArgs = args[2].split(" "); args[2] = secondArgs[1]; args.push(secondArgs[2]); break; } } catch (error) { if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, rollen som skal nevnes er ikke obligatorisk!`).catch(() => { ; }); else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, the role to be mentioned is not mandatory!`).catch(() => { ; }); }; break;
-        case 'save': // save command PRIVATE
-            if (msg.author.id == `676690539126718467`) { msg.channel.send("**LAST DATA FILES**", { files: ["data/clan.json", "data/customrole.json", "data/gpname.json", "data/guildmessage.json", "data/guildnotification.json", "data/lang.json", "data/notification.json", "data/prefix.json", "data/profile.json", "data/reminder.json", "data/servperm.json"] }).catch(() => { ; }); } return;
-        case 'edt':
-        case 'emploidutemps': // edt command PRIVATE
-            commandName = 'edt'; break;
-        case 'devoirs': // devoir command PRIVATE
-            commandName = 'devoir'; break;
-        case 'bie': // bie command PRIVATE
-            {
-                if (msg.author.id != `676690539126718467`) return;
-                let option1 = new MessageMenuOption().setLabel(`EDT - Cette semaine`).setEmoji('893889890108981278').setValue(`edt1`).setDescription(`Recevoir l'emploi du temps de cette semaine`);
-                let option2 = new MessageMenuOption().setLabel(`EDT - Semaine prochaine`).setEmoji('893889890108981278').setValue(`edt2`).setDescription(`Recevoir l'emploi du temps de la semaine prochaine`);
-                let option3 = new MessageMenuOption().setLabel(`Devoirs - Actuels`).setEmoji('893971159933145140').setValue(`devoir`).setDescription(`Recevoir la liste des prochains devoirs`);
-                let option4 = new MessageMenuOption().setLabel(`Recharger les options`).setEmoji('868852714690478090').setValue(`reload`).setDescription(`Pour pouvoir choisir de nouveau une autre option`);
-                let select = new MessageMenu().setID(`customid`).setPlaceholder(`🧑‍💻 Choisissez une commande`).addOption(option1).addOption(option2).addOption(option3).addOption(option4);
+// ici reposait commandLaunch()
 
-                msg.channel.send(`**Bonjour <@&775833208012800050> ! :wave:**\n\n<a:gear:893920078024831017> **Voici les commandes importantes à connaître concernant Efficom :**\n\`&emploidutemps\` pour recevoir l'emploi du temps de la semaine actuelle (raccourci: \`&edt\`)\n\`&emploidutemps suivant\` pour recevoir l'emploi du temps de la semaine prochaine (r: \`&edt s\`)\n\`&devoirs\` pour recevoir les prochains devoirs à faire (\`&devoirs stats\` pour avoir plus de statisques)\n\n\`&teams [LienDeRéunion] [HeureDebut] [HeureFin] [NomDuCours]\` pour prévenir la classe d'une réunion Teams\n\`&note [Matière]\` pour prévenir la classe d'une nouvelle note sur MyGes\n\n<a:thumbsup:893920077974499388> **Réactions**\nCliquez sur 🔔 pour être notifié tout les soirs à 19h30 de l'heure à laquelle vous commencez le lendemain\nCliquez sur 💯 pour être notifié dès qu'une nouvelle note apparaît sur MyGes\nCliquez sur 📔 pour être notifié à l'ajout d'un nouveau devoir\nCliquez sur <:teams:875369282207354920> pour être notifié à chaque réunion Teams\n\n<a:gift:893921102361931807> **D'autres commandes:**\n\`&role create\` pour créer un rôle personnalisé pour vous sur le serveur (r: \`&r cr\`)\n\`&role nom [VotreNom]\` pour changer le nom de votre rôle (r: \`&r n [VotreNom]\`)\n\`&role couleur [#Couleur]\` pour changer la couleur de votre rôle (r: \`&r c [#Couleur]\`), vous devez mettre un code hexadécimal commençant par un #, ou une couleur comme \`rouge\`, \`bleu\` etc...\n­`, select).then(msgb => { msgb.react(`🔔`).catch(() => { ; }); msgb.react(`💯`).catch(() => { ; }); msgb.react(`📔`).catch(() => { ; }); msgb.react(`875369282207354920`).catch(() => { ; }); }).catch((e) => { console.log(e); });
-                return;
-            }
-        default:
-            break;
-    }
-    if (!client.commands.has(commandName)) return;
-    const command = client.commands.get(commandName);
-    if (command.guildOnly && msg.channel.type != 'text') {
-        return msg.reply('Vous devez taper cette commande dans un serveur Discord !').catch(() => { ; });
-    }
 
-    try {
-        command.execute(msg, args, client, prefix, getca, version);
-    } catch (error) {
-        console.error(error);
-        msg.channel.send(`Error CMD[${sha1(commandName.toLowerCase())}] was generated`).catch(() => { ; });
-    }
-};
-
-// XP System
+// XP SystemUp Message
 // Cooldown
 const userCooldown = new Set();
-// Level Up Message
+// Level 
 function levelUpMessage(msg, level) {
     const levelUpEmote = client.emojis.cache.get(`868850243754688523`).toString();
     var levelUpClanXp = ((Math.floor(Math.random() * (300 - 150 + 1)) + 150) * level);
@@ -810,6 +375,7 @@ function levelUpMessage(msg, level) {
         msg.react(levelUpEmote).catch(() => { ; });
     } else return;
 }
+
 function clanLevelUpMessage(name, msg, level) {
     const levelUpEmote = client.emojis.cache.get(`868850243754688523`).toString();
     // xp boost
@@ -846,26 +412,9 @@ function clanLevelUpMessage(name, msg, level) {
         }
     }
 }
+
 client.on('message', msg => {
     if (msg.author.bot) return; if (msg.content.length <= 1) return;
-    // UPDATE
-    // {
-    //     if (!profile[msg.author.id]) {
-    //         // don't do the update
-    //     } else { // update
-    //         // profile
-    //         if (profile[msg.author.id].version != "2.0") {
-    //             profile[msg.author.id].version = "2.0"; fs.writeFile(`./data/profile.json`, JSON.stringify(profile),err=>{if(err) throw err;});
-    //         }
-    //         // clan
-    //         if (!clan[profile[msg.author.id].clan]) { ; } else {
-    //             if (clan[profile[msg.author.id].clan].version != "2.0") {
-    //                 clan[profile[msg.author.id].clan].version = "2.0"; fs.writeFile(`./data/clan.json`, JSON.stringify(profile),err=>{if(err) throw err;});
-    //             }
-    //         }
-    //     }
-    // }
-    // command after the update
     commandLaunch(msg);
     if (msg.channel.type == `dm`) return;
     if (!userCooldown.has(msg.author.id)) {
@@ -964,35 +513,6 @@ client.on('message', msg => {
         }, 2500);
     }
 });
-// reactions
-client.on('messageReactionAdd', (reaction, user) => {
-    if (user.id == `839602909942906891`) return;
-    if (reaction.message.channel.id == `868524232898908190`) {
-        if (reaction.emoji.name == `🔔`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`871298355161092186`).id); } catch (error) { ; };
-        } else if (reaction.emoji.name == `💯`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`871298481233494027`).id); } catch (error) { ; };
-        } else if (reaction.emoji.name == `📔`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`893923446940123137`).id); } catch (error) { ; };
-        } else if (reaction.emoji.id == `875369282207354920`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.add(reaction.message.guild.roles.cache.get(`875369959503581244`).id); } catch (error) { ; };
-        }
-    }
-})
-client.on('messageReactionRemove', (reaction, user) => {
-    if (user.id == `839602909942906891`) return;
-    if (reaction.message.channel.id == `868524232898908190`) {
-        if (reaction.emoji.name == `🔔`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`871298355161092186`).id); } catch (error) { ; };
-        } else if (reaction.emoji.name == `💯`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`871298481233494027`).id); } catch (error) { ; };
-        } else if (reaction.emoji.name == `📔`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`893923446940123137`).id); } catch (error) { ; };
-        } else if (reaction.emoji.id == `875369282207354920`) {
-            try { reaction.message.guild.members.cache.get(user.id).roles.remove(reaction.message.guild.roles.cache.get(`875369959503581244`).id); } catch (error) { ; };
-        }
-    }
-})
 
 // login
 client.login(process.env.TOKEN);

@@ -5,7 +5,7 @@ module.exports = {
         var action = ((msg.content.split(" "))[1]).toLowerCase();
         let lang = getca(`language`);
         if (action == `add` || action == `a`) {
-            function error(msg) {
+            const error = (msg) => {
                 if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(()=>{;});
                 else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, rollen som skal nevnes er ikke obligatorisk!`).catch(()=>{;});
                 else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, the role to be mentioned is not mandatory!`).catch(()=>{;});
@@ -37,7 +37,7 @@ module.exports = {
                 else if(!isNumeric(args[1])) {return error(msg);}
                 else {
                     var id = parseInt(args[1]);
-                    if(!id || id == `NaN`) {return error(msg);}
+                    if(!id || id == undefined) {return error(msg);}
                     return getca(`reminderdelete`, msg, id);
                 }
             } else {

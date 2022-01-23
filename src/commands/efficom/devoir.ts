@@ -1,4 +1,4 @@
-const moment = require('moment');
+import moment from 'moment';
 module.exports = {
     name: 'devoir',
     guildOnly: false,
@@ -37,7 +37,7 @@ module.exports = {
                 }
             }).catch(() => { ; });
         } else if (args[0].toLowerCase().startsWith(`s`)) {
-            var matieresnb = {};
+            var matieresnb: any = {};
             var totalnb = 0;
             for (const [key, value] of Object.entries(devoir)) {
                 for (const [key2, value2] of Object.entries(value)) {
@@ -50,6 +50,7 @@ module.exports = {
                 }
             }
             const matieresnbSorted = Object.fromEntries(
+                // @ts-ignore
                 Object.entries(matieresnb).sort(([, a], [, b]) => b - a)
             );
             matieresnb = [];

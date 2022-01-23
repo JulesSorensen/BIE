@@ -2,13 +2,14 @@ module.exports = {
     name: 'remindme',
     guildOnly: false,
     execute(msg, args, client, prefix, getca, version) {
-        lang = getca("language", msg)
+        let lang = getca("language", msg)
         if (!args[0]) {
             if (lang[msg.author.id] == "FR") return msg.channel.send(msg.author + " il faut indiquer dans combien de temps voulez-vous votre rappel, exemple : `"+prefix+"remindme 1h30` ou `"+prefix+"rmd 5m`\nAttention, seulement les heures et les minutes fonctionnent pour le moment.");
             else if (lang[msg.author.id] == "NO") return msg.channel.send(msg.author + " du må angi hvor lenge du vil ha påminnelsen din, eksempel : `"+prefix+" minne meg 1h30` eller `"+prefix+"rmd 5m`.\nAdvarsel, bare timer og minutter fungerer for øyeblikket.");
             else return msg.channel.send(msg.author+" you need to indicate how long you want your reminder for, e.g. `"+prefix+"remindme 1h30` or `"+prefix+"rmd 5m`.\nWarning, only hours minutes and seconds work at the moment.")
         }
-        fait = false
+        let fait = false
+        let attente = 0;
         // temps d'attente | args[0] 
         if (args[0].toLowerCase().indexOf('h') > -1) {
             if (args[0].toLowerCase().indexOf('m') > -1) {
@@ -30,7 +31,7 @@ module.exports = {
                 }
             }
         } else if (args[0].toLowerCase().indexOf('m') > -1) {
-            if (!args[0].toLowerCase().indexOf('h') > -1) {
+            if (!(args[0].toLowerCase().indexOf('h') > -1)) {
                 argstemps = args[0].split('m')
                 argstemps[1] = argstemps[0]
                 argstemps[0] = 0
@@ -59,7 +60,7 @@ module.exports = {
         }
         rmdheure += 1 // decalage horraire
         // message enregistré dans les derniers args[]
-        mess = ""
+        let mess = ""
         for (let i = 1; i < args.length; i++) {
             if (i == 1) { mess = mess + args[i] } else { mess = mess + " " + args[i] }
         }

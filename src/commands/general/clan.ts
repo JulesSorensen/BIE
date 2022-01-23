@@ -27,7 +27,7 @@ module.exports = {
             var levelTableClan = [`0-19999`, `20000-99999`, `100000-499999`, `500000-999999`, `1000000-1499999`, `1500000-2499999`, `2500000-4999999`, `5000000-9999999`, `10000000-49999999`, `50000000-10000000000`];
             var levelStatus = `▰▰▰▰▰▰▰▰▰▰`;
             for (var i in levelTableClan) {
-                var a = levelTableClan[i].split(`-`);
+                var a: Array<any> = levelTableClan[i].split(`-`);
                 if ((clan[clanname].experience >= a[0]) && (a[1] >= clan[clanname].experience)) {
                     a[0] = parseInt(a[0]);
                     a[1] = parseInt(a[1]);
@@ -65,7 +65,11 @@ module.exports = {
             } else {
                 var clanMessage = `Clan:`; var membersMessage = `Members`; var levelMessage = `Level`; var messagesMessage = `Messages`; var statusMessage = `Status`; var statusMessage = `Status`; var statusMessageName = clan[clanname].status ? `Public` : `Private`;
             }
-            if (clan[clanname].messages >= 1000000) {var msgText = Math.floor(clan[clanname].messages * 0.000001) + "M " + Math.floor(clan[clanname].messages * 0.001) + "k";} else if (clan[clanname].messages >= 1000) {var msgText = Math.floor(clan[clanname].messages * 0.001) + "," + (Math.floor(clan[clanname].messages)).toString().substr(-3,1) + "k";} else {var msgText = clan[clanname].messages;}
+            if (clan[clanname].messages >= 1000000) {
+                var msgText = Math.floor(clan[clanname].messages * 0.000001) + "M " + Math.floor(clan[clanname].messages * 0.001) + "k";
+            } else if (clan[clanname].messages >= 1000) {
+                var msgText = Math.floor(clan[clanname].messages * 0.001) + "," + (Math.floor(clan[clanname].messages)).toString().substr(-3, 1) + "k";
+            } else { msgText = clan[clanname].messages; }
             return msg.channel.send({
                 embed: {
                     color: clan[clanname].color,

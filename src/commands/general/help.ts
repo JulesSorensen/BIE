@@ -2,7 +2,7 @@ module.exports = {
     name: 'help',
     guildOnly: true,
     execute(msg, args, client, prefix, getca, version) {
-        lang = getca("language", msg)
+        let lang = getca("language", msg)
         const arrow = client.emojis.cache.get("842384331329634304").toString();
         if (!args[0]) { // help
             if (lang[msg.author.id] === "FR") {

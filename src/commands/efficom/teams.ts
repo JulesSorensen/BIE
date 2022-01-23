@@ -1,6 +1,6 @@
 module.exports = {
     name: 'teams',
-    guildOnly: true,
+    guildOnly: false,
     execute(msg, args, client, prefix, getca, version) {
         if (msg.guild.id != "762698485011054602") return;
         if (!args[0]) return msg.channel.send(`Voici comment utiliser la commande: \`&teams [Lien] [HeureDuDébut] [HeureDeFin] [NomDuCours]\``).catch(()=>{;});

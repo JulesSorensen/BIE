@@ -1,11 +1,12 @@
 {
   "name": "glede",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Glede Bot made by Nekewo",
-  "main": "glede.js",
+  "main": "glede.ts",
   "scripts": {
-    "start": "node ./glede.ts",
-    "dev": "node ./glede.ts"
+    "start": "tsc && node dist/glede.js",
+    "dev": "nodemon --exec \"ts-node\" main.ts",
+    "testdb": "nodemon --exec \"ts-node\" testDb.ts"
   },
   "repository": {
     "type": "git",
@@ -25,12 +26,12 @@
     "discord-reply": "^0.1.2",
     "discord.js": "^13.3.1",
     "dotenv": "^10.0.0",
-    "fs": "0.0.1-security",
-    "moment": "^2.29.1",
-    "node-fetch": "^2.6.6",
-    "sha1": "^1.1.1"
+    "file-system": "^1.2.2",
+    "firebase-admin": "^10.0.0",
+    "moment": "^2.29.1"
   },
   "devDependencies": {
-    "@types/node": "^16.11.6"
+    "@types/node": "^16.11.6",
+    "typescript": "^4.4.4"
   }
 }

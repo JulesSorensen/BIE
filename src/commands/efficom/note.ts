@@ -2,11 +2,11 @@ module.exports = {
 	name: 'note',
 	guildOnly: false,
 	execute(msg, args, client, prefix, getca, version) {
-		if (msg.guild.id != "762698485011054602") return;
+		if (msg.guild.id != "762698485011054602" || msg.guild.id != "783679631101526056") return;
         var desc = (!args[0]) ? false : args.join(' ');
         if(!desc) return msg.reply(`vous devez précisez la matière après la commande`).catch(()=>{;});
 		msg.delete({ timeout: 10 }).catch(()=>{;});
-		(client.channels.cache.get(`864439897107857438`)).send(`<@&871298481233494027>`, {
+		(client.channels.cache.get(`762698661892849714`)).send(`<@&871298481233494027>`, {
             embed: {
                 color: 16712451,
                 thumbnail: {

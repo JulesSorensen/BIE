@@ -2,7 +2,7 @@ module.exports = {
     name: 'language',
     guildOnly: false,
     execute(msg, args, client, prefix, getca) {
-        lang = getca("language", msg)
+        let lang = getca("language", msg)
         // default
         if (!lang[msg.author.id]) {
             getca("changelanguage", msg, "EN");

@@ -2,8 +2,8 @@ module.exports = {
     name: 'prefix',
     guildOnly: true,
     execute(msg, args, client, prefix, getca, version) {
-        lang = getca("language", msg)
-        customprefix = getca("customprefix", msg)
+        let lang = getca("language", msg)
+        let customprefix = getca("customprefix", msg)
         if (msg.member.permissions.has('ADMINISTRATOR')) {
             if (!args[0]) {
                 if (!customprefix[msg.guild.id]) {
