@@ -1,6 +1,5 @@
 import Discord from 'discord.js';
 require('dotenv').config()
-require('discord-reply');
 import { Client, Collection, Intents } from 'discord.js';
 const client = new Client({
     intents: [
@@ -47,10 +46,8 @@ fs.readdir(`./src/commands/`, (error, folders) => {
 client.on('ready', () => {
     console.log(`-----\nLogged in as ${client.user.username} !\nVersion: ` + version + ` ✅\n-----\n`);
     client.user.setActivity({ name: '&help', type: `WATCHING` });
-    
-    // gameverify(); // not stable
-    // remindfunction();
-    edtReminderCheck();
+
+    edtReminderCheck(client);
     mygesCheck(client);
 });
 

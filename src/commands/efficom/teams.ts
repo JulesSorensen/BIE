@@ -10,8 +10,8 @@ module.exports = {
         var heured = (!args[1]) ? (`Non spécifié`) : args[1];
         var heuref = (!args[2]) ? (`Non spécifié`) : args[2];
         var nomducours = (!args[3]) ? (``) : (`📚 Cours : ${args.slice(3).join(' ')}\n­`);
-        efficomsalon.send("<@&875369959503581244>", {
-            embed: {
+        efficomsalon.send({content: "<@&875369959503581244>",
+            embeds: [{
                 color: 4673464,
                 thumbnail: {
                     url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg/1200px-Microsoft_Office_Teams_%282018%E2%80%93present%29.svg.png"
@@ -32,9 +32,9 @@ module.exports = {
                     inline: true
                 }],
                 footer: {
-                    text: `Fonctionnalité privée ┃ Envoyé par ${msg.author.username}`
+                    text: `Envoyé par ${msg.author.username}`
                 }
-            }
+            }]
         }).catch(()=>{;});
     }
 };

@@ -87,19 +87,7 @@
 
 // pareil qu'au dessus sauf que c'est pour le serveur Efficom
 function edtremindfunction() {
-    var date = new Date();
-    date.setDate(date.getDate() + 1);
-    var datesplit = (date.toLocaleString('en', { dateStyle: 'short' }).toString().split(`/`));
-    datesplit.forEach((item, index) => {
-        if (index == 2) { datesplit[index] = `20${item}`; } else if (item.length == 1) { datesplit[index] = `0${item}`; }
-    });
-    var datefinale = `${datesplit[1]}/${datesplit[0]}/${datesplit[2]}`;
-    if (!edtremind[datefinale]) return;
-    if (date.getHours() >= 19 && date.getMinutes() >= 30) {
-        let channel = client.channels.cache.get(`762698661892849714`);
-        channel.send(`<@&871298355161092186> <a:bell:868901922483097661> Vous commencez à **${edtremind[datefinale]}** demain !`).catch(() => { ; });
-        delete edtremind[datefinale]; fs.writeFile(`./data/edtremind.json`, JSON.stringify(edtremind), err => { if (err) throw err; });
-    }
+    
 }
 
 
