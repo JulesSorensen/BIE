@@ -11,7 +11,6 @@ const client = new Client({
 });
 // @ts-ignore
 client.commands = new Discord.Collection();
-import { MessageMenuOption, MessageMenu } from 'discord-buttons';
 import fs from 'file-system'
 
 import config from './src/config/config.json';
