@@ -15,7 +15,6 @@ const devoirAdd = async (msg: any, date: string, matiere: string, text: string, 
                 }
             ]
         })
-        msg.react(checkIcon);
     } else {
         devoir[date].matieres.push({
             matiere: matiere,
@@ -23,6 +22,7 @@ const devoirAdd = async (msg: any, date: string, matiere: string, text: string, 
         })
         await createData('devoir', date, devoir[date])
     }
+    await msg.react(checkIcon);
 }
 
 // supprime un devoir

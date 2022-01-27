@@ -1,6 +1,6 @@
 {
   "name": "glede",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Glede Bot made by Nekewo",
   "main": "glede.ts",
   "scripts": {

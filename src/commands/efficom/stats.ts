@@ -4,7 +4,7 @@ import { getAllData } from "../../firebase/firebase";
 module.exports = {
     name: 'stats',
     guildOnly: false,
-    async execute(msg, args, client, prefix, getca, version) {
+    async execute(msg, args, client, version) {
         let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
         msg.react(searchIcon).catch(() => { ; });
         let stats: any = (await getAllData('stats'));
@@ -35,10 +35,11 @@ module.exports = {
                 timestamp: new Date(),
                 footer: {
                     icon_url: msg.author.avatarURL(),
-                    text: `Statistiques demandé par ${msg.author.tag}`
+                    text: `BIE V.${version} | Statistiques demandé par ${msg.author.tag}`
                 }
             }], components: [row]
         }).catch(() => { });
+        (client.channels.cache.get(`874251822045487125`)).send(`📊 Stats sent to ${msg.author.username}`).catch(() => { ; });
         msg.reactions.removeAll()
     }
 };

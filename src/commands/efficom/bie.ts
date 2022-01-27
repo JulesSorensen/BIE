@@ -3,7 +3,7 @@ import { Client, Message, MessageActionRow, MessageButton } from 'discord.js';
 module.exports = {
     name: 'bie',
     guildOnly: true,
-    execute(msg, args, client, prefix, getca, version) {
+    execute(msg, args, client, version) {
         if (msg.author.id != `676690539126718467`) return;
 
         const row = new MessageActionRow().addComponents(
