@@ -11,8 +11,8 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
     const getCustomizedDate = () => {
         var date = new Date();
         if (date.getDay() == 6 || date.getDay() == 0) {
-            let nb = (date.getDay() == 6 ? 1 : -1)
-            date.setDate(date.getDate() + (((nb + 7 - date.getDay()))));
+            let nb = (date.getDay() == 6 ? 8 : 1)
+            date.setDate(date.getDate() + (((nb - date.getDay()))));
         }
         return date
     }
@@ -42,22 +42,28 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 1 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
+            edt1Cooldown.add(interaction.user.id);
+            setTimeout(() => {
+                edt1Cooldown.delete(interaction.user.id);
+            }, 180000);
+            let pastille;
+            let myges;
             if (!edt1Cooldown.has(interaction.user.id)) {
-                const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
-                const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
-                if (!edt[edtDate].desc) {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**`, files: [edt[edtDate].link] }).catch(() => { })
-                } else {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+                try {
+                    myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
+                    pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
+                } catch {
+                    pastille = '🟠';
                 }
-                edt1Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt1Cooldown.delete(interaction.user.id);
-                }, 600000);
-                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${interaction.user.username}`).catch(() => { })
             } else {
-                return interaction.user.send({ content: `🗓️ **__${datefinale}__** 🟠\nVous avez déjà récupéré cet emploi du temps trop récemment, merci de réessayer plus tard` }).catch(() => { })
+                pastille = '🕐';
             }
+            if (!edt[edtDate].desc) {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**`, files: [edt[edtDate].link] }).catch(() => { })
+            } else {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+            }
+            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${interaction.user.username}`).catch(() => { })
         }
     } else if (num == '2') {
         statsAddEdt();
@@ -74,22 +80,28 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 2 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
+            edt2Cooldown.add(interaction.user.id);
+            setTimeout(() => {
+                edt2Cooldown.delete(interaction.user.id);
+            }, 180000);
+            let pastille;
+            let myges;
             if (!edt2Cooldown.has(interaction.user.id)) {
-                const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
-                const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
-                if (!edt[edtDate].desc) {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[edtDate].link] }).catch(() => { })
-                } else {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+                try {
+                    myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
+                    pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
+                } catch {
+                    pastille = '🟠';
                 }
-                edt2Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt2Cooldown.delete(interaction.user.id);
-                }, 600000);
-                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${interaction.user.username}`).catch(() => { })
             } else {
-                return interaction.user.send({ content: `🗓️ **__${datefinale}__** 🟠\nVous avez déjà récupéré cet emploi du temps trop récemment, merci de réessayer plus tard` }).catch(() => { })
+                pastille = '🕐';
             }
+            if (!edt[edtDate].desc) {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[edtDate].link] }).catch(() => { })
+            } else {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+            }
+            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${interaction.user.username}`).catch(() => { })
         }
     } else if (num == '3') {
         statsAddEdt();
@@ -106,22 +118,28 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 3 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
+            edt3Cooldown.add(interaction.user.id);
+            setTimeout(() => {
+                edt3Cooldown.delete(interaction.user.id);
+            }, 180000);
+            let pastille;
+            let myges;
             if (!edt3Cooldown.has(interaction.user.id)) {
-                const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
-                const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
-                if (!edt[edtDate].desc) {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps dans deux semaines**`, files: [edt[edtDate].link] }).catch(() => { })
-                } else {
-                    await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps dans deux semaines**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+                try {
+                    myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
+                    pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
+                } catch {
+                    pastille = '🟠';
                 }
-                edt3Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt3Cooldown.delete(interaction.user.id);
-                }, 600000);
-                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 3 sent to ${interaction.user.username}`).catch(() => { })
             } else {
-                return interaction.user.send({ content: `🗓️ **__${datefinale}__** 🟠\nVous avez déjà récupéré cet emploi du temps trop récemment, merci de réessayer plus tard` }).catch(() => { })
+                pastille = '🕐';
             }
+            if (!edt[edtDate].desc) {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps dans deux semaines**`, files: [edt[edtDate].link] }).catch(() => { })
+            } else {
+                await interaction.user.send({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps dans deux semaines**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { })
+            }
+            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 3 sent to ${interaction.user.username}`).catch(() => { })
         }
     }
 }

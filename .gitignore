@@ -10,3 +10,4 @@ node_modules
 .env
 dist
 /src/firebase/admin.json
+test.ts

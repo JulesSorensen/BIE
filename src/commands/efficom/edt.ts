@@ -19,8 +19,8 @@ module.exports = {
         const getCustomizedDate = () => {
             var date = new Date();
             if (date.getDay() == 6 || date.getDay() == 0) {
-                let nb = (date.getDay() == 6 ? 1 : -1)
-                date.setDate(date.getDate() + (((nb + 7 - date.getDay()))));
+                let nb = (date.getDay() == 6 ? 8 : 1)
+                date.setDate(date.getDate() + (((nb - date.getDay()))));
             }
             return date
         }
@@ -50,24 +50,29 @@ module.exports = {
             if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
                 return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> <#\`${msg.channel.id}\`> waits EDT 1 ${datefinale}`).catch(() => { ; });
             } else {
+                edt1Cooldown.add(msg.author.id);
+                setTimeout(() => {
+                    edt1Cooldown.delete(msg.author.id);
+                }, 180000);
+                let pastille;
+                let myges;
                 if (!edt1Cooldown.has(msg.author.id)) {
-                    edt1Cooldown.add(msg.author.id);
-                    setTimeout(() => {
-                        edt1Cooldown.delete(msg.author.id);
-                    }, 300000);
-                    const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
-                    const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
-                    if (!edt[edtDate].desc) {
-                        msg.reply({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**`, files: [edt[edtDate].link] }).catch(() => { ; });
-                    } else {
-                        msg.reply({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { ; });
+                    try {
+                        myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
+                        pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
+                    } catch {
+                        pastille = '🟠';
                     }
-                    msg.reactions.removeAll()
-                    return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${msg.author.username}`).catch(() => { ; });
                 } else {
-                    msg.reactions.removeAll()
-                    return msg.reply({ content: `🗓️ **__${datefinale}__** 🟠\nVous avez déjà récupéré cet emploi du temps trop récemment, merci de réessayer plus tard` }).catch(() => { })
+                    pastille = '🕐';
                 }
+                if (!edt[edtDate].desc) {
+                    msg.reply({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**`, files: [edt[edtDate].link] }).catch(() => { ; });
+                } else {
+                    msg.reply({ content: `🗓️ **__${datefinale}__ ${pastille} Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[edtDate].desc}`, files: [edt[edtDate].link] }).catch(() => { ; });
+                }
+                msg.reactions.removeAll()
+                return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${msg.author.username}`).catch(() => { ; });
             }
         } else if (args[0] == `2` || args[0].toLowerCase() == `suivant` || args[0].toLowerCase() == `s`) {
             statsAddEdt();

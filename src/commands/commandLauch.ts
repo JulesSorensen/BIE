@@ -27,49 +27,6 @@ const interactionLaunch = (interaction: any, client: any, version: string) => {
 
 const checkAlias = (commandName: string) => {
     switch (commandName) {
-        // case 'h':
-        // case 'aide':
-        // case 'hjelp': // help
-        //     commandName = 'help'; break;
-        // case 'rmd':
-        // case 'rmdm':
-        // case 'rmdme': // remind me
-        //     commandName = 'remindme'; break;
-        // case 'lang':
-        // case 'langue':
-        // case 'språk':
-        // case 'sprak': // language
-        //     commandName = 'language'; break;
-        // case 'invite':
-        // case 'invitasjon':
-        // case 'invitere ': // invitation
-        //     commandName = 'invitation'; break;
-        // case 'p':
-        // case 'profil': // profile
-        //     commandName = 'profile'; break;
-        // case 'not':
-        //     commandName = 'notification'; break;
-        // case 'klan':
-        // case 'c': // clan
-        //     commandName = 'clan'; break;
-        // case 'suggestions':
-        // case 'sugg': // suggestion
-        //     commandName = 'suggestion'; break;
-        // case 'server':
-        // case 'serveur':
-        // case 'g':
-        // case 'guilde': // guild
-        //     commandName = 'guild'; break;
-        // case 'ro':
-        // case 'r': // role
-        //     commandName = 'role'; break;
-        // case 'remind':
-        // case 'autoremind':
-        // case 'autoreminder':
-        // case 'rm':
-        // case 'reminder': // reminder
-        // // commandName = 'reminder'; try { if (args[0].toLowerCase() == `add`) { args = msg.content.split('"'); args[0] = args[0].split(" ")[2]; var secondArgs = args[2].split(" "); args[2] = secondArgs[1]; args.push(secondArgs[2]); break; } } catch (error) { if (lang[msg.author.id] === `FR`) return msg.channel.send(`La commande est \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, le rôle à mentionner n'est pas obligatoire !`).catch(() => { ; }); else if (lang[msg.author.id] === `NO`) return msg.channel.send(`Ordren er \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, rollen som skal nevnes er ikke obligatorisk!`).catch(() => { ; }); else return msg.channel.send(`The command is \`&reminder add [dd/mm/yyyy] "[ReminderTitle]" [#TextChannel] [@RoleToMention]\` <@${msg.author.id}>, the role to be mentioned is not mandatory!`).catch(() => { ; }); }; break;
-
         case 'e': // edt command PRIVATE
         case 'edt':
         case 'emploidutemps':
@@ -102,7 +59,7 @@ const commandLaunch = async (msg: Message<any>, config: { prefix: any; owner?: s
 
     if (!client.commands.has(commandName)) return;
     const command = client.commands.get(commandName);
-    if (command.guildOnly && msg.channel.type != 'GUILD_TEXT') {
+    if (command.guildOnly && (msg.channel.type != 'GUILD_TEXT' && msg.channel.type != 'GUILD_NEWS' && msg.channel.type != 'GUILD_NEWS_THREAD' && msg.channel.type != 'GUILD_PUBLIC_THREAD')) {
         return msg.reply('Vous devez taper cette commande dans un serveur Discord !').catch(() => { ; });
     }
 

@@ -20,7 +20,7 @@ import { commandLaunch, interactionLaunch } from './src/commands/commandLauch';
 import { reactionAdded, reactionRemoved } from './src/tasks/reactions';
 import { edtReminderCheck, edtSenderCheck, mygesCheck } from './src/tasks/intervalsCheck';
 
-const version = "3.0.0";
+const version = "3.0.1";
 // @ts-ignore
 let prefix = config.prefix;
 
@@ -61,21 +61,25 @@ client.on('ready', () => {
 client.on('messageCreate', msg => {
     // @ts-ignore
     if (authServers.includes(msg.guild.id) && !bannedUsers.includes(msg.author.id)) {
-        commandLaunch(msg, config, client, version);
+        try { commandLaunch(msg, config, client, version); } catch (e: any) { }
     }
 });
 
 client.on('interactionCreate', interaction => {
-    interactionLaunch(interaction, client, version);
+    try { interactionLaunch(interaction, client, version); } catch (e: any) { }
 })
 
 client.on('messageReactionAdd', (reaction, user) => {
-    if (!bannedUsers.includes(user.id)) { reactionAdded(reaction, user) }
+    if (!bannedUsers.includes(user.id)) {
+        try { reactionAdded(reaction, user) } catch (e: any) { }
+    }
 })
 
 client.on('messageReactionRemove', (reaction, user) => {
-    if (!bannedUsers.includes(user.id)) { reactionRemoved(reaction, user) }
+    if (!bannedUsers.includes(user.id)) {
+        try { reactionRemoved(reaction, user) } catch (e: any) { }
+    }
 })
 
 // login
-client.login(process.env['token']);
+client.login(process.env['TOKEN']);

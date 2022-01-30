@@ -8,8 +8,8 @@ const mygesCheck = (client: any) => {
     const getCustomizedDate = () => {
         var date = new Date();
         if (date.getDay() == 6 || date.getDay() == 0) {
-            let nb = (date.getDay() == 6 ? 1 : -1)
-            date.setDate(date.getDate() + (nb + 7 - date.getDay()));
+            let nb = (date.getDay() == 6 ? 8 : 1)
+            date.setDate(date.getDate() + (((nb - date.getDay()))));
         }
         return date
     }
@@ -83,38 +83,57 @@ const mygesCheck = (client: any) => {
                 }
             }
         } catch (e) {
-
+            console.log("error while check mg",e)
         }
     }, 900000)
 }
 
 const edtSenderCheck = (client: any) => {
-    const getFirstWeek = () => {
-        function getPreviousMonday() {
-            var date = new Date();
-            var day = date.getDay();
-            var prevMonday = new Date();
-            if (date.getDay() == 0) {
-                prevMonday.setDate(date.getDate() - 6);
+    const mygesCooldown = new Set();
+    let lastPastille = '🔴';
+    const askMyges = (edt: any, edtDate: string) => {
+        return new Promise(async (resolve) => {
+            let pastille;
+            let myges;
+            if (!mygesCooldown.has('cd')) {
+                try {
+                    myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
+                    pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
+                } catch {
+                    pastille = '🟠';
+                }
+                lastPastille = pastille
+                mygesCooldown.add('cd');
+                setTimeout(() => {
+                    mygesCooldown.delete('cd');
+                }, 600000);
+                resolve(pastille);
             } else {
-                prevMonday.setDate(date.getDate() - (day - 1));
+                resolve(lastPastille);
             }
-            return prevMonday;
-        }
-        var datesplit = (getPreviousMonday().toLocaleString('en', { dateStyle: 'short' }).toString().split(`/`));
-        datesplit.forEach((item, index) => {
-            if (index == 2) { datesplit[index] = `20${item}`; } else if (item.length == 1) { datesplit[index] = `0${item}`; }
-        });
-        return `${datesplit[1]}-${datesplit[0]}-${datesplit[2]}`;
+        })
     }
     setInterval(async () => {
         try {
-            const date = new Date();
+            const date: any = new Date();
+            let nextMonday: any = new Date();
+            nextMonday.setDate(nextMonday.getDate() + (((1 + 7 - nextMonday.getDay()))));
+            var datesplit = (nextMonday.toLocaleString('en', {
+                dateStyle: 'short'
+            }).toString().split(`/`));
+            datesplit.forEach((item, index) => {
+                if (index == 2) {
+                    datesplit[index] = `20${item}`;
+                } else if (item.length == 1) {
+                    datesplit[index] = `0${item}`;
+                }
+            });
+            nextMonday = `${datesplit[1]}-${datesplit[0]}-${datesplit[2]}`;
             if (date.getHours() >= 17 && date.getHours() <= 18 && date.getDay() == 5) {
                 const edtsub = await getAllData('edtsub');
                 const edt = await getAllData('edt')
                 for (const [key, val] of Object.entries(edtsub)) {
-                    const currentDate = moment().format('DD-MM-YYYY')
+                    const currentDate = nextMonday;
                     // @ts-ignore
                     if (val.sended != currentDate) {
                         // @ts-ignore
@@ -124,8 +143,7 @@ const edtSenderCheck = (client: any) => {
                         } else {
                             // send
                             const userToSend = (client.users.cache.get(key));
-                            const myges = btoa((await exec(`myges agenda ${currentDate}`)).stdout)
-                            const pastille = (edt[currentDate].myges == myges ? '🟢' : '🔴');
+                            const pastille = await askMyges(edt, currentDate);
                             const dateFinale = moment().format("DD/MM/YYYY");
                             if (!edt[currentDate].desc) {
                                 await userToSend.send({ content: `*Réception automatique <#868524232898908190>*\n🗓️ **__${dateFinale}__ ${pastille} <@${userToSend.id}> voici l'emploi du temps dans deux semaines**`, files: [edt[currentDate].link] }).catch(() => { ; });
