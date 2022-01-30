@@ -42,13 +42,13 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 1 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
-            edt1Cooldown.add(interaction.user.id);
-            setTimeout(() => {
-                edt1Cooldown.delete(interaction.user.id);
-            }, 180000);
             let pastille;
             let myges;
             if (!edt1Cooldown.has(interaction.user.id)) {
+                edt1Cooldown.add(interaction.user.id);
+                setTimeout(() => {
+                    edt1Cooldown.delete(interaction.user.id);
+                }, 180000);
                 try {
                     myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
                     pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
@@ -80,13 +80,13 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 2 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
-            edt2Cooldown.add(interaction.user.id);
-            setTimeout(() => {
-                edt2Cooldown.delete(interaction.user.id);
-            }, 180000);
             let pastille;
             let myges;
             if (!edt2Cooldown.has(interaction.user.id)) {
+                edt2Cooldown.add(interaction.user.id);
+                setTimeout(() => {
+                    edt2Cooldown.delete(interaction.user.id);
+                }, 180000);
                 try {
                     myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
                     pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
@@ -118,13 +118,13 @@ const edt = async (num: '1' | '2' | '3', interaction, client) => {
         if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${interaction.user.id}> waits EDT 3 ${datefinale}\n\`&edt sendmp ${datefinale} ${interaction.user.id} 1\``).catch(() => { })
         } else {
-            edt3Cooldown.add(interaction.user.id);
-            setTimeout(() => {
-                edt3Cooldown.delete(interaction.user.id);
-            }, 180000);
             let pastille;
             let myges;
             if (!edt3Cooldown.has(interaction.user.id)) {
+                edt3Cooldown.add(interaction.user.id);
+                setTimeout(() => {
+                    edt3Cooldown.delete(interaction.user.id);
+                }, 180000);
                 try {
                     myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
                     pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');

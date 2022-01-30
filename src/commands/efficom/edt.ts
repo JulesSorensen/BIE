@@ -50,13 +50,13 @@ module.exports = {
             if (!edt[edtDate] || edt[edtDate].myges == 'UNDEFINED') {
                 return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${msg.author.id}> <#\`${msg.channel.id}\`> waits EDT 1 ${datefinale}`).catch(() => { ; });
             } else {
-                edt1Cooldown.add(msg.author.id);
-                setTimeout(() => {
-                    edt1Cooldown.delete(msg.author.id);
-                }, 180000);
                 let pastille;
                 let myges;
                 if (!edt1Cooldown.has(msg.author.id)) {
+                    edt1Cooldown.add(msg.author.id);
+                    setTimeout(() => {
+                        edt1Cooldown.delete(msg.author.id);
+                    }, 180000);
                     try {
                         myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout);
                         pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
@@ -94,7 +94,7 @@ module.exports = {
                     edt2Cooldown.add(msg.author.id);
                     setTimeout(() => {
                         edt2Cooldown.delete(msg.author.id);
-                    }, 300000);
+                    }, 180000);
                     const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
                     const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
                     if (!edt[edtDate].desc) {
@@ -129,7 +129,7 @@ module.exports = {
                     edt3Cooldown.add(msg.author.id);
                     setTimeout(() => {
                         edt3Cooldown.delete(msg.author.id);
-                    }, 300000);
+                    }, 180000);
                     const myges = btoa((await exec(`myges agenda ${edtDate}`)).stdout)
                     const pastille = (edt[edtDate].myges == myges ? '🟢' : '🔴');
                     if (!edt[edtDate].desc) {
