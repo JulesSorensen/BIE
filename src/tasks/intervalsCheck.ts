@@ -83,7 +83,7 @@ const mygesCheck = (client: any) => {
                 }
             }
         } catch (e) {
-            console.log("error while check mg",e)
+            console.log("error while check mg", e)
         }
     }, 900000)
 }
@@ -116,20 +116,20 @@ const edtSenderCheck = (client: any) => {
     setInterval(async () => {
         try {
             const date: any = new Date();
-            let nextMonday: any = new Date();
-            nextMonday.setDate(nextMonday.getDate() + (((1 + 7 - nextMonday.getDay()))));
-            var datesplit = (nextMonday.toLocaleString('en', {
-                dateStyle: 'short'
-            }).toString().split(`/`));
-            datesplit.forEach((item, index) => {
-                if (index == 2) {
-                    datesplit[index] = `20${item}`;
-                } else if (item.length == 1) {
-                    datesplit[index] = `0${item}`;
-                }
-            });
-            nextMonday = `${datesplit[1]}-${datesplit[0]}-${datesplit[2]}`;
             if (date.getHours() >= 17 && date.getHours() <= 18 && date.getDay() == 5) {
+                let nextMonday: any = new Date();
+                nextMonday.setDate(nextMonday.getDate() + (((1 + 7 - nextMonday.getDay()))));
+                var datesplit = (nextMonday.toLocaleString('en', {
+                    dateStyle: 'short'
+                }).toString().split(`/`));
+                datesplit.forEach((item, index) => {
+                    if (index == 2) {
+                        datesplit[index] = `20${item}`;
+                    } else if (item.length == 1) {
+                        datesplit[index] = `0${item}`;
+                    }
+                });
+                nextMonday = `${datesplit[1]}-${datesplit[0]}-${datesplit[2]}`;
                 const edtsub = await getAllData('edtsub');
                 const edt = await getAllData('edt')
                 for (const [key, val] of Object.entries(edtsub)) {
@@ -142,20 +142,19 @@ const edtSenderCheck = (client: any) => {
                             return (client.channels.cache.get("871440882811928646")).send(`<@676690539126718467> | <@${key}> waits EDT 1 ${currentDate}\n\`&edt sendmp ${currentDate} ${key} 1\``).catch(() => { })
                         } else {
                             // send
-                            const userToSend = (client.users.cache.get(key));
+                            const userToSend = await client.users.fetch(key);
                             const pastille = await askMyges(edt, currentDate);
                             const dateFinale = moment().format("DD/MM/YYYY");
                             if (!edt[currentDate].desc) {
-                                await userToSend.send({ content: `*Réception automatique <#868524232898908190>*\n🗓️ **__${dateFinale}__ ${pastille} <@${userToSend.id}> voici l'emploi du temps dans deux semaines**`, files: [edt[currentDate].link] }).catch(() => { ; });
+                                await userToSend.send({ content: `*Réception automatique <#868524232898908190>*\n🗓️ **__${dateFinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[currentDate].link] }).catch(() => { ; });
                             } else {
-                                await userToSend.send({ content: `*Réception automatique <#868524232898908190>*\n🗓️ **__${dateFinale}__ ${pastille} <@${userToSend.id}> voici l'emploi du temps dans deux semaines**\n**Détails:**\n${edt[currentDate].desc}`, files: [edt[currentDate].link] }).catch(() => { ; });
+                                await userToSend.send({ content: `*Réception automatique <#868524232898908190>*\n🗓️ **__${dateFinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[currentDate].desc}`, files: [edt[currentDate].link] }).catch(() => { ; });
                             }
                         }
                     }
                 }
             }
         } catch (e) {
-
         }
     }, 600000)
 }
