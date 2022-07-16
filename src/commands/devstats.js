@@ -1,13 +1,14 @@
-import { MessageActionRow, MessageButton } from 'discord.js';
-import moment from 'moment';
-import { getAllData } from "../../firebase/firebase";
+const { MessageActionRow, MessageButton } = require('discord.js');
+const moment = require('moment');
+const { getAllData } = require("../firebase/firebase");
 
-const devstats = async (interaction, client, version) => {
+const devstats = async (params) => {
+    const { interaction, client, version } = params;
 
     await interaction.deferReply();
-    const stats: any = (await getAllData('stats'));
-    const devoir: any = stats.allStats.allDevoirs;
-    let devoirNb: any = 0;
+    const stats = (await getAllData('stats'));
+    const devoir = stats.allStats.allDevoirs;
+    let devoirNb = 0;
     function sortObject(obj) {
         var arr = [];
         for (var prop in obj) {
@@ -23,6 +24,7 @@ const devstats = async (interaction, client, version) => {
         arr.sort(function (a, b) { return b.value - a.value; });
         return arr;
     }
+
     const matieresFields = sortObject(devoir);
     await interaction.editReply({
         embeds: [{
@@ -33,10 +35,10 @@ const devstats = async (interaction, client, version) => {
             timestamp: new Date(),
             footer: {
                 icon_url: interaction.user.avatarURL(),
-                text: `BIE V.${version} | Devoirs demandé par ${interaction.user.tag}`
+                text: `BIE V.${version} | Statistiques des devoirs demandées par ${interaction.user.tag}`
             }
         }]
     }).catch(() => { ; });
 }
 
-export { devstats }
+module.exports = { devstats }

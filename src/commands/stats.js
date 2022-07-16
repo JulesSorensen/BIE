@@ -1,17 +1,19 @@
-import { MessageActionRow, MessageButton } from 'discord.js';
-import moment from 'moment';
-import { getAllData } from "../../firebase/firebase";
+const { MessageActionRow, MessageButton } = require('discord.js');
+const moment = require('moment');
+const { getAllData } = require("../firebase/firebase");
 
-const stats = async (interaction, client) => {
+const stats = async (params) => {
+    const { interaction, client, type, version } = params;
 
-    await interaction.deferUpdate();
-    let searchIcon = client.emojis.cache.get(`868852714690478090`).toString();
-    let stats: any = (await getAllData('stats'));
-    stats = stats.allStats;
-    const row = new MessageActionRow().addComponents(
-        new MessageButton().setCustomId("DEVSTATS").setEmoji("893971159933145140").setLabel("Stats devoirs").setStyle('SECONDARY')
-    )
-    await interaction.user.send({
+    if (type == "BUTTON") {
+        await interaction.deferUpdate();
+    } else {
+        await interaction.deferReply({ ephemeral: false });
+    }
+
+    const stats = (await getAllData('stats')).allStats;
+
+    const statsContent = {
         embeds: [{
             color: 16777215,
             title: `📈 Statistiques du robot`,
@@ -31,10 +33,21 @@ const stats = async (interaction, client) => {
                     inline: true
                 },
             ],
-            timestamp: new Date()
-        }], components: [row]
-    }).catch(() => { });
+            timestamp: new Date(),
+            footer: {
+                icon_url: interaction.user.avatarURL(),
+                text: `BIE V.${version} | Statistiques demandées par ${interaction?.user?.tag}`
+            }
+        }]
+    }
+
+    if (type == "BUTTON") {
+        await interaction.user.send(statsContent).catch(() => { });
+    } else {
+        await interaction.editReply(statsContent).catch(() => { });
+    }
+
     (client.channels.cache.get(`874251822045487125`)).send(`📊 Stats sent to ${interaction.user.username}`).catch(() => { ; });
 }
 
-export { stats }
+module.exports = { stats }

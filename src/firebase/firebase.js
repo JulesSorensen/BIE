@@ -1,14 +1,13 @@
-import { initializeApp, applicationDefault, cert } from 'firebase-admin/app';
-import { getFirestore, Timestamp, FieldValue } from 'firebase-admin/firestore';
-const serviceAccount = require('./admin.json');
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, } = require('firebase-admin/firestore');
+var admin = require("firebase-admin");
 
+const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
 initializeApp({
-  credential: cert(serviceAccount)
+  credential: cert(credentials)
 });
 
 const db = getFirestore();
-
-const faktion = () => {};
 
 /**
  * Create the document on Firestore, even if the collection does not exist.
@@ -17,7 +16,7 @@ const faktion = () => {};
  * @param {string} id - Firestore document id.
  * @param {object} data - Firestore document data.
  */
-const createData = async (col: string, id: string, data: object) => {
+const createData = async (col, id, data) => {
   try {
     const ref = db.collection(col).doc(id);
     return ref.set(data);
@@ -33,7 +32,7 @@ const createData = async (col: string, id: string, data: object) => {
  * @param {string} id - Firestore document id.
  * @param {object} data - Firestore document data.
  */
-const updateData = async (col: string, id: string, data: object) => {
+const updateData = async (col, id, data) => {
   try {
     return await db.collection(col).doc(id).update(data);
   } catch (e) {
@@ -46,7 +45,7 @@ const updateData = async (col: string, id: string, data: object) => {
  * Returns null if there's no error, otherwise the error is returned.
  * @param {string} col - Firestore collection name.
  */
-const getAllData = async (col: string) => {
+const getAllData = async (col) => {
   try {
     let datas = {};
     const ref = await db.collection(col).get();
@@ -65,7 +64,7 @@ const getAllData = async (col: string) => {
  * @param {string} col - Firestore collection name.
  * @param {string} id - Firestore document id.
  */
-const getData = async (col: string, id: string) => {
+const getData = async (col, id) => {
   try {
     return (await db.collection(col).doc(id).get()).data();
   } catch (e) {
@@ -79,7 +78,7 @@ const getData = async (col: string, id: string) => {
  * @param {string} col - Firestore collection name.
  * @param {string} id - Firestore document id.
  */
-const deleteData = async (col: string, id: string) => {
+const deleteData = async (col, id) => {
   try {
     return await db.collection(col).doc(id).delete();
   } catch (e) {
@@ -87,14 +86,4 @@ const deleteData = async (col: string, id: string) => {
   }
 }
 
-// getAllData("users", (d) => {
-//   console.log("2",d)
-// })
-// getData("users", "123", (d) => { console.log("1", d) }).catch((err) => console.log("err", err))
-// createData("users", "123", { "test": false })
-// deleteData("users", "aturing", ()=>{
-//   console.log("deleted")
-// })
-// updateData("users","123",{test:true,lol:true},(r)=>console.log(r)).catch((err) => console.log("err", err))
-
-export { createData, updateData, getData, getAllData, deleteData };
+module.exports = { createData, updateData, getData, getAllData, deleteData };

@@ -1,12 +1,13 @@
 {
   "name": "glede",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Glede Bot made by Nekewo",
   "main": "glede.ts",
   "scripts": {
-    "start": "tsc && node dist/main.js",
-    "replit": "ts-node main.ts",
-    "dev": "nodemon --exec \"ts-node\" main.ts",
+    "start": "node main.js",
+    "startts": "tsc && node dist/main.js",
+    "dev": "nodemon main.js",
+    "devts": "nodemon --exec \"ts-node\" main.ts",
     "myges": "myges login"
   },
   "repository": {
@@ -24,11 +25,14 @@
   "homepage": "https://github.com/JulesSorensen/Glede#readme",
   "dependencies": {
     "axios": "^0.25.0",
-    "discord.js": "^13.3.1",
+    "crypto-js": "^4.1.1",
+    "discord.js": "^13.8.1",
     "dotenv": "^10.0.0",
     "file-system": "^1.2.2",
-    "firebase-admin": "^10.0.0",
-    "moment": "^2.29.1"
+    "firebase-admin": "^10.3.0",
+    "http": "^0.0.1-security",
+    "moment": "^2.29.1",
+    "sha1": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^16.11.6",

@@ -9,5 +9,4 @@ node_modules
 # misc
 .env
 dist
-/src/firebase/admin.json
-test.ts
+test.js
