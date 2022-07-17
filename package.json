@@ -1,8 +1,8 @@
 {
-  "name": "glede",
-  "version": "4.0.0",
-  "description": "Glede Bot made by Nekewo",
-  "main": "glede.ts",
+  "name": "bie",
+  "version": "4.0.1",
+  "description": "Bie Bot made by Nekewo",
+  "main": "bie.ts",
   "scripts": {
     "start": "node main.js",
     "startts": "tsc && node dist/main.js",
@@ -12,17 +12,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JulesSorensen/Glede.git"
+    "url": "git+https://github.com/JulesSorensen/bie.git"
   },
   "keywords": [
-    "glede"
+    "bie"
   ],
   "author": "Nekewo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JulesSorensen/Glede/issues"
+    "url": "https://github.com/JulesSorensen/BIE/issues"
   },
-  "homepage": "https://github.com/JulesSorensen/Glede#readme",
+  "homepage": "https://github.com/JulesSorensen/BIE#readme",
   "dependencies": {
     "axios": "^0.25.0",
     "crypto-js": "^4.1.1",

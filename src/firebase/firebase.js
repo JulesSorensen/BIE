@@ -1,8 +1,12 @@
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, } = require('firebase-admin/firestore');
-var admin = require("firebase-admin");
+const { decrypt } = require("../tasks/crypter");
 
-const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+const credentials = JSON.parse(decrypt({
+  iv: process.env.GOOGLE_CREDENTIALS_IV,
+  content: process.env.GOOGLE_CREDENTIALS_CONTENT
+}));
+
 initializeApp({
   credential: cert(credentials)
 });
@@ -53,7 +57,7 @@ const getAllData = async (col) => {
       datas[doc.id] = { ...doc.data() };
     });
     return datas
-    } catch (e) {
+  } catch (e) {
     Promise.reject(e);
   }
 }

@@ -11,6 +11,33 @@ const setAllCommands = async (guildId, client) => {
             description: 'Affiche la liste des commandes disponibles par le robot'
         }));
 
+        await commands.create(({
+            name: 'edt',
+            description: 'Affiche l\'emploi du temps sélectionné',
+            options: [
+                {
+                    "type": Constants.ApplicationCommandOptionTypes.STRING,
+                    "name": "semaine",
+                    "description": "Semaine concernée",
+                    "choices": [
+                        {
+                            "name": "Semaine actuelle",
+                            "value": "1"
+                        },
+                        {
+                            "name": "Semaine prochaine",
+                            "value": "2"
+                        },
+                        {
+                            "name": "Dans deux semaines",
+                            "value": "3"
+                        }
+                    ],
+                    "required": true
+                }
+            ]
+        }));
+
         if (guildId != "831823187213680682") { // NOT A PRIVATE COMMAND
             await commands.create(({
                 name: 'devoirs',
@@ -63,33 +90,6 @@ const setAllCommands = async (guildId, client) => {
                     "type": Constants.ApplicationCommandOptionTypes.SUB_COMMAND,
                     "name": "devoirs",
                     "description": "Statistiques concernant uniquement les devoirs"
-                }
-            ]
-        }));
-
-        await commands.create(({
-            name: 'edt',
-            description: 'Affiche l\'emploi du temps sélectionné',
-            options: [
-                {
-                    "type": Constants.ApplicationCommandOptionTypes.STRING,
-                    "name": "semaine",
-                    "description": "Semaine concernée",
-                    "choices": [
-                        {
-                            "name": "Semaine actuelle",
-                            "value": "1"
-                        },
-                        {
-                            "name": "Semaine prochaine",
-                            "value": "2"
-                        },
-                        {
-                            "name": "Dans deux semaines",
-                            "value": "3"
-                        }
-                    ],
-                    "required": true
                 }
             ]
         }));

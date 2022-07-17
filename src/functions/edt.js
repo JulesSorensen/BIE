@@ -5,9 +5,9 @@ const moment = require('moment');
 
 // ajout de l'emploi du temps de la semaine spécifique
 const edtAdd = async (date, link, desc, client) => {
-    const edtMyges =  await getAgendaCrypted({ start: moment(date, "DD-MM-YYYY").format("YYYY-MM-DD"), end: moment(date, "DD-MM-YYYY").add(7, "days").format("YYYY-MM-DD") });
+    const edtMyges = await getAgendaCrypted({ start: date, end: moment(date, "YYYY-MM-DD").add(7, "days").format("YYYY-MM-DD") });
     let newEdt = { link: link, desc: desc, myges: edtMyges };
-    createData("edt", moment(date, "DD-MM-YYYY").format("YYYY-MM-DD"), newEdt).then(() => {
+    createData("edt", date, newEdt).then(() => {
         (client.channels.cache.get(`874251822045487125`)).send(`➕ EDT ${date} ajouté`).catch(() => { ; });
     }).catch(() => { })
 }
