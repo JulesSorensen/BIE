@@ -98,7 +98,7 @@ const forceAddDevoir = async (params) => {
     if (moment(date, 'DD/MM/YYYY', true).isValid()) {
         const newDate = moment(date, 'DD/MM/YYYY').format("DD-MM-YYYY");
         await devoirAdd(newDate, matiere, desc);
-        await (client.channels.cache.get("762698661892849714")).send(`<@&996043232410599565> <a:bell:868901922483097661> Un nouveau devoir en **${matiere.split(/(?=[A-Z])/).join(` `)}** a été ajouté`)
+        await (client.channels.cache.get("762698661892849714")).send(`<@&996043232410599565> <a:bell:868901922483097661> Un nouveau devoir en **${matiere.split(/(?=[A-Z])/).join(` `)}** a été ajouté par <@${authorId}>`);
         return await interaction.editReply({
             content: `<:Check:866581082551615489> Devoir ajouté avec succès\nDate: \`${newDate}\`, matière: \`${matiere}\`, détails: \`${desc}\`, envoyé par <@${authorId}>`
         }).catch(() => { });
