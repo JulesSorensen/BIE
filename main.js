@@ -11,7 +11,7 @@ const { reactionAdded, reactionRemoved } = require('./src/tasks/reactions');
 const { edtReminderCheck,
     edtSenderCheck, mygesCheck, currentNotesCheck } = require('./src/tasks/intervalsCheck');
 const { setAllCommands } = require('./src/tasks/setAllCommands');
-require('./server.js')
+require('./server.js');
 const version = config.version;
 
 const authServers = ["762698485011054602", "783679631101526056", "831823187213680682"];
