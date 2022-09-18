@@ -1,12 +1,8 @@
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, } = require('firebase-admin/firestore');
-const { decrypt } = require("../tasks/crypter");
+const { decrypt, encrypt } = require("../tasks/crypter");
 
-const credentials = JSON.parse(decrypt({
-  iv: process.env.GOOGLE_CREDENTIALS_IV,
-  content: process.env.GOOGLE_CREDENTIALS_CONTENT
-}));
-
+const credentials = JSON.parse(decrypt(process.env.GOOGLE_CREDENTIALS_CONTENT).split("\n").join("\\n"));
 initializeApp({
   credential: cert(credentials)
 });

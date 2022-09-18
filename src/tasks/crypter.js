@@ -1,9 +1,12 @@
+var CryptoJS = require("crypto-js");
+
 const encrypt = (text) => {
-  return new Buffer(text).toString("base64");
+  return CryptoJS.AES.encrypt(text, process.env.SECRET_KEY).toString();
 };
 
 const decrypt = (hash) => {
-  return new Buffer(hash, "base64").toString("utf-8");
+  const bytes = CryptoJS.AES.decrypt(hash, process.env.SECRET_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
 };
 
 module.exports = {
