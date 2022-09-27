@@ -1,9 +1,7 @@
-const { MessageActionRow, MessageButton } = require('discord.js');
-const moment = require('moment');
 const { getAllData } = require("../firebase/firebase");
 
 const devstats = async (params) => {
-    const { interaction, client, version } = params;
+    const { interaction, version } = params;
 
     await interaction.deferReply();
     const stats = (await getAllData('stats'));
@@ -34,8 +32,7 @@ const devstats = async (params) => {
             fields: matieresFields,
             timestamp: new Date(),
             footer: {
-                icon_url: interaction.user.avatarURL(),
-                text: `BIE V.${version} | Statistiques des devoirs demandées par ${interaction.user.tag}`
+                text: `Version ${version}`
             }
         }]
     }).catch(() => { ; });

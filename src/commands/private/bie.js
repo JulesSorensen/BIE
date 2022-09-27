@@ -1,4 +1,4 @@
-const { Client, Message, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageActionRow, MessageButton } = require('discord.js');
 
 const sendBIEMessage = async (params) => {
     const { interaction, client } = params;
@@ -22,10 +22,10 @@ Pour connaître la liste des commandes disponibles par le robot, utilisez la com
 
 🔰 **Icônes :**
 Voici la liste des icônes que vous pouvez obtenir en demandant l'emploi du temps:
-    - <:Check:866581082551615489> L'emploi du temps est fiable, vérifié via l'API de MyGes
-    - <:Question:997270154490679348> API de MyGes indisponible
-    - <:Uncheck:866581082870513684> L'emploi du temps n'est plus valide
-    - <:Wait:997268180911280158> Merci d'attendre 2 minutes avant de pouvoir contacter l'API
+    - <:check:866581082551615489> L'emploi du temps est fiable, vérifié via l'API de MyGes
+    - <:question:997270154490679348> API de MyGes indisponible
+    - <:uncheck:866581082870513684> L'emploi du temps n'est plus valide
+    - <:wait:997268180911280158> Merci d'attendre 8 minutes avant de pouvoir contacter l'API
 *Dans le cas ou vous n'avez pas de pastille verte, le dernier emploi du temps enregistré vous sera envoyé*
 
 <a:thumbsup:893920077974499388> **Réactions**
@@ -46,7 +46,7 @@ Vous pouvez utiliser les boutons ci-dessous pour éxécuter les commandes en mes
     });
 
     return await interaction.editReply({
-        content: `<:Check:866581082551615489> Message envoyé !`
+        content: `<:check:866581082551615489> Message envoyé !`
     });
 }
 

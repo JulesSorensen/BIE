@@ -1,8 +1,8 @@
 {
   "name": "bie",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "description": "Bie Bot made by Nekewo",
-  "main": "bie.ts",
+  "main": "main.js",
   "scripts": {
     "start": "node main.js",
     "startts": "tsc && node dist/main.js",
@@ -32,6 +32,7 @@
     "firebase-admin": "^10.3.0",
     "http": "^0.0.1-security",
     "moment": "^2.29.1",
+    "qs": "^6.11.0",
     "sha1": "^1.1.1"
   },
   "devDependencies": {

@@ -94,6 +94,39 @@ const setAllCommands = async (guildId, client) => {
             ]
         }));
 
+        await commands.create(({
+            name: 'salle',
+            description: 'Affiche les salles attribués'
+        }));
+
+        await commands.create(({
+            name: 'merci',
+            description: 'Commande de remerciement',
+            options: [
+                {
+                    "type": Constants.ApplicationCommandOptionTypes.STRING,
+                    "name": "option",
+                    "description": "Option de la commande",
+                    "choices": [
+                        {
+                            "name": "Personnels",
+                            "value": "1"
+                        },
+                        {
+                            "name": "Classement",
+                            "value": "2"
+                        }
+                    ],
+                    "required": true
+                }
+            ]
+        }));
+
+        await commands.create(({
+            name: 'info',
+            description: 'Affiche diverses informations concernant le robot'
+        }));
+
         if (guildId == "831823187213680682") { // PRIVATE COMMANDS
             await commands.create(({
                 name: 'edtadd',
@@ -110,19 +143,8 @@ const setAllCommands = async (guildId, client) => {
                         "name": "link",
                         "description": "Photo de l'emploi du temps",
                         "required": true
-                    },
-                    {
-                        "type": Constants.ApplicationCommandOptionTypes.STRING,
-                        "name": "description",
-                        "description": "Description de l'emploi du temps",
-                        "required": false
                     }
                 ]
-            }));
-
-            await commands.create(({
-                name: 'edtshow',
-                description: 'Montre la BDD de l\'emploi du temps'
             }));
 
             await commands.create(({
@@ -156,44 +178,6 @@ const setAllCommands = async (guildId, client) => {
                         "required": true
                     }
                 ]
-            }));
-
-            await commands.create(({
-                name: 'edtrmd',
-                description: 'Ajoute manuellement les horraires de la semaine',
-                options: [
-                    {
-                        "type": Constants.ApplicationCommandOptionTypes.STRING,
-                        "name": "semaine",
-                        "description": "Semaine concernée",
-                        "choices": [
-                            {
-                                "name": "Semaine actuelle",
-                                "value": "1"
-                            },
-                            {
-                                "name": "Semaine prochaine",
-                                "value": "2"
-                            },
-                            {
-                                "name": "Dans deux semaines",
-                                "value": "3"
-                            }
-                        ],
-                        "required": true
-                    },
-                    {
-                        "type": Constants.ApplicationCommandOptionTypes.STRING,
-                        "name": "horraire",
-                        "description": "Horraires de la semaine (h1,h2,??,h3)",
-                        "required": true
-                    }
-                ]
-            }));
-
-            await commands.create(({
-                name: 'edtrmdshow',
-                description: 'Montre la BDD des horraires'
             }));
 
             await commands.create(({

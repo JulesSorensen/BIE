@@ -1,17 +1,15 @@
+const { MessageActionRow, MessageButton } = require('discord.js');
 const { getAgendaCrypted } = require("../api/mgapi");
 const { getAllData } = require("../firebase/firebase");
 const { statsAddEdt } = require("../functions/stats");
 const moment = require("moment");
+const { isUserInDelay, addUserDelay } = require('../functions/delay');
 
 const sendEdtAlert = async (id, client) => {
     client.channels.cache.get("995994128234057779").send({
         content: `<@${id}> (${id}) | Reception d'un emploi du temps éronné`
     }).catch(() => { });
 }
-
-const edt1Cooldown = new Set();
-const edt2Cooldown = new Set();
-const edt3Cooldown = new Set();
 
 const edt = async (params) => {
     const { num, interaction, type, client } = params;
@@ -42,32 +40,39 @@ const edt = async (params) => {
         } else {
             let pastille;
             let myges;
-            if (!edt1Cooldown.has(interaction.user.id)) {
-                edt1Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt1Cooldown.delete(interaction.user.id);
-                }, 120000);
+            const isInDelay = await isUserInDelay(interaction.user.id, "edt1");
+            if (!isInDelay) {
+                addUserDelay(interaction.user.id, "edt1");
                 try {
                     myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
-                    pastille = (edt[edtDate].myges == myges ? '<:Check:866581082551615489>' : '<:Uncheck:866581082870513684>');
-                    if (pastille == "<:Uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
+                    pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
+                    if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {
-                    pastille = '<:Question:997270154490679348>';
+                    pastille = '<:question:997270154490679348>';
                 }
             } else {
-                pastille = '<:Wait:997268180911280158>';
+                pastille = '<:wait:997268180911280158>';
             }
-            let edtMessageContent;
-            if (!edt[edtDate].desc) {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps de cette semaine**`, files: [edt[edtDate].link] };
+
+            const row = new MessageActionRow().addComponents(
+                new MessageButton().setCustomId("EDTCHM").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY').setDisabled(true),
+                new MessageButton().setCustomId("DETAILS1").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
+                new MessageButton().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
+            );
+            let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine actuelle)**` };
+            let file = edt[edtDate]?.link;
+            if (file) {
+                edtMessageContent["files"] = [file];
             } else {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps de cette semaine**\n**Détails:**\n${edt[edtDate].desc.replace(/\\n/g, '\n')}`, files: [edt[edtDate].link] };
+                edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
             }
 
             if (type == "BUTTON") {
                 await interaction.user.send(edtMessageContent).catch(() => { });
             } else {
+                edtMessageContent["components"] = [row];
                 await interaction.editReply(edtMessageContent).catch(() => { });
+                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
             return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${interaction.user.username}`).catch(() => { })
         }
@@ -83,33 +88,40 @@ const edt = async (params) => {
         } else {
             let pastille;
             let myges;
-            if (!edt2Cooldown.has(interaction.user.id)) {
-                edt2Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt2Cooldown.delete(interaction.user.id);
-                }, 120000);
+            const isInDelay = await isUserInDelay(interaction.user.id, "edt2");
+            if (!isInDelay) {
+                addUserDelay(interaction.user.id, "edt2");
                 try {
                     myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
-                    pastille = (edt[edtDate].myges == myges ? '<:Check:866581082551615489>' : '<:Uncheck:866581082870513684>');
-                    if (pastille == "<:Uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
+                    pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
+                    if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {
-                    pastille = '<:Question:997270154490679348>';
+                    pastille = '<:question:997270154490679348>';
                 }
             } else {
-                pastille = '<:Wait:997268180911280158>';
+                pastille = '<:wait:997268180911280158>';
             }
 
-            let edtMessageContent;
-            if (!edt[edtDate].desc) {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[edtDate].link] };
+            const row = new MessageActionRow().addComponents(
+                new MessageButton().setCustomId("EDTCHM1").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY'),
+                new MessageButton().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
+                new MessageButton().setCustomId("EDTCHM3").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
+            );
+
+            let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine prochaine)**` };
+            let file = edt[edtDate]?.link;
+            if (file) {
+                edtMessageContent["files"] = [file];
             } else {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps de la semaine prochaine**\n**Détails:**\n${edt[edtDate].desc.replace(/\\n/g, '\n')}`, files: [edt[edtDate].link] };
+                edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
             }
 
             if (type == "BUTTON") {
                 await interaction.user.send(edtMessageContent).catch(() => { });
             } else {
+                edtMessageContent["components"] = [row];
                 await interaction.editReply(edtMessageContent).catch(() => { });
+                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
             return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${interaction.user.username}`).catch(() => { })
         }
@@ -125,33 +137,39 @@ const edt = async (params) => {
         } else {
             let pastille;
             let myges;
-            if (!edt3Cooldown.has(interaction.user.id)) {
-                edt3Cooldown.add(interaction.user.id);
-                setTimeout(() => {
-                    edt3Cooldown.delete(interaction.user.id);
-                }, 120000);
+            const isInDelay = await isUserInDelay(interaction.user.id, "edt3");
+            if (!isInDelay) {
+                addUserDelay(interaction.user.id, "edt3");
                 try {
                     myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
-                    pastille = (edt[edtDate].myges == myges ? '<:Check:866581082551615489>' : '<:Uncheck:866581082870513684>');
-                    if (pastille == "<:Uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
+                    pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
+                    if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {
-                    pastille = '<:Question:997270154490679348>';
+                    pastille = '<:question:997270154490679348>';
                 }
             } else {
-                pastille = '<:Wait:997268180911280158>';
+                pastille = '<:wait:997268180911280158>';
             }
 
-            let edtMessageContent;
-            if (!edt[edtDate].desc) {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps dans deux semaines**`, files: [edt[edtDate].link] };
+            const row = new MessageActionRow().addComponents(
+                new MessageButton().setCustomId("EDTCHM2").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY'),
+                new MessageButton().setCustomId("DETAILS3").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
+                new MessageButton().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY').setDisabled(true)
+            );
+            let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)**` };
+            let file = edt[edtDate]?.link;
+            if (file) {
+                edtMessageContent["files"] = [file];
             } else {
-                edtMessageContent = { content: `🗓️ **__${datefinale}__ 🗓️\n${pastille} Voici l'emploi du temps dans deux semaines**\n**Détails:**\n${edt[edtDate].desc.replace(/\\n/g, '\n')}`, files: [edt[edtDate].link] };
+                edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
             }
 
             if (type == "BUTTON") {
                 await interaction.user.send(edtMessageContent).catch(() => { });
             } else {
+                edtMessageContent["components"] = [row];
                 await interaction.editReply(edtMessageContent).catch(() => { });
+                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
             return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 3 sent to ${interaction.user.username}`).catch(() => { })
         }

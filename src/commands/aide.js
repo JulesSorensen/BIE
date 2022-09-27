@@ -1,5 +1,5 @@
 const aide = async (params) => {
-    const { interaction, client, version } = params;
+    const { interaction, version } = params;
     await interaction.deferReply({
         ephemeral: false
     })
@@ -34,10 +34,8 @@ const aide = async (params) => {
                     "value": `Permet de faire une demande d'ajout de devoir.\n­`
                 }
             ],
-            timestamp: new Date(),
             footer: {
-                icon_url: interaction.user.avatarURL(),
-                text: `BIE V.${version} | Aide demandé par ${interaction.user.tag}`
+                text: `Version ${version}`
             }
         }]
     });

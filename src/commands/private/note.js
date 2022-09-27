@@ -23,7 +23,7 @@ const addNote = async (params) => {
     }).catch(() => { ; });
 
     return await interaction.editReply({
-        content: `<:Check:866581082551615489> La nouvelle note en **n°${matiere.replace(/[A-Z]/g, ' $&').trim()}** a bien été annoncée`
+        content: `<:check:866581082551615489> La nouvelle note en **n°${matiere.replace(/[A-Z]/g, ' $&').trim()}** a bien été annoncée`
     });
 }
 
