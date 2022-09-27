@@ -192,11 +192,11 @@ const setRemind = async (agenda) => {
   const startHourPerDate = {};
   agenda?.data?.result.map((event) => {
     const currentDate = moment(new Date(event.start_date)).format("YYYY-MM-DD");
-    const currentHour = moment(new Date(event.start_date)).format("HH:mm");
+    const currentHour = moment(new Date(event.start_date)).format("HH[h]mm");
 
     if (!startHourPerDate[currentDate]) {
       startHourPerDate[currentDate] = currentHour;
-    } else if (moment(currentHour, "HH:mm").isBefore(moment(startHourPerDate[currentDate], "HH:mm"))) {
+    } else if (moment(currentHour, "HH[h]mm").isBefore(moment(startHourPerDate[currentDate], "HH[h]mm"))) {
       startHourPerDate[currentDate] = currentHour;
     }
   });
