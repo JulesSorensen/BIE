@@ -31,14 +31,14 @@ process.on("uncaughtException", function (err) {
   client.channels.cache
     .get("922139628729958400")
     .send(`General error\n\`\`\`${err}\`\`\``)
-    .catch(() => {});
+    .catch(() => { });
 });
 
 client.on("ready", () => {
   console.log(
     `-------------------------\nLogged in as ${client.user.username} !\nVersion: ` +
-      version +
-      ` ✅\n-------------------------\n`
+    version +
+    ` ✅\n-------------------------\n`
   );
   uptime = new Date();
 

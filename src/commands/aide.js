@@ -14,12 +14,20 @@ const aide = async (params) => {
             color: 0x42fcff,
             fields: [
                 {
-                    "name": `/edt [semaine]`,
+                    "name": `/edt {semaine}`,
                     "value": `Permet de récupérer l'emploi du temps sélectionné. Trois semaines vous serront proposés lors de l'entrée de la commande, à savoir qu'à partir de samedi la semaine actuelle est considérée comme étant la semaine du lundi suivant.`
+                },
+                {
+                    "name": `/salle`,
+                    "value": `Permet de récupérer l'ensemble des salles de la journée ou du lendemain si il n'y en a pas le jour même. La salle actuelle y est affiché en premier.`
                 },
                 {
                     "name": `/devoirs afficher`,
                     "value": `Permet de récupérer l'ensemble des devoirs à effectuer. Les précédents devoirs n'y sont plus affichés.`
+                },
+                {
+                    "name": `/merci [personnels/classement]`,
+                    "value": `Permet d'afficher son propre nombre de remerciements, ou le classement des 10 premières personnes ayant le plus de remerciements.`
                 },
                 {
                     "name": `/stats globales`,
@@ -31,7 +39,11 @@ const aide = async (params) => {
                 },
                 {
                     "name": `/devoirs ajouter [date] [matière] [description du devoir]`,
-                    "value": `Permet de faire une demande d'ajout de devoir.\n­`
+                    "value": `Permet de faire une demande d'ajout de devoir.`
+                },
+                {
+                    "name": `/info`,
+                    "value": `Permet de récupérer le ping des différents API utilisés ainsi que la version du bot.\n­`
                 }
             ],
             footer: {
