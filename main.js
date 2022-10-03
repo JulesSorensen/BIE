@@ -40,7 +40,6 @@ client.on("ready", () => {
     version +
     ` ✅\n-------------------------\n`
   );
-  uptime = new Date();
 
   client.user.setActivity({ name: "/aide", type: `WATCHING` });
 

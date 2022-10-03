@@ -1,11 +1,11 @@
 const { MessageAttachment } = require('discord.js');
-const { edtAdd, edtShow, edtRemindAdd, edtRemindShow } = require("../../functions/edt");
-const moment = require("moment");
+const { edtAdd } = require("../../functions/edt");
 const { statsAddEdt } = require('../../functions/stats');
-const { getAllData, deleteData } = require('../../firebase/firebase');
+const { getAllData } = require('../../firebase/firebase');
+const { getCurrentDate } = require('../../tasks/dates');
 
 const getCustomizedDate = (semaine = 0) => {
-    const date = moment().add(semaine, "weeks");
+    const date = getCurrentDate().add(semaine, "weeks");
 
     if (date.isoWeekday() >= 6) {
         date.add(1, 'weeks');
@@ -21,8 +21,8 @@ const addEdt = async (params) => {
     const [date, link] = [interaction?.options?.get("date")?.value, interaction?.options?.get("link")?.attachment?.url];
 
     if (link !== undefined) {
-        if (moment(date, 'DD/MM/YYYY', true).isValid()) {
-            await edtAdd(moment(date, 'DD/MM/YYYY').format("YYYY-MM-DD"), link, client);
+        if (getCurrentDate(date, 'DD/MM/YYYY', true).isValid()) {
+            await edtAdd(getCurrentDate(date, 'DD/MM/YYYY').format("YYYY-MM-DD"), link, client);
             return await interaction.editReply({
                 content: `<:check:866581082551615489> EDT **${date}** mis à jour`,
                 files: [new MessageAttachment(link)]
@@ -51,7 +51,7 @@ const sendmpEdt = async (params) => {
     const date = getCustomizedDate(number - 1).format("DD/MM/YYYY");
     let pastille;
     try {
-        myges = await getAgendaCrypted({ start: date, end: moment(date, "YYYY-MM-DD").add(1, "weeks").format("YYYY-MM-DD") });
+        myges = await getAgendaCrypted({ start: date, end: getCurrentDate(date, "YYYY-MM-DD").add(1, "weeks").format("YYYY-MM-DD") });
         pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:question:997270154490679348>');
     } catch {
         pastille = '<:uncheck:866581082870513684>';

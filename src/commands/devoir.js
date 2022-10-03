@@ -1,7 +1,7 @@
-const moment = require('moment');
 const { getAllData } = require("../firebase/firebase");
 const { devoirAllDelete, devoirDelete, devoirAdd } = require('../functions/devoir');
 const { statsAddDevoirAsked } = require("../functions/stats");
+const { getCurrentDate } = require('../tasks/dates');
 
 const devoir = async (params) => {
     const { interaction, client, type } = params;
@@ -16,9 +16,9 @@ const devoir = async (params) => {
     statsAddDevoirAsked();
     var devoirs = [];
     Object.keys(devoir).map((date) => {
-        if (moment(date, 'DD-MM-YYYY') > moment().subtract(1, 'days')) {
+        if (getCurrentDate(date, 'DD-MM-YYYY') > getCurrentDate().subtract(1, 'days')) {
             devoir[date].matieres.map((matiere) => {
-                devoirs.push({ name: `${moment(date, 'DD-MM-YYYY').format('DD/MM/YYYY')} - ${matiere.matiere.split(/(?=[A-Z])/).join(` `)}`, value: matiere.devoir })
+                devoirs.push({ name: `${getCurrentDate(date, 'DD-MM-YYYY').format('DD/MM/YYYY')} - ${matiere.matiere.split(/(?=[A-Z])/).join(` `)}`, value: matiere.devoir })
             })
         } else {
             devoirAllDelete(date);
@@ -74,7 +74,7 @@ const addDevoir = async (params) => {
 
     await interaction.deferReply({ ephemeral: true });
 
-    if (moment(date, 'DD/MM/YYYY', true).isValid()) {
+    if (getCurrentDate(date, 'DD/MM/YYYY', true).isValid()) {
         (client.channels.cache.get("995994128234057779")).send(`<@${interaction.user.id}> (${interaction.user.id}) | Voudrait ajouter un devoir en ${matiere} \`${desc}\``)
 
         return await interaction.editReply({
@@ -94,8 +94,8 @@ const forceAddDevoir = async (params) => {
 
     await interaction.deferReply({ ephemeral: false });
 
-    if (moment(date, 'DD/MM/YYYY', true).isValid()) {
-        const newDate = moment(date, 'DD/MM/YYYY').format("DD-MM-YYYY");
+    if (getCurrentDate(date, 'DD/MM/YYYY', true).isValid()) {
+        const newDate = getCurrentDate(date, 'DD/MM/YYYY').format("DD-MM-YYYY");
         await devoirAdd(newDate, matiere, desc);
         await (client.channels.cache.get("762698661892849714")).send(`<@&996043232410599565> <a:bell:868901922483097661> Un nouveau devoir en **${matiere.split(/(?=[A-Z])/).join(` `)}** a été ajouté par <@${authorId}>`);
         return await interaction.editReply({
@@ -115,8 +115,8 @@ const forceDeleteDevoir = async (params) => {
 
     await interaction.deferReply({ ephemeral: false });
 
-    if (moment(date, 'DD/MM/YYYY', true).isValid()) {
-        const newDate = moment(date, 'DD/MM/YYYY').format("DD-MM-YYYY");
+    if (getCurrentDate(date, 'DD/MM/YYYY', true).isValid()) {
+        const newDate = getCurrentDate(date, 'DD/MM/YYYY').format("DD-MM-YYYY");
         const res = await devoirDelete(newDate, matiere, client);
         if (!res.error) {
             return await interaction.editReply({

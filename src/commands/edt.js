@@ -2,8 +2,8 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 const { getAgendaCrypted } = require("../api/mgapi");
 const { getAllData } = require("../firebase/firebase");
 const { statsAddEdt } = require("../functions/stats");
-const moment = require("moment");
 const { isUserInDelay, addUserDelay } = require('../functions/delay');
+const { getCurrentDate } = require('../tasks/dates');
 
 const sendEdtAlert = async (id, client) => {
     client.channels.cache.get("995994128234057779").send({
@@ -14,7 +14,7 @@ const sendEdtAlert = async (id, client) => {
 const edt = async (params) => {
     const { num, interaction, type, client } = params;
     const getCustomizedDate = (semaine = 0) => {
-        const date = moment().add(semaine, "weeks");
+        const date = getCurrentDate().add(semaine, "weeks");
 
         if (date.isoWeekday() >= 6) {
             date.add(1, 'weeks');
@@ -44,7 +44,7 @@ const edt = async (params) => {
             if (!isInDelay) {
                 addUserDelay(interaction.user.id, "edt1");
                 try {
-                    myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
+                    myges = await getAgendaCrypted({ start: getCurrentDate(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: getCurrentDate(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
                     pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
                     if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {
@@ -92,7 +92,7 @@ const edt = async (params) => {
             if (!isInDelay) {
                 addUserDelay(interaction.user.id, "edt2");
                 try {
-                    myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
+                    myges = await getAgendaCrypted({ start: getCurrentDate(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: getCurrentDate(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
                     pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
                     if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {
@@ -141,7 +141,7 @@ const edt = async (params) => {
             if (!isInDelay) {
                 addUserDelay(interaction.user.id, "edt3");
                 try {
-                    myges = await getAgendaCrypted({ start: moment(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: moment(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
+                    myges = await getAgendaCrypted({ start: getCurrentDate(datefinale, "DD/MM/YYYY").format("YYYY-MM-DD"), end: getCurrentDate(datefinale, "DD/MM/YYYY").add(7, "days").format("YYYY-MM-DD") });
                     pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
                     if (pastille == "<:uncheck:866581082870513684>") sendEdtAlert(interaction.user.id, client);
                 } catch {

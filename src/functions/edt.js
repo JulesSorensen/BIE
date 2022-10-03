@@ -2,8 +2,8 @@ const { MessageAttachment } = require("discord.js");
 const { getAgendaCrypted } = require("../api/mgapi");
 const { createData, getAllData } = require("../firebase/firebase");
 const qs = require("qs");
-const moment = require("moment");
 const { default: axios } = require("axios");
+const { getCurrentDate } = require("../tasks/dates");
 
 // ajout de l'emploi du temps de la semaine spécifique
 const edtAdd = async (date, link, client) => {
@@ -17,7 +17,7 @@ const edtAdd = async (date, link, client) => {
   });
   const edtMyges = await getAgendaCrypted({
     start: date,
-    end: moment(date, "YYYY-MM-DD").add(7, "days").format("YYYY-MM-DD"),
+    end: getCurrentDate(date, "YYYY-MM-DD").add(7, "days").format("YYYY-MM-DD"),
   }, true);
 
   let newEdt = { link: uploadedImg.data.data.url, myges: edtMyges.cryptedAgenda, details: edtMyges.details };

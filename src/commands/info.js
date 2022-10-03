@@ -1,7 +1,7 @@
-const moment = require('moment');
 const { getAgendaCrypted } = require('../api/mgapi');
 const { getAllData } = require('../firebase/firebase');
 const { isUserInDelay, addUserDelay } = require('../functions/delay');
+const { getCurrentDate } = require('../tasks/dates');
 
 const info = async (params) => {
     const { interaction, time, botUptime, version } = params;
@@ -9,7 +9,7 @@ const info = async (params) => {
     const { discordPing, botPing, uptime } = {
         discordPing: `${Math.abs(new Date() - new Date(interaction.createdTimestamp))}ms`,
         botPing: `${new Date() - new Date(time)}ms`,
-        uptime: moment(botUptime).format("[En ligne depuis le] DD/MM/YYYY [à] HH[h]mm")
+        uptime: getCurrentDate(botUptime).format("[En ligne depuis le] DD/MM/YYYY [à] HH[h]mm")
     };
 
     await interaction.deferReply({ ephemeral: false });
@@ -23,7 +23,7 @@ const info = async (params) => {
     if (!isInDelay) {
         await addUserDelay(interaction.user.id, 'info');
         const firstMGDate = new Date();
-        const mgDate = moment().format("YYYY-MM-DD");
+        const mgDate = getCurrentDate().format("YYYY-MM-DD");
         await getAgendaCrypted({ start: mgDate, end: mgDate });
         mygesPing = `${new Date() - firstMGDate}ms`;
     }

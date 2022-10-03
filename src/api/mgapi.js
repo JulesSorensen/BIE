@@ -2,7 +2,7 @@ const axios = require("axios");
 const sha1 = require("sha1");
 const { encrypt, decrypt } = require("../tasks/crypter.js");
 const { getAllData, createData } = require("../firebase/firebase");
-const moment = require("moment");
+const { getCurrentDate } = require("../tasks/dates.js");
 
 const mgLogin = async (username, password) => {
   const token = await mgGenerateAccessToken(username, password);
@@ -117,8 +117,8 @@ const getNotesCrypted = async () => {
 
 const getAgendaCrypted = async (dates, withDetails = false) => {
   const { start, end } = {
-    start: moment(dates.start, "YYYY-MM-DD").toDate().valueOf(),
-    end: moment(dates.end, "YYYY-MM-DD").toDate().valueOf(),
+    start: getCurrentDate(dates.start, "YYYY-MM-DD").toDate().valueOf(),
+    end: getCurrentDate(dates.end, "YYYY-MM-DD").toDate().valueOf(),
   };
   const token = await getToken();
   let agenda;
@@ -142,8 +142,8 @@ const getAgendaCrypted = async (dates, withDetails = false) => {
     let detailsPerDate = {};
 
     agenda.data.result.forEach((event) => {
-      const currentDate = jours[moment(new Date(event.start_date)).day() - 1];
-      const matinOuAprem = moment(new Date(event.start_date)).hour() < 13 ? "am" : "pm";
+      const currentDate = jours[getCurrentDate(new Date(event.start_date)).day() - 1];
+      const matinOuAprem = getCurrentDate(new Date(event.start_date)).hour() < 13 ? "am" : "pm";
       if (!detailsPerDate[currentDate]) {
         detailsPerDate[currentDate] = {};
         detailsPerDate[currentDate]["am"] = [];
@@ -191,12 +191,12 @@ const getAgendaCrypted = async (dates, withDetails = false) => {
 const setRemind = async (agenda) => {
   const startHourPerDate = {};
   agenda?.data?.result.map((event) => {
-    const currentDate = moment(new Date(event.start_date)).format("YYYY-MM-DD");
-    const currentHour = moment(new Date(event.start_date)).format("HH[h]mm");
+    const currentDate = getCurrentDate(new Date(event.start_date)).format("YYYY-MM-DD");
+    const currentHour = getCurrentDate(new Date(event.start_date)).format("HH[h]mm");
 
     if (!startHourPerDate[currentDate]) {
       startHourPerDate[currentDate] = currentHour;
-    } else if (moment(currentHour, "HH[h]mm").isBefore(moment(startHourPerDate[currentDate], "HH[h]mm"))) {
+    } else if (getCurrentDate(currentHour, "HH[h]mm").isBefore(getCurrentDate(startHourPerDate[currentDate], "HH[h]mm"))) {
       startHourPerDate[currentDate] = currentHour;
     }
   });
@@ -226,7 +226,7 @@ const setSalles = async (params) => {
 
   const salles = {};
   params.agenda?.data?.result.map((event) => {
-    const datetime = moment(new Date(event.start_date));
+    const datetime = getCurrentDate(new Date(event.start_date));
     const date = datetime.format("YYYY-MM-DD");
     const time = datetime.format("HH[h]mm");
 
