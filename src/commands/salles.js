@@ -71,7 +71,7 @@ const salles = async (params) => {
                 value.shift();
                 fields.push({
                     name: formatedHour,
-                    value: value
+                    value: value.join(" - ")
                 });
             });
 
