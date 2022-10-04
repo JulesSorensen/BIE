@@ -22,9 +22,9 @@ const addNewMerci = async (reaction, user) => {
         await createData("merci", user.id, { count: 1, msg: [reaction.message.id], name: user.username });
         await user.send(`**Coucou, c'est la première fois que tu me remercies ! Ca me fait vraiment plaisir** \<:heart_gil:874358424777941012> 
 Saches qu'en cliquant sur la réaction \<:merciBIE:1022118516129792000> tu bénéficies d'un délai de requête API sur MyGes réduit !
-- **5** <:merciBIE:1022118516129792000> réduit ton délai à 6 minutes
-- **10** <:merciBIE:1022118516129792000> réduit ton délai à 5 minutes + le délai sera propre à chaque requête (\`salle\`/\`edt1\`/\`edt2\`...)
-- **50** <:merciBIE:1022118516129792000> réduit ton délai à 2 minutes
+- **5** <:merciBIE:1022118516129792000> réduit ton délai à 30 secondes
+- **10** <:merciBIE:1022118516129792000> réduit ton délai à 15 secondes
+- **50** <:merciBIE:1022118516129792000> réduit ton délai à 1 seconde
 
 Ceci est mis en place pour éviter le spam de requête avec le compte MyGes de <@676690539126718467> :eyes: 
 Tu peux consulter ton nombre de remerciments avec la commande \`/merci personnels\` et le classement avec \`/merci classement\``).catch(() => { });

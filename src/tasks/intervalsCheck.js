@@ -91,7 +91,7 @@ const edtSenderCheck = async (client) => {
 const edtReminderCheck = (client) => {
     setInterval(async () => {
         const date = getCurrentDate();
-        if (date.hours() >= 17 && date.minutes() == 0) {
+        if (date.hours() >= 19 && date.minutes() == 0) {
             const currentDatefinale = date.add(1, "days").format("YYYY-MM-DD");
             const edtremind = await getAllData("edtremind");
             if (!!edtremind[currentDatefinale]?.hour) {

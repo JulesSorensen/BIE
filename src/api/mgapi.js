@@ -192,11 +192,11 @@ const setRemind = async (agenda) => {
   const startHourPerDate = {};
   agenda?.data?.result.map((event) => {
     const currentDate = getCurrentDate(new Date(event.start_date)).format("YYYY-MM-DD");
-    const currentHour = getCurrentDate(new Date(event.start_date)).format("HH[h]mm");
+    const currentHour = getCurrentDate(new Date(event.start_date)).format("H[h]mm");
 
     if (!startHourPerDate[currentDate]) {
       startHourPerDate[currentDate] = currentHour;
-    } else if (getCurrentDate(currentHour, "HH[h]mm").isBefore(getCurrentDate(startHourPerDate[currentDate], "HH[h]mm"))) {
+    } else if (getCurrentDate(currentHour, "H[h]mm").isBefore(getCurrentDate(startHourPerDate[currentDate], "H[h]mm"))) {
       startHourPerDate[currentDate] = currentHour;
     }
   });
@@ -228,7 +228,7 @@ const setSalles = async (params) => {
   params.agenda?.data?.result.map((event) => {
     const datetime = getCurrentDate(new Date(event.start_date));
     const date = datetime.format("YYYY-MM-DD");
-    const time = datetime.format("HH[h]mm");
+    const time = datetime.format("H[h]mm");
 
     if (!salles[date]) { salles[date] = {}; }
 

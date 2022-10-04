@@ -36,18 +36,18 @@ const getUserDelayNbAndType = async (userId, type) => {
     const userData = await getData("merci", userId);
 
     if (!userData) {
-        return { userDelay: 480000, type: "default" };
+        return { userDelay: 60000, type: type };
     }
 
     switch (true) {
         case userData.count >= 50:
-            return { userDelay: 180000, type: type };
+            return { userDelay: 1000, type: type };
         case userData.count >= 10:
-            return { userDelay: 300000, type: type };
+            return { userDelay: 15000, type: type };
         case userData.count >= 5:
-            return { userDelay: 360000, type: "default" };
+            return { userDelay: 30000, type: type };
         default:
-            return { userDelay: 480000, type: "default" };
+            return { userDelay: 60000, type: type };
     }
 };
 
