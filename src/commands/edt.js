@@ -68,13 +68,12 @@ const edt = async (params) => {
             }
 
             if (type == "BUTTON") {
-                await interaction.user.send(edtMessageContent).catch(() => { });
+                return await interaction.user.send(edtMessageContent);
             } else {
                 edtMessageContent["components"] = [row];
-                await interaction.editReply(edtMessageContent).catch(() => { });
-                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
+                await interaction.editReply(edtMessageContent);
+                return (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
-            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${interaction.user.username}`).catch(() => { })
         }
     } else if (num == '2') {
         statsAddEdt();
@@ -117,13 +116,12 @@ const edt = async (params) => {
             }
 
             if (type == "BUTTON") {
-                await interaction.user.send(edtMessageContent).catch(() => { });
+                return await interaction.user.send(edtMessageContent);
             } else {
                 edtMessageContent["components"] = [row];
-                await interaction.editReply(edtMessageContent).catch(() => { });
-                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
+                await interaction.editReply(edtMessageContent);
+                return (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
-            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${interaction.user.username}`).catch(() => { })
         }
     } else if (num == '3') {
         statsAddEdt();
@@ -165,13 +163,12 @@ const edt = async (params) => {
             }
 
             if (type == "BUTTON") {
-                await interaction.user.send(edtMessageContent).catch(() => { });
+                return await interaction.user.send(edtMessageContent);
             } else {
                 edtMessageContent["components"] = [row];
-                await interaction.editReply(edtMessageContent).catch(() => { });
-                (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
+                await interaction.editReply(edtMessageContent);
+                return (await interaction.fetchReply()).react("1022118516129792000").catch(() => { });
             }
-            return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 3 sent to ${interaction.user.username}`).catch(() => { })
         }
     }
 }

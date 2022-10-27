@@ -43,14 +43,14 @@ const edtSenderCheck = async (client) => {
             let pastille;
             let myges;
             if (!mygesCooldown.has('cd')) {
+                mygesCooldown.add('cd');
                 try {
-                    myges = await getAgendaCrypted({ start: edtDate, end: edtDate });
-                    pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:question:997270154490679348>');
+                    myges = await getAgendaCrypted({ start: edtDate, end: moment(edtDate, "YYYY-MM-DD").add(7, 'days').format("YYYY-MM-DD") });
+                    pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
                 } catch {
-                    pastille = '<:uncheck:866581082870513684>';
+                    pastille = '<:question:997270154490679348>';
                 }
                 lastPastille = pastille
-                mygesCooldown.add('cd');
                 setTimeout(() => {
                     mygesCooldown.delete('cd');
                 }, 600000);

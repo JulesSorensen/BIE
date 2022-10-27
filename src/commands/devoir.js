@@ -2,6 +2,7 @@ const { getAllData } = require("../firebase/firebase");
 const { devoirAllDelete, devoirDelete, devoirAdd } = require('../functions/devoir');
 const { statsAddDevoirAsked } = require("../functions/stats");
 const { getCurrentDate } = require('../tasks/dates');
+const moment = require("moment");
 
 const devoir = async (params) => {
     const { interaction, client, type } = params;
@@ -25,11 +26,17 @@ const devoir = async (params) => {
         }
     })
     devoirs = devoirs.sort(function (a, b) {
-        const [startSplit, endSplit] = [a.name.split('/'), b.name.split('/')];
-        const [start, end] = [`${startSplit[2]}-${startSplit[1]}-${startSplit[0]}`, `${endSplit[2]}-${endSplit[1]}-${endSplit[0]}`];
-        return new Date(start) - new Date(end);
+        const [startSplit, endSplit] = [a.name.split('/').join(" -").split(" -"), b.name.split('/').join(" -").split(" -")];
+        const [start, end] = [
+            moment(`${startSplit[0]}-${startSplit[1]}-${startSplit[2]}`, "DD-MM-YYYY"),
+            moment(`${endSplit[0]}-${endSplit[1]}-${endSplit[2]}`, "DD-MM-YYYY")
+        ];
+
+        if (start.isBefore(end)) return -1;
+        if (start.isAfter(end)) return 1;
+        return 0;
     });
-    (client.channels.cache.get(`874251822045487125`)).send(`📔 Devoirs sent to ${interaction.user.username}`).catch(() => { ; });
+
     let isS = ''; let isS2 = 'le prochain devoir';
     let devoirMessageContent;
     if (devoirs.length < 1) {
@@ -75,10 +82,10 @@ const addDevoir = async (params) => {
     await interaction.deferReply({ ephemeral: true });
 
     if (getCurrentDate(date, 'DD/MM/YYYY', true).isValid()) {
-        (client.channels.cache.get("995994128234057779")).send(`<@${interaction.user.id}> (${interaction.user.id}) | Voudrait ajouter un devoir en ${matiere} \`${desc}\``)
+        (client.channels.cache.get("995994128234057779")).send(`<@${interaction.user.id}> (${interaction.user.id}) | Voudrait ajouter un devoir pour le \`${date}\` en ${matiere} \`${desc}\``)
 
         return await interaction.editReply({
-            content: `<:check:866581082551615489> Votre demande d'ajout de devoir vient d'être envoyée, merci !\nDate: \`${date}\`, matière: \`${matiere}\`, détails: \`${desc}\``
+            content: `<:check:866581082551615489> Votre devoir est en attente de validation par <@676690539126718467>, merci beaucoup !\nDate: \`${date}\`, matière: \`${matiere}\`, détails: \`${desc}\``
         }).catch(() => { });
     } else {
         return await interaction.editReply({
@@ -90,7 +97,7 @@ const addDevoir = async (params) => {
 const forceAddDevoir = async (params) => {
     const { interaction, client } = params;
 
-    const [date, matiere, desc, authorId] = [interaction.options.get("date").value, interaction.options.get("matiere").value.replace(/[A-Z]/g, ' $&').trim(), interaction.options.get("description").value, interaction.options.get("userid")?.value ?? interaction.user.id];
+    const [date, matiere, desc, authorId] = [interaction.options.get("date").value, interaction.options.get("matiere").value.replace(/[A-Z&]/g, ' $&'), interaction.options.get("description").value, interaction.options.get("userid")?.value ?? interaction.user.id];
 
     await interaction.deferReply({ ephemeral: false });
 

@@ -49,12 +49,9 @@ client.on("ready", () => {
   currentNotesCheck(client);
 });
 
-client.on("interactionCreate", (interaction) => {
-  if (
-    !bannedUsers.includes(interaction?.user?.id) &&
-    !bannedUsers.includes(interaction?.user?.id)
-  ) {
-    interactionLaunch(interaction, client, version, new Date(), uptime);
+client.on("interactionCreate", async (interaction) => {
+  if (!bannedUsers.includes(interaction?.user?.id)) {
+    await interactionLaunch(interaction, client, version, new Date(), uptime);
   }
 });
 

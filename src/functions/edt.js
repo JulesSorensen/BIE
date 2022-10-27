@@ -23,11 +23,6 @@ const edtAdd = async (date, link, client) => {
   let newEdt = { link: uploadedImg.data.data.url, myges: edtMyges.cryptedAgenda, details: edtMyges.details };
 
   await createData("edt", date, newEdt);
-
-  client.channels.cache
-    .get(`874251822045487125`)
-    .send(`➕ EDT ${date} ajouté`)
-    .catch(() => {});
 };
 
 // Retourne les donnés de l'emploi du temps

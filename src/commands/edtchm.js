@@ -65,9 +65,7 @@ const edtchm = async (params) => {
         edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
       }
 
-      await interaction.update(edtMessageContent).catch(() => { });
-
-      return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 1  sent to ${interaction.user.username}`).catch(() => { })
+      return await interaction.update(edtMessageContent);
     } else if (num == '2') {
       statsAddEdt();
       var date = getCustomizedDate(1);
@@ -105,9 +103,7 @@ const edtchm = async (params) => {
         edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
       }
 
-      await interaction.update(edtMessageContent).catch(() => { });
-
-      return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 2 sent to ${interaction.user.username}`).catch(() => { })
+      return await interaction.update(edtMessageContent);
     } else if (num == '3') {
       statsAddEdt();
       var date = getCustomizedDate(2);
@@ -145,12 +141,10 @@ const edtchm = async (params) => {
         edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
       }
 
-      await interaction.update(edtMessageContent).catch(() => { });
-
-      return (client.channels.cache.get(`874251822045487125`)).send(`🗓️ EDT 3 sent to ${interaction.user.username}`).catch(() => { })
+      return await interaction.update(edtMessageContent);
     }
   } else {
-    return interaction.reply({ content: `❌ **| Uniquement <@${interaction.user.id}> peut utiliser ces boutons.** Effectues la commande toi-même pour y avoir accès !`, ephemeral: true });
+    return interaction.reply({ content: `❌ **| Uniquement l'auteur de cette commande peut utiliser ces boutons.** Effectues la commande toi-même pour y avoir accès !`, ephemeral: true });
   }
 };
 

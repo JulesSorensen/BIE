@@ -28,7 +28,7 @@ const info = async (params) => {
         mygesPing = `${new Date() - firstMGDate}ms`;
     }
 
-    interaction.editReply({
+    return await interaction.editReply({
         embeds: [{
             color: 0x42fcff,
             title: `ℹ️ Informations`,

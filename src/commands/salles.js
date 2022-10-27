@@ -66,7 +66,7 @@ const salles = async (params) => {
         } else {
             const fields = [];
             Object.keys(sallesData[currentDate]).map((hour) => {
-                const formatedHour = getCurrentDate(new Date(parseInt(hour))).format('HH[h]mm');
+                const formatedHour = getCurrentDate(new Date(parseInt(hour))).format('H[h]mm');
                 const value = sallesData[currentDate][hour].split(" - ");
                 value.shift();
                 fields.push({
@@ -76,8 +76,8 @@ const salles = async (params) => {
             });
 
             fields.sort((a, b) => {
-                const aHour = getCurrentDate(a.name, 'HH[h]mm');
-                const bHour = getCurrentDate(b.name, 'HH[h]mm');
+                const aHour = getCurrentDate(a.name, 'H[h]mm');
+                const bHour = getCurrentDate(b.name, 'H[h]mm');
 
                 if (aHour > bHour) return 1;
                 if (aHour < bHour) return -1;
@@ -88,7 +88,7 @@ const salles = async (params) => {
                 embeds: [
                     {
                         "title": `${pastille} Liste des salles du jour`,
-                        "description": `${getCurrentDate(new Date(parseInt(rightHour))) > getCurrentDate() ? 'Salle actuelle' : 'Prochaine salle'}: ${sallesData[currentDate][rightHour].split(/Salles?/)[1]}\n­`,
+                        "description": `${getCurrentDate(new Date(parseInt(rightHour))) > getCurrentDate() ? 'Prochaine salle' : 'Salle actuelle'}: ${sallesData[currentDate][rightHour].split(/Salles?/)[1]}\n­`,
                         "color": 0x42fcff,
                         "fields": fields,
                         "thumbnail": {
@@ -111,7 +111,7 @@ const salles = async (params) => {
             } else {
                 const fields = [];
                 Object.keys(sallesData[nextDate]).map((hour) => {
-                    const formatedHour = getCurrentDate(new Date(parseInt(hour))).format('HH[h]mm');
+                    const formatedHour = getCurrentDate(new Date(parseInt(hour))).format('H[h]mm');
                     fields.push({
                         name: formatedHour,
                         value: sallesData[nextDate][hour].split(" - ")[1],
@@ -119,8 +119,8 @@ const salles = async (params) => {
                 });
 
                 fields.sort((a, b) => {
-                    const aHour = getCurrentDate(a.name, 'HH[h]mm');
-                    const bHour = getCurrentDate(b.name, 'HH[h]mm');
+                    const aHour = getCurrentDate(a.name, 'H[h]mm');
+                    const bHour = getCurrentDate(b.name, 'H[h]mm');
 
                     if (aHour > bHour) return 1;
                     if (aHour < bHour) return -1;
