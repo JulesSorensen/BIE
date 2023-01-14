@@ -1,5 +1,4 @@
 require("dotenv").config();
-const Discord = require("discord.js");
 const { Client, Intents } = require("discord.js");
 const client = new Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
@@ -41,7 +40,7 @@ client.on("ready", () => {
     ` ✅\n-------------------------\n`
   );
 
-  client.user.setActivity({ name: "/aide", type: `WATCHING` });
+  client.user.setStatus("dnd");
 
   edtReminderCheck(client);
   edtSenderCheck(client);
