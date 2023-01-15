@@ -127,6 +127,11 @@ const setAllCommands = async (guildId, client) => {
             description: 'Affiche diverses informations concernant le robot'
         }));
 
+        await commands.create(({
+            name: 'wifi',
+            description: 'Affiche diverses informations concernant la connexion wifi d\'Efficom'
+        }));
+
         if (guildId == "831823187213680682") { // PRIVATE COMMANDS
             await commands.create(({
                 name: 'edtadd',

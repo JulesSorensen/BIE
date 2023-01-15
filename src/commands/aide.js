@@ -42,6 +42,10 @@ const aide = async (params) => {
                     "value": `Permet de faire une demande d'ajout de devoir.`
                 },
                 {
+                    "name": `/wifi`,
+                    "value": `Permet de récupérer les informations à propos de la connexion internet d'Efficom.`
+                },
+                {
                     "name": `/info`,
                     "value": `Permet de récupérer le ping des différents API utilisés ainsi que la version du bot.\n­`
                 }

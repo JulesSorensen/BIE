@@ -11,6 +11,7 @@ const { edtchm } = require("../commands/edtchm");
 const { salles } = require("../commands/salles");
 const { info } = require("../commands/info");
 const { merci } = require("../commands/merci");
+const { wifi } = require("../commands/wifi");
 
 const interactionLaunch = async (interaction, client, version, initDate, uptime) => {
     const commandName = interaction?.isCommand() ? interaction?.commandName?.toUpperCase() : interaction?.customId?.toUpperCase();
@@ -60,6 +61,8 @@ const interactionLaunch = async (interaction, client, version, initDate, uptime)
                 return await info({ interaction: interaction, version: version, time: initDate, botUptime: uptime });
             case 'MERCI':
                 return await merci({ interaction: interaction, version: version });
+            case 'WIFI':
+                return await wifi({ interaction: interaction, version: version });
             // PRIVATE
             case 'EDTADD':
                 return await addEdt({ interaction: interaction, client: client });

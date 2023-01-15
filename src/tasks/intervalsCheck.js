@@ -3,6 +3,7 @@ const { createData, deleteData, getAllData, updateData } = require('../firebase/
 const { statsAddRemind } = require('../functions/stats');
 const { getNotesCryptedInDb, setNotesCryptedInDb } = require('../functions/note');
 const { getCurrentDate } = require('./dates');
+const moment = require('moment');
 
 const getCustomizedDate = (semaine = 0) => {
     const date = getCurrentDate().add(semaine, "weeks");
@@ -47,7 +48,8 @@ const edtSenderCheck = async (client) => {
                 try {
                     myges = await getAgendaCrypted({ start: edtDate, end: moment(edtDate, "YYYY-MM-DD").add(7, 'days').format("YYYY-MM-DD") });
                     pastille = (edt[edtDate].myges == myges ? '<:check:866581082551615489>' : '<:uncheck:866581082870513684>');
-                } catch {
+                } catch (err) {
+                    console.log("EDTAuto err", err);
                     pastille = '<:question:997270154490679348>';
                 }
                 lastPastille = pastille
@@ -76,14 +78,13 @@ const edtSenderCheck = async (client) => {
                             // send
                             const userToSend = await client.users.fetch(key);
                             const pastille = await askMyges(edt, currentDate);
-                            const dateFinale = getCurrentDate().format("DD/MM/YYYY");
+                            const dateFinale = moment(currentDate, "YYYY-MM-DD").format("DD/MM/YYYY");
                             await userToSend.send({ content: `*Réception automatique <#991371617043222638>*\n🗓️ **__${dateFinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[currentDate].link] }).catch(() => { ; });
                         }
                     }
                 }
             }
-        } catch (e) {
-        }
+        } catch { }
     }, 59000)
 }
 
