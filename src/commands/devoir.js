@@ -97,7 +97,7 @@ const addDevoir = async (params) => {
 const forceAddDevoir = async (params) => {
     const { interaction, client } = params;
 
-    const [date, matiere, desc, authorId] = [interaction.options.get("date").value, interaction.options.get("matiere").value.replace(/[A-Z&]/g, ' $&'), interaction.options.get("description").value, interaction.options.get("userid")?.value ?? interaction.user.id];
+    const [date, matiere, desc, authorId] = [interaction.options.get("date").value, interaction.options.get("matiere").value.replace(/[A-Z&-]/g, ' $&').trim(), interaction.options.get("description").value, interaction.options.get("userid")?.value ?? interaction.user.id];
 
     await interaction.deferReply({ ephemeral: false });
 

@@ -112,9 +112,11 @@ const salles = async (params) => {
                 const fields = [];
                 Object.keys(sallesData[nextDate]).map((hour) => {
                     const formatedHour = getCurrentDate(new Date(parseInt(hour))).format('H[h]mm');
+                    const value = sallesData[nextDate][hour].split(" - ");
+                    value.shift();
                     fields.push({
                         name: formatedHour,
-                        value: sallesData[nextDate][hour].split(" - ")[1],
+                        value: value.join(" - ")
                     });
                 });
 
