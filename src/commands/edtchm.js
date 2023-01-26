@@ -57,7 +57,7 @@ const edtchm = async (params) => {
       new MessageButton().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
     );
     let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine actuelle)** \\↔️ <@${interaction.user.id}>`, components: [row] };
+    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine actuelle)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
@@ -95,7 +95,7 @@ const edtchm = async (params) => {
       new MessageButton().setCustomId("EDTCHM3").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
     );
     let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine prochaine)** \\↔️ <@${interaction.user.id}>`, components: [row] };
+    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine prochaine)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
@@ -133,7 +133,7 @@ const edtchm = async (params) => {
       new MessageButton().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY').setDisabled(true)
     );
     let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)** \\↔️ <@${interaction.user.id}>`, components: [row] };
+    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
