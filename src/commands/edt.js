@@ -53,8 +53,8 @@ const edt = async (params) => {
             }
 
             const row = new ActionRowBuilder().addComponents(
-                new ButtonBuilder().setCustomId("EDTCHM1").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Secondary).setDisabled(true),
-                new ButtonBuilder().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
+                new ButtonBuilder().setCustomId("EDTCHM1").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Danger).setDisabled(true),
+                new ButtonBuilder().setCustomId("DETAILS1").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
                 new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Success)
             );
 
@@ -151,7 +151,7 @@ const edt = async (params) => {
             const row = new ActionRowBuilder().addComponents(
                 new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Success),
                 new ButtonBuilder().setCustomId("DETAILS3").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
-                new ButtonBuilder().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Secondary).setDisabled(true)
+                new ButtonBuilder().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Danger).setDisabled(true)
             );
             const edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)**` };
             const file = edt[edtDate]?.link;

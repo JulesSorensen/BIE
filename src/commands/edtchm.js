@@ -14,6 +14,9 @@ const sendEdtAlert = async (id, client) => {
 const edtchm = async (params) => {
   const { client, interaction } = params;
 
+  setTimeout(async () => await interaction.deferUpdate(), 2000);
+  const msg = await interaction.channel.messages.fetch(interaction.message.id);
+
   const num = interaction.customId.slice(6);
 
   const getCustomizedDate = (semaine = 0) => {
@@ -48,8 +51,8 @@ const edtchm = async (params) => {
     }
 
     row = new ActionRowBuilder().addComponents(
-      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Secondary).setDisabled(true),
-      new ButtonBuilder().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Danger).setDisabled(true),
+      new ButtonBuilder().setCustomId("DETAILS1").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
       new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Success)
     );
     const file = edt[edtDate]?.link;
@@ -60,7 +63,7 @@ const edtchm = async (params) => {
       edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
     }
 
-    return await interaction.update(edtMessageContent);
+    return await msg.edit(edtMessageContent);
   } else if (num == '2') {
     statsAddEdt();
     const date = getCustomizedDate(1);
@@ -103,7 +106,7 @@ const edtchm = async (params) => {
     } else {
       edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
     }
-    return await interaction.update(edtMessageContent);
+    return await msg.edit(edtMessageContent);
   } else if (num == '3') {
     statsAddEdt();
     const date = getCustomizedDate(2);
@@ -131,7 +134,7 @@ const edtchm = async (params) => {
     const row = new ActionRowBuilder().addComponents(
       new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Success),
       new ButtonBuilder().setCustomId("DETAILS3").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
-      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Secondary).setDisabled(true)
+      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Danger).setDisabled(true)
     );
     const file = edt[edtDate]?.link;
     const edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)** \\↔️ <@${interaction.user.id}>`, components: [row] };
@@ -141,7 +144,7 @@ const edtchm = async (params) => {
       edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
     }
 
-    return await interaction.update(edtMessageContent);
+    return await msg.edit(edtMessageContent);
   }
 };
 
