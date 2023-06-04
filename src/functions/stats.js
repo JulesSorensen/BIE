@@ -1,4 +1,4 @@
-const { MessageAttachment } = require('discord.js');
+const { AttachmentBuilder } = require('discord.js');
 const { createData, getAllData, updateData } = require('../firebase/firebase');
 
 // ajouter une stat pour un devoir

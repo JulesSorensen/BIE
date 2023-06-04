@@ -79,7 +79,7 @@ const edtSenderCheck = async (client) => {
                             const userToSend = await client.users.fetch(key);
                             const pastille = await askMyges(edt, currentDate);
                             const dateFinale = moment(currentDate, "YYYY-MM-DD").format("DD/MM/YYYY");
-                            await userToSend.send({ content: `*Réception automatique <#991371617043222638>*\n🗓️ **__${dateFinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[currentDate].link] }).catch(() => { ; });
+                            await userToSend.send({ content: `*Réception automatique*\n🗓️ **__${dateFinale}__ ${pastille} Voici l'emploi du temps de la semaine prochaine**`, files: [edt[currentDate].link] }).catch(() => { ; });
                         }
                     }
                 }

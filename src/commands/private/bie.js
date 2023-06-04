@@ -1,16 +1,16 @@
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 const sendBIEMessage = async (params) => {
     const { interaction, client } = params;
 
     await interaction.deferReply({ ephemeral: true });
 
-    const row = new MessageActionRow().addComponents(
-        new MessageButton().setCustomId("EDT1").setEmoji("893889890108981278").setLabel("EDT 1").setStyle('SUCCESS'),
-        new MessageButton().setCustomId("EDT2").setEmoji("893889890108981278").setLabel("EDT 2").setStyle('SUCCESS'),
-        new MessageButton().setCustomId("EDT3").setEmoji("893889890108981278").setLabel("EDT 3").setStyle('SUCCESS'),
-        new MessageButton().setCustomId("DEV").setEmoji("893971159933145140").setLabel("Devoirs").setStyle('PRIMARY'),
-        new MessageButton().setCustomId("STATS").setEmoji("934423720875941918").setLabel("Stats").setStyle('SECONDARY'),
+    const row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId("EDT1").setEmoji("893889890108981278").setLabel("EDT 1").setStyle('SUCCESS'),
+        new ButtonBuilder().setCustomId("EDT2").setEmoji("893889890108981278").setLabel("EDT 2").setStyle('SUCCESS'),
+        new ButtonBuilder().setCustomId("EDT3").setEmoji("893889890108981278").setLabel("EDT 3").setStyle('SUCCESS'),
+        new ButtonBuilder().setCustomId("DEV").setEmoji("893971159933145140").setLabel("Devoirs").setStyle(ButtonStyle.Primary),
+        new ButtonBuilder().setCustomId("STATS").setEmoji("934423720875941918").setLabel("Stats").setStyle(ButtonStyle.Secondary),
     )
 
     client.channels.cache.get(`991371617043222638`).send({

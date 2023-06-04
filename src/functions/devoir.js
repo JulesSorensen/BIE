@@ -48,7 +48,7 @@ const devoirAllDelete = async (date) => {
 // affiche les alarmes de l'emploi du temps
 const devoirShow = async (msg) => {
     const devoir = JSON.stringify(await getAllData("devoir"))
-    let attachment = new MessageAttachment(Buffer.from(devoir, 'utf-8'), 'devoir.json');
+    let attachment = new AttachmentBuilder(Buffer.from(devoir, 'utf-8'), 'devoir.json');
     msg.channel.send({ content: `**LAST DEVOIR DATA FILE**`, files: [attachment] })
 }
 

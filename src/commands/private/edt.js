@@ -1,4 +1,4 @@
-const { MessageAttachment } = require('discord.js');
+const { AttachmentBuilder } = require('discord.js');
 const { edtAdd } = require("../../functions/edt");
 const { statsAddEdt } = require('../../functions/stats');
 const { getAllData } = require('../../firebase/firebase');
@@ -7,9 +7,7 @@ const { getCurrentDate } = require('../../tasks/dates');
 const getCustomizedDate = (semaine = 0) => {
     const date = getCurrentDate().add(semaine, "weeks");
 
-    if (date.isoWeekday() >= 6) {
-        date.add(1, 'weeks');
-    }
+    if (date.isoWeekday() >= 6) date.add(1, 'weeks');
     return date.isoWeekday(1);
 }
 
@@ -25,7 +23,7 @@ const addEdt = async (params) => {
             await edtAdd(getCurrentDate(date, 'DD/MM/YYYY').format("YYYY-MM-DD"), link, client);
             return await interaction.editReply({
                 content: `<:check:866581082551615489> EDT **${date}** mis à jour`,
-                files: [new MessageAttachment(link)]
+                files: [new AttachmentBuilder(link)]
             });
         } else {
             return await interaction.editReply({
@@ -61,7 +59,7 @@ const sendmpEdt = async (params) => {
     const edt = await getAllData("edt");
     const userToSend = client.users?.cache?.get(userId);
     if (edt[edtDate] && edt[edtDate].myges != "UNDEFINED") {
-        await userToSend?.send({ content: `🗓️ **__${date}__ 🗓️${pastille} ${semaine}**`, files: [new MessageAttachment(edt[edtDate].link)]}).catch(() => { ; });
+        await userToSend?.send({ content: `🗓️ **__${date}__ 🗓️${pastille} ${semaine}**`, files: [new AttachmentBuilder(edt[edtDate].link)]}).catch(() => { ; });
         return await interaction.editReply({ content: `<:check:866581082551615489> EDT envoyé à <@${userId}> avec succès` });
     } else {
         return await interaction.editReply({ content: `<:uncheck:866581082870513684> Cet EDT du **${date}** n'existe pas` });

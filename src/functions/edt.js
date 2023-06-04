@@ -1,4 +1,4 @@
-const { MessageAttachment } = require("discord.js");
+const { AttachmentBuilder } = require("discord.js");
 const { getAgendaCrypted } = require("../api/mgapi");
 const { createData, getAllData } = require("../firebase/firebase");
 const qs = require("qs");
@@ -28,14 +28,14 @@ const edtAdd = async (date, link, client) => {
 // Retourne les donnés de l'emploi du temps
 const edtShow = async () => {
   const edt = JSON.stringify(await getAllData("edt"));
-  let attachment = new MessageAttachment(Buffer.from(edt, "utf-8"), "edt.json");
+  let attachment = new AttachmentBuilder(Buffer.from(edt, "utf-8"), "edt.json");
   return { content: `**LAST EDT DATA FILE**`, files: [attachment] };
 };
 
 // affiche les alarmes de l'emploi du temps
 const edtRemindShow = async () => {
   const edtremind = JSON.stringify(await getAllData("edtremind"));
-  let attachment = new MessageAttachment(
+  let attachment = new AttachmentBuilder(
     Buffer.from(edtremind, "utf-8"),
     "edtremind.json"
   );

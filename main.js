@@ -1,8 +1,21 @@
 require("dotenv").config();
-const { Client, Intents } = require("discord.js");
+const { Client, GatewayIntentBits } = require("discord.js");
 const client = new Client({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
-	intents: new Intents(32767),
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.GuildMessageReactions,
+		GatewayIntentBits.GuildMessageTyping,
+		GatewayIntentBits.GuildPresences,
+		GatewayIntentBits.GuildIntegrations,
+		GatewayIntentBits.DirectMessages,
+		GatewayIntentBits.DirectMessageReactions,
+		GatewayIntentBits.DirectMessageTyping,
+		GatewayIntentBits.MessageContent
+	]
 });
 const config = require("./src/config/config.json");
 const { interactionLaunch } = require("./src/tasks/commandLauch");
@@ -40,7 +53,7 @@ client.on("ready", () => {
 		` ✅\n-------------------------\n`
 	);
 
-	client.user.setStatus("dnd");
+	client.user.setStatus(process.env.BOT_STATUS);
 
 	edtReminderCheck(client);
 	edtSenderCheck(client);

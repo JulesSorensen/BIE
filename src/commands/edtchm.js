@@ -1,4 +1,4 @@
-const { MessageActionRow, MessageButton } = require("discord.js");
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { getAgendaCrypted } = require("../api/mgapi");
 const { getAllData } = require("../firebase/firebase");
 const { isUserInDelay, addUserDelay } = require("../functions/delay");
@@ -14,26 +14,22 @@ const sendEdtAlert = async (id, client) => {
 const edtchm = async (params) => {
   const { client, interaction } = params;
 
-  const msg = await interaction.channel.messages.fetch(interaction.message.id);
-
   const num = interaction.customId.slice(6);
 
   const getCustomizedDate = (semaine = 0) => {
     const date = getCurrentDate().add(semaine, "weeks");
 
-    if (date.isoWeekday() >= 6) {
-      date.add(1, 'weeks');
-    }
+    if (date.isoWeekday() >= 6) date.add(1, 'weeks');
     return date.isoWeekday(1);
   }
 
   if (num == '1') {
     statsAddEdt();
-    var date = getCustomizedDate();
-    var datefinale = date.format("DD/MM/YYYY");
-    var edtDate = date.format("YYYY-MM-DD");
+    const date = getCustomizedDate();
+    const datefinale = date.format("DD/MM/YYYY");
+    const edtDate = date.format("YYYY-MM-DD");
 
-    let edt = await getAllData("edt")
+    const edt = await getAllData("edt")
 
     let pastille;
     let myges;
@@ -51,13 +47,13 @@ const edtchm = async (params) => {
       pastille = '<:wait:997268180911280158>';
     }
 
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("EDTCHM").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY').setDisabled(true),
-      new MessageButton().setCustomId("DETAILS1").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
-      new MessageButton().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
+    row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Secondary).setDisabled(true),
+      new ButtonBuilder().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Success)
     );
-    let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine actuelle)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
+    const file = edt[edtDate]?.link;
+    const edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine actuelle)** \\↔️ <@${interaction.user.id}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
@@ -67,11 +63,11 @@ const edtchm = async (params) => {
     return await interaction.update(edtMessageContent);
   } else if (num == '2') {
     statsAddEdt();
-    var date = getCustomizedDate(1);
-    var datefinale = date.format("DD/MM/YYYY");
-    var edtDate = date.format("YYYY-MM-DD");
+    const date = getCustomizedDate(1);
+    const datefinale = date.format("DD/MM/YYYY");
+    const edtDate = date.format("YYYY-MM-DD");
 
-    let edt = await getAllData("edt")
+    const edt = await getAllData("edt")
 
     let pastille;
     let myges;
@@ -89,27 +85,32 @@ const edtchm = async (params) => {
       pastille = '<:wait:997268180911280158>';
     }
 
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("EDTCHM1").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY'),
-      new MessageButton().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
-      new MessageButton().setCustomId("EDTCHM3").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY')
-    );
-    let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine prochaine)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
+    let row;
+    try {
+      row = new ActionRowBuilder().addComponents(
+        new ButtonBuilder().setCustomId("EDTCHM1").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Success),
+        new ButtonBuilder().setCustomId("DETAILS2").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder().setCustomId("EDTCHM3").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Success)
+      );
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+    const file = edt[edtDate]?.link;
+    const edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Semaine prochaine)** \\↔️ <@${interaction.user.id}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
       edtMessageContent["files"] = ["https://i.imgur.com/ZACLa60.png"];
     }
-
     return await interaction.update(edtMessageContent);
   } else if (num == '3') {
     statsAddEdt();
-    var date = getCustomizedDate(2);
-    var datefinale = date.format("DD/MM/YYYY");
-    var edtDate = date.format("YYYY-MM-DD");
+    const date = getCustomizedDate(2);
+    const datefinale = date.format("DD/MM/YYYY");
+    const edtDate = date.format("YYYY-MM-DD");
 
-    let edt = await getAllData("edt")
+    const edt = await getAllData("edt")
 
     let pastille;
     let myges;
@@ -127,13 +128,13 @@ const edtchm = async (params) => {
       pastille = '<:wait:997268180911280158>';
     }
 
-    const row = new MessageActionRow().addComponents(
-      new MessageButton().setCustomId("EDTCHM2").setEmoji("◀️").setLabel("Précédent").setStyle('PRIMARY'),
-      new MessageButton().setCustomId("DETAILS3").setEmoji("🪪").setLabel("Détails").setStyle('SECONDARY'),
-      new MessageButton().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle('PRIMARY').setDisabled(true)
+    const row = new ActionRowBuilder().addComponents(
+      new ButtonBuilder().setCustomId("EDTCHM2").setEmoji("◀️").setLabel("Précédent").setStyle(ButtonStyle.Success),
+      new ButtonBuilder().setCustomId("DETAILS3").setEmoji("🪪").setLabel("Détails").setStyle(ButtonStyle.Secondary),
+      new ButtonBuilder().setCustomId("EDTCHM").setEmoji("▶️").setLabel("Suivant").setStyle(ButtonStyle.Secondary).setDisabled(true)
     );
-    let file = edt[edtDate]?.link;
-    let edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)** ${msg.interaction.user.id === interaction.user.id ? `\\↔️ <@${interaction.user.id}` : ''}>`, components: [row] };
+    const file = edt[edtDate]?.link;
+    const edtMessageContent = { content: `🗓️ **__${datefinale}__ ${pastille} (Dans deux semaines)** \\↔️ <@${interaction.user.id}>`, components: [row] };
     if (file) {
       edtMessageContent["files"] = [file];
     } else {
